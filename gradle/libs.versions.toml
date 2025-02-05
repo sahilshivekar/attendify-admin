@@ -1,23 +1,22 @@
 [versions]
 hiltVersion = "2.53.1"
-kspVersion = "2.0.21-1.0.27"
-serialization = "1.8.21"
+kspVersion = "2.1.0-1.0.29"
 roomVersion = "2.6.1"
 pagingVersion = "3.3.5"
-navVersion = "2.8.5"
+navVersion = "2.8.6"
 retrofitVersion = "2.9.0"
 
 
 #predefined
 agp = "8.7.3"
-kotlin = "2.0.0"
+kotlin = "2.1.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.0"
-composeBom = "2025.01.00"
+composeBom = "2025.01.01"
 
 
 [libraries]
@@ -30,15 +29,15 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVersion" }
 retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofitVersion" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.4.0" }
-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version = "1.1.1" }
-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version = "1.7.6" }
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version = "1.1.2" }
+compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version = "1.7.7" }
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version = "0.31.4-beta" }
 paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "pagingVersion" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "pagingVersion" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomVersion" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomVersion" }
-
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.8.0"}
 
 #predefined
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -59,7 +58,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 [plugins]
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 
 #predefined

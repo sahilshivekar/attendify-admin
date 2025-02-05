@@ -1,5 +1,7 @@
-package com.edu.wiet_admin.common.presentation
+package com.edu.wiet_admin.common.presentation.components
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -10,8 +12,14 @@ import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.edu.wiet_admin.R
+import com.edu.wiet_admin.common.presentation.ComponentPreview
+import com.edu.wiet_admin.common.presentation.PreviewWrapper
 import com.edu.wiet_admin.ui.theme.Typography
 
 
@@ -20,10 +28,12 @@ fun WietTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
+    modifier: Modifier = Modifier
+        .widthIn(max = 500.dp)
+        .fillMaxWidth(),
+    enabled: Boolean = false,
     readOnly: Boolean = false,
-    textStyle: TextStyle = Typography.bodyMedium,
+    textStyle: TextStyle = Typography.bodyLarge,
     isError: Boolean = false,
     supportingText: String? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
@@ -33,14 +43,29 @@ fun WietTextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    singleLine: Boolean = false,
+    singleLine: Boolean = true,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
     shape: Shape = MaterialTheme.shapes.medium,
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors().copy(
-        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+        focusedTextColor = colorResource(R.color.normal_text),
+        unfocusedTextColor = colorResource(R.color.normal_text),
+        disabledTextColor = colorResource(R.color.normal_text).copy(alpha = 0.70f),
+
         focusedLabelColor = MaterialTheme.colorScheme.primary,
-        focusedLeadingIconColor = MaterialTheme.colorScheme.primary
+        unfocusedLabelColor = colorResource(R.color.text_field_border_label),
+        disabledLabelColor = colorResource(R.color.text_field_border_label).copy(alpha = 0.30f),
+        errorLabelColor = MaterialTheme.colorScheme.error,
+
+        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+        unfocusedIndicatorColor = colorResource(R.color.text_field_border_label),
+        disabledIndicatorColor = colorResource(R.color.text_field_border_label).copy(alpha = 0.30f),
+        errorIndicatorColor = MaterialTheme.colorScheme.error,
+
+        focusedSupportingTextColor = MaterialTheme.colorScheme.primary,
+        unfocusedSupportingTextColor = colorResource(R.color.text_field_border_label),
+        disabledSupportingTextColor = colorResource(R.color.text_field_border_label).copy(alpha = 0.30f),
+        errorSupportingTextColor = MaterialTheme.colorScheme.error,
     )
 ) {
     OutlinedTextField(
@@ -52,13 +77,14 @@ fun WietTextField(
         textStyle = textStyle,
         label = {
             Text(
-                text = label
+                text = label,
+                style = Typography.bodyMedium
             )
         },
         isError = isError,
         supportingText = {
             if (supportingText != null) {
-                Text(text = supportingText)
+                Text(text = supportingText, fontSize = 12.sp)
             }
         },
         leadingIcon = leadingIcon,
@@ -75,14 +101,13 @@ fun WietTextField(
     )
 }
 
-
 @ComponentPreview
 @Composable
 fun WietPrimaryTextFieldPreview() {
     PreviewWrapper {
         WietTextField(
             value = "sahilshivekar124",
-            onValueChange =  {},
+            onValueChange = {},
             label = "Username",
         )
     }

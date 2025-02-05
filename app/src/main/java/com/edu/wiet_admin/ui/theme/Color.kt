@@ -2,16 +2,18 @@ package com.edu.wiet_admin.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Blue = Color(0xFF196ede)
-val LightBlue = Color(0xFFc2e7ff)   // picked from google drive
-val DarkBlue = Color(0xFF004a77)    // picked from google drive
+//val DarkThemeBlue = Color(0xFF00469C) // old blue
+val DarkThemeBlue = Color(0xFF0064E0)
 
-val DarkGray = Color(0xFF3A3B3C) //Dark Surface
-val LightGray = Color(0xFFF5F5F5) //Light Surface
+val DarkThemeLightBlue = Color(0xFF88AABF)   // picked from google drive
+val DarkThemeDarkBlue = Color(0xFF003454)    // picked from google drive
 
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val LightThemeBlue = Color(0xFF0064E0)
+val LightThemeLightBlue = Color(0xFFC3E7ff)
+val LightThemeDarkBlue = Color(0xFF074E74)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val DarkThemeSurface = Color(0xFF151716) //Dark theme Surface
+val LightThemeSurface = Color(0xFFF0F3F8) //Light theme Surface
+
+val DarkThemeBackground = Color(0xFF0D0D0D) //background for dark theme
+val LightThemeBackground = Color(0xFFF5F5F5) //background for light theme

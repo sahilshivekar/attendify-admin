@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="splash_screen_background">#FFFFFFFF</color>
+    old border label FFE1E1E4
+    <!--text field colors-->
+    <color name="text_field_border_label">#801A1D1F</color>
+    <color name="normal_text">#E6000000</color>
+
 </resources>

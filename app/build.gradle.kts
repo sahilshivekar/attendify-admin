@@ -61,7 +61,7 @@ dependencies {
     implementation(libs.room.runtime) // Room for local database persistence with SQLite
     ksp(libs.room.compiler) // Room compiler for generating code related to database entities and DAOs
     implementation(libs.room.ktx) // Room KTX for Kotlin extensions to simplify Room database interactions
-
+    implementation(libs.kotlinx.serialization.json) // Kotlin serialization for data serialization and deserialization
 
     //predefined
     implementation(libs.androidx.core.ktx)

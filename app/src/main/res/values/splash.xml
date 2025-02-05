@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenAnimatedIcon">@drawable/wiet_logo_circle_svg</item>
+        <item name="windowSplashScreenAnimatedIcon" >@drawable/wiet_logo_circle_splash_screen</item>
         <item name="windowSplashScreenBackground">@color/splash_screen_background</item>
         <item name="postSplashScreenTheme">@style/Theme.WietAdmin</item>
+        <item name="splashScreenIconSize">290dp</item>
         <!--
         this "postSplashScreenTheme" is of use only if the xml theme is being used but in our
         current case we are using the Material theme inside from the compose
