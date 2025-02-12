@@ -16,6 +16,7 @@ import com.edu.wiet_admin.admin_auth.presentation.login.LoginScreen
 import com.edu.wiet_admin.admin_auth.presentation.login.LoginViewModel
 import com.edu.wiet_admin.admin_auth.presentation.verify_code.VerifyCodeScreen
 import com.edu.wiet_admin.admin_auth.presentation.verify_code.VerifyCodeViewModel
+import com.edu.wiet_admin.admin_mgt.navigation.AdminMgtDestination
 import com.edu.wiet_admin.navigation.AppDestination
 
 fun NavGraphBuilder.adminAuthGraph(
@@ -119,8 +120,12 @@ fun NavGraphBuilder.adminAuthGraph(
                 navigateToHomeOrAdminDetailsScreen = {
                     val prevDestination = navController.previousBackStackEntry?.destination?.route
 
-                    if (prevDestination == AppDestination.AdminDetailsScreen.route) {
-                        navController.navigateUp()
+                    if (prevDestination == AdminMgtDestination.AdminDetails.route) {
+                        navController.navigate(AdminMgtDestination.AdminDetails.route) {
+                            popUpTo(AdminMgtDestination.AdminDetails.route) {
+                                inclusive = true
+                            }
+                        }
                     } else if(prevDestination == AuthDestination.ForgotPasswordScreen.route){
                         navController.navigate(AppDestination.HomeScreen.route) {
                             popUpTo(AuthDestination.LoginScreen.route) {

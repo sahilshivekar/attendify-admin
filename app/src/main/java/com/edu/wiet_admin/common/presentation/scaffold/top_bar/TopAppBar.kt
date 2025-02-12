@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.edu.wiet_admin.admin_auth.navigation.AuthDestination
+import com.edu.wiet_admin.admin_mgt.navigation.AdminMgtDestination
 import com.edu.wiet_admin.navigation.AppDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,6 +58,27 @@ fun WietTopAppBar(
             viewModel.updateProfileButtonVisibility(true)
         }
 
+        AdminMgtDestination.AdminDetails.route -> {
+            viewModel.updateBarVisibility(true)
+            viewModel.updateTitle("Admin Details")
+            viewModel.updateBackButtonVisibility(true)
+            viewModel.updateProfileButtonVisibility(false)
+        }
+
+        AdminMgtDestination.UpdatePassword.route -> {
+            viewModel.updateBarVisibility(true)
+            viewModel.updateTitle("Update password")
+            viewModel.updateBackButtonVisibility(true)
+            viewModel.updateProfileButtonVisibility(false)
+        }
+
+        AdminMgtDestination.AddAdmin.route -> {
+            viewModel.updateBarVisibility(true)
+            viewModel.updateTitle("Add Admin")
+            viewModel.updateBackButtonVisibility(true)
+            viewModel.updateProfileButtonVisibility(false)
+        }
+
         else -> {
             viewModel.updateBarVisibility(false)
         }
@@ -93,12 +115,12 @@ fun WietTopAppBar(
                 if (state.isProfileButtonVisible) {
                     IconButton(
                         onClick = {
-                            navController.navigateUp()
+                            navController.navigate(route = AppDestination.AdminMgt.route)
                         }
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Person,
-                            contentDescription = "Back Button"
+                            contentDescription = "Account Details"
                         )
                     }
                 }

@@ -27,11 +27,11 @@ import com.edu.wiet_admin.ui.theme.Typography
 fun WietTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    label: String,
+    label: String? = null,
     modifier: Modifier = Modifier
         .widthIn(max = 500.dp)
         .fillMaxWidth(),
-    enabled: Boolean = false,
+    enabled: Boolean = true,
     readOnly: Boolean = false,
     textStyle: TextStyle = Typography.bodyLarge,
     isError: Boolean = false,
@@ -76,10 +76,12 @@ fun WietTextField(
         readOnly = readOnly,
         textStyle = textStyle,
         label = {
-            Text(
-                text = label,
-                style = Typography.bodyMedium
-            )
+            label?.let {
+                Text(
+                    text = label,
+                    style = Typography.bodyMedium
+                )
+            }
         },
         isError = isError,
         supportingText = {

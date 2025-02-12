@@ -11,9 +11,14 @@ import java.io.IOException
 
 object RemoteUtils {
 
-    const val NETWORK_IO: String = "Unable to reach server!"
+
+    const val NETWORK_IO: String = "Unable to reach server! check your internet connection."
     const val UNKNOWN_NETWORK_ERROR: String = "Unknown error occurred!"
-    const val UNAUTHORIZED_REQUEST: String = "Unauthorized request"
+    const val UNAUTHORIZED_REQUEST: String = "Unauthorized request!"
+
+    fun isKnownError(message: String?) =
+        message in listOf(NETWORK_IO, UNKNOWN_NETWORK_ERROR, UNAUTHORIZED_REQUEST)
+
     private fun <T> getErrorMessage(response: Response<T>): String? {
         val errorBody = response.errorBody()?.string()
         errorBody?.let {

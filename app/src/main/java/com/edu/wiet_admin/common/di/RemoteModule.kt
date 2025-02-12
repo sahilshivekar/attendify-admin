@@ -1,12 +1,8 @@
 package com.edu.wiet_admin.common.di
 
-import com.edu.wiet_admin.admin_auth.data.remote.AuthApi
-import com.edu.wiet_admin.admin_auth.data.repository.AuthRepositoryImpl
-import com.edu.wiet_admin.admin_auth.domain.repository.AuthRepository
-import com.edu.wiet_admin.admin_auth.domain.use_case.GetAccessRefreshTokenUseCase
 import com.edu.wiet_admin.common.Constants.BASE_URL
 import com.edu.wiet_admin.common.data.remote.AuthInterceptor
-import com.edu.wiet_admin.common.data.remote.ResolveUnauthorized
+import com.edu.wiet_admin.common.data.remote.ResolveUnauthorizedApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,13 +46,13 @@ class RemoteModule {
     }
 
     @Provides
-    fun provideResolveUnauthorized(): ResolveUnauthorized {
+    fun provideResolveUnauthorized(): ResolveUnauthorizedApi {
         val retrofit = Retrofit
             .Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
             .build()
-        return retrofit.create(ResolveUnauthorized::class.java)
+        return retrofit.create(ResolveUnauthorizedApi::class.java)
     }
 
 

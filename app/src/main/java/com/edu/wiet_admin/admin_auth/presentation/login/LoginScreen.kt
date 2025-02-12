@@ -48,9 +48,10 @@ fun LoginScreen(
     }
 
     state.isOtherError?.let {
-        WietAlertDialog(dialogText = it) {
-            onEvent(LoginEvent.DismissAlertDialog)
-        }
+        WietAlertDialog(
+            dialogText = it,
+            onDismiss = { onEvent(LoginEvent.DismissAlertDialog) },
+        )
     }
 
     Column(
@@ -62,7 +63,7 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier = Modifier.size(80.dp),
+            modifier = Modifier.size(70.dp),
             painter = painterResource(id = R.drawable.wiet_logo_circle_svg),
             contentDescription = null,
         )
@@ -71,7 +72,7 @@ fun LoginScreen(
         Spacer(Modifier.height(12.dp))
         Text(
             text = "Admin Login",
-            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Medium)
+            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Medium)
         )
 
         Spacer(Modifier.height(80.dp))
@@ -102,7 +103,8 @@ fun LoginScreen(
                 IconButton(
                     onClick = {
                         onEvent(LoginEvent.PasswordVisibilityChanged(isVisible = !state.isPasswordVisible))
-                    }
+                    },
+                    enabled = !state.isLoading
                 ) {
                     Icon(
                         painter = if (state.isPasswordVisible) painterResource(R.drawable.baseline_visibility_24) else painterResource(
@@ -112,7 +114,7 @@ fun LoginScreen(
                         tint = colorResource(R.color.text_field_border_label)
                     )
                 }
-            }
+            },
         )
 
         Spacer(Modifier.height(8.dp))
@@ -124,7 +126,6 @@ fun LoginScreen(
         )
 
 
-
         Spacer(Modifier.height(16.dp))
         WietTextButton(
             onClick = { navigateToForgotPasswordScreen() },
@@ -132,6 +133,8 @@ fun LoginScreen(
         ) {
             Text("Forgotten Password?")
         }
+        // to give space from bottom so that the text-fields come at center of screen
+        Spacer(Modifier.height(130.dp))
     }
 }
 

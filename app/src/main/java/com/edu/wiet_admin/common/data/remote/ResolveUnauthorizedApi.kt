@@ -6,7 +6,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface ResolveUnauthorized {
+interface ResolveUnauthorizedApi {
 
     @POST("api/v1/admin/get-access-token")
     suspend fun getAccessToken(@Body requestBody: GetAccessTokenRequest): Response<WietApiResponse<GetAccessRefreshTokenData?>>

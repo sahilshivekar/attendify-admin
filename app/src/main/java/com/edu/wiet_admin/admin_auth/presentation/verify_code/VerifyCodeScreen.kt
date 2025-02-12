@@ -7,18 +7,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.edu.wiet_admin.admin_auth.presentation.login.LoginEvent
 import com.edu.wiet_admin.common.presentation.components.WietAlertDialog
 import com.edu.wiet_admin.common.presentation.components.WietButton
 import com.edu.wiet_admin.common.presentation.components.WietTextField
-import com.edu.wiet_admin.common.presentation.scaffold.top_bar.TopAppBarViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,9 +36,10 @@ fun VerifyCodeScreen(
 
 
     state.isOtherError?.let {
-        WietAlertDialog(dialogText = it) {
-            onEvent(VerifyCodeEvent.DismissAlertDialog)
-        }
+        WietAlertDialog(
+            dialogText = it,
+            onDismiss = { onEvent(VerifyCodeEvent.DismissAlertDialog) },
+        )
     }
 
 
@@ -69,7 +70,8 @@ fun VerifyCodeScreen(
                 label = "Verification code",
                 isError = state.codeError != null,
                 supportingText = state.codeError,
-                enabled = !state.isVerified && !state.isLoading
+                enabled = !state.isVerified && !state.isLoading,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
 

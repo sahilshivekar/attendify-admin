@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.edu.wiet_admin.admin_auth.domain.use_case.LoginUseCase
-import com.edu.wiet_admin.admin_auth.domain.use_case.ReadAccessTokenUseCase
 import com.edu.wiet_admin.admin_auth.domain.use_case.SaveAccessTokenUseCase
 import com.edu.wiet_admin.admin_auth.domain.use_case.SaveRefreshTokenUseCase
 import com.edu.wiet_admin.common.data.remote.Resource
@@ -77,7 +76,8 @@ class LoginViewModel @Inject constructor(
                         isLoginButtonEnabled = false,
                         isForgottenPasswordEnabled = false,
                         emailOrUsernameError = null,
-                        passwordError = null
+                        passwordError = null,
+                        isPasswordVisible = false
                     )
                 }
 
@@ -88,7 +88,7 @@ class LoginViewModel @Inject constructor(
                         isLoginSuccessful = true,
                         isForgottenPasswordEnabled = false,
                         emailOrUsernameError = null,
-                        passwordError = null
+                        passwordError = null,
                     )
                     viewModelScope.launch {
                         result.data?.data?.let {
@@ -122,6 +122,7 @@ class LoginViewModel @Inject constructor(
                         state.value = state.value.copy(
                             passwordError = result.message,
                             emailOrUsernameError = null,
+                            isPasswordVisible = true
                         )
                     } else if(result.message == RemoteUtils.NETWORK_IO){
                         state.value = state.value.copy(isOtherError = RemoteUtils.NETWORK_IO)

@@ -4,6 +4,7 @@ import android.util.Log
 import com.edu.wiet_admin.admin_auth.data.remote.GetAccessTokenRequest
 import com.edu.wiet_admin.admin_auth.domain.use_case.ReadAccessTokenUseCase
 import com.edu.wiet_admin.admin_auth.domain.use_case.ReadRefreshTokenUseCase
+import com.edu.wiet_admin.admin_auth.domain.use_case.RemoveAuthTokensUseCase
 import com.edu.wiet_admin.admin_auth.domain.use_case.SaveAccessTokenUseCase
 import com.edu.wiet_admin.admin_auth.domain.use_case.SaveRefreshTokenUseCase
 import kotlinx.coroutines.flow.first
@@ -15,13 +16,15 @@ import javax.inject.Inject
 class AuthInterceptor @Inject constructor(
     private val readAccessTokenUseCase: ReadAccessTokenUseCase,
     private val readRefreshTokenUseCase: ReadRefreshTokenUseCase,
+    private val removeAuthTokensUseCase: RemoveAuthTokensUseCase,
     private val saveAccessTokenUseCase: SaveAccessTokenUseCase,
     private val saveRefreshTokenUseCase: SaveRefreshTokenUseCase,
-    private val resolveUnauthorized: ResolveUnauthorized
+    private val resolveUnauthorized: ResolveUnauthorizedApi
 ) : Interceptor {
 
 
     override fun intercept(chain: Interceptor.Chain): Response {
+
         val accessToken = runBlocking {
             readAccessTokenUseCase().first()
         }
@@ -34,7 +37,7 @@ class AuthInterceptor @Inject constructor(
         var response = chain.proceed(request)
 
         if (response.code == 401) {
-
+            response.close()
             //following fun will get new access token with help of refresh token
             getNewTokens()
             val newAccessToken = runBlocking {
@@ -45,7 +48,6 @@ class AuthInterceptor @Inject constructor(
                     header("Authorization", it)
                 }
             }.build()
-
             response = chain.proceed(newRequest)
         }
 
@@ -63,9 +65,7 @@ class AuthInterceptor @Inject constructor(
 
         refreshToken?.let {
             runBlocking {
-
                 try {
-
                     val response = resolveUnauthorized.getAccessToken(
                         requestBody = GetAccessTokenRequest(refreshToken)
                     )
@@ -79,6 +79,7 @@ class AuthInterceptor @Inject constructor(
                         }
                     } else {
                         Log.e("API Error", response.errorBody()?.string() ?: "Unknown error")
+                        removeAuthTokensUseCase() // so that next time the user opens app he will be navigated to the login screen
                     }
 
 

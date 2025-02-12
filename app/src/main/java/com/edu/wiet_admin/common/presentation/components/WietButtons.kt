@@ -20,7 +20,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import com.edu.wiet_admin.R
 import com.edu.wiet_admin.common.presentation.ComponentPreview
 import com.edu.wiet_admin.common.presentation.PreviewWrapper
 
@@ -72,7 +74,7 @@ fun WietButton(
                             strokeWidth = 2.dp,
                         )
                     } else {
-                        Text(text ?: "")
+                        Text(text ?: "", )
                     }
                 }
             }
@@ -120,7 +122,10 @@ fun WietOutlinedButton(
     shape: Shape = ButtonDefaults.outlinedShape,
     colors: ButtonColors = ButtonDefaults.outlinedButtonColors(),
     elevation: ButtonElevation? = null,
-    border: BorderStroke? = ButtonDefaults.outlinedButtonBorder(enabled),
+    border: BorderStroke? = BorderStroke(
+        width = 1.dp,
+        color = if(enabled) colorResource(R.color.text_field_border_label) else colorResource(R.color.text_field_border_label).copy(alpha = 0.30f)
+    ),
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     interactionSource: MutableInteractionSource? = null,
     content: @Composable RowScope.() -> Unit

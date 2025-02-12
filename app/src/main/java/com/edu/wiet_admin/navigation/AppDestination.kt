@@ -1,7 +1,5 @@
 package com.edu.wiet_admin.navigation
 
-import kotlinx.serialization.Serializable
-
 sealed class AppDestination(
     val route: String
 ) {
@@ -10,6 +8,6 @@ sealed class AppDestination(
 
     data object HomeScreen : AppDestination("home_screen")
 
-    data object AdminDetailsScreen : AppDestination("admin_details_screen")
+    data object AdminMgt : AppDestination("admin_mgt")
 
 }

@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,7 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.edu.wiet_admin.admin_auth.navigation.adminAuthGraph
-import com.edu.wiet_admin.common.presentation.scaffold.top_bar.TopAppBarViewModel
+import com.edu.wiet_admin.admin_mgt.navigation.adminMgtNavGraph
 
 @Composable
 fun AppNavGraph(
@@ -28,7 +27,9 @@ fun AppNavGraph(
     ) {
 
         adminAuthGraph(navController)
-    
+
+        adminMgtNavGraph(navController)
+
         composable(route = AppDestination.HomeScreen.route) {
             Box(
                 modifier = Modifier.background(Color.Red).fillMaxSize(),

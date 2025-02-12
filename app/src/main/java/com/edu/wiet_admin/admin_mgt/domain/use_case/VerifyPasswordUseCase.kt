@@ -1,6 +1,6 @@
 package com.edu.wiet_admin.admin_mgt.domain.use_case
 
-import com.edu.wiet_admin.admin_mgt.data.remote.VerifyPasswordRequest
+import com.edu.wiet_admin.admin_mgt.data.remote.VerifyPasswordRequestBody
 import com.edu.wiet_admin.admin_mgt.domain.repository.AdminMgtRepository
 import com.edu.wiet_admin.common.data.remote.Resource
 import com.edu.wiet_admin.common.data.remote.WietApiResponse
@@ -14,7 +14,7 @@ class VerifyPasswordUseCase @Inject constructor(
     operator fun invoke(
         password: String
     ): Flow<Resource<WietApiResponse<Unit?>>> {
-        val verifyPasswordRequest = VerifyPasswordRequest(password)
+        val verifyPasswordRequest = VerifyPasswordRequestBody(password)
         return RemoteUtils.responseFlow {
             adminMgtRepository.verifyPassword(verifyPasswordRequest)
         }
