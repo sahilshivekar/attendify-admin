@@ -45,7 +45,7 @@ fun WietOptionRow(
             CircularProgressIndicator(
                 modifier = Modifier
                     .size(24.dp),
-                color = if(isRisky) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+                color = if(isRisky) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                 strokeWidth = 2.dp
             )
         }

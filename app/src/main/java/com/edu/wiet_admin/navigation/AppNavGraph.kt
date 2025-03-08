@@ -1,18 +1,16 @@
 package com.edu.wiet_admin.navigation
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.edu.wiet_admin.admin_auth.navigation.adminAuthGraph
+import com.edu.wiet_admin.academics.navigation.AcademicsNavHost
+import com.edu.wiet_admin.admin_auth.navigation.adminAuthNavGraph
 import com.edu.wiet_admin.admin_mgt.navigation.adminMgtNavGraph
+import com.edu.wiet_admin.announcements.navigation.AnnouncementsNavHost
+import com.edu.wiet_admin.shedule.navigation.ScheduleNavHost
+import com.edu.wiet_admin.users.navigation.UsersNavHost
 
 @Composable
 fun AppNavGraph(
@@ -26,18 +24,26 @@ fun AppNavGraph(
         modifier = modifier
     ) {
 
-        adminAuthGraph(navController)
+        adminAuthNavGraph(navController)
 
         adminMgtNavGraph(navController)
 
-        composable(route = AppDestination.HomeScreen.route) {
-            Box(
-                modifier = Modifier.background(Color.Red).fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("Hello")
-            }
+        composable(AppDestination.Users.route) {
+            UsersNavHost()
         }
+
+        composable(AppDestination.Schedule.route) {
+            ScheduleNavHost()
+        }
+
+        composable(AppDestination.Announcements.route) {
+            AnnouncementsNavHost()
+        }
+
+        composable(AppDestination.Academics.route) {
+            AcademicsNavHost()
+        }
+
     }
 
 }

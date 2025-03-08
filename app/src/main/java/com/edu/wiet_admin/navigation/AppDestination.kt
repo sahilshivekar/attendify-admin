@@ -6,8 +6,14 @@ sealed class AppDestination(
 
     data object AdminAuth : AppDestination("admin_auth")
 
-    data object HomeScreen : AppDestination("home_screen")
-
     data object AdminMgt : AppDestination("admin_mgt")
+
+    data object Users : AppDestination("users")
+
+    data object Academics : AppDestination("academics")
+
+    data object Announcements : AppDestination("announcements")
+
+    data object Schedule : AppDestination("schedule")
 
 }

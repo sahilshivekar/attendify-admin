@@ -1,8 +1,11 @@
 package com.edu.wiet_admin.common.presentation.scaffold.top_bar
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -17,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.edu.wiet_admin.admin_auth.navigation.AuthDestination
 import com.edu.wiet_admin.admin_mgt.navigation.AdminMgtDestination
+import com.edu.wiet_admin.common.Constants
 import com.edu.wiet_admin.navigation.AppDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,13 +55,6 @@ fun WietTopAppBar(
             viewModel.updateProfileButtonVisibility(false)
         }
 
-        AppDestination.HomeScreen.route -> {
-            viewModel.updateBarVisibility(true)
-            viewModel.updateTitle("Home")
-            viewModel.updateBackButtonVisibility(false)
-            viewModel.updateProfileButtonVisibility(true)
-        }
-
         AdminMgtDestination.AdminDetails.route -> {
             viewModel.updateBarVisibility(true)
             viewModel.updateTitle("Admin Details")
@@ -79,6 +76,34 @@ fun WietTopAppBar(
             viewModel.updateProfileButtonVisibility(false)
         }
 
+        AppDestination.Schedule.route -> {
+            viewModel.updateBarVisibility(true)
+            viewModel.updateTitle("Schedule")
+            viewModel.updateBackButtonVisibility(false)
+            viewModel.updateProfileButtonVisibility(true)
+        }
+
+        AppDestination.Announcements.route -> {
+            viewModel.updateBarVisibility(true)
+            viewModel.updateTitle("Announcements")
+            viewModel.updateBackButtonVisibility(false)
+            viewModel.updateProfileButtonVisibility(true)
+        }
+
+        AppDestination.Academics.route -> {
+            viewModel.updateBarVisibility(true)
+            viewModel.updateTitle("Academics")
+            viewModel.updateBackButtonVisibility(false)
+            viewModel.updateProfileButtonVisibility(true)
+        }
+
+        AppDestination.Users.route -> {
+            viewModel.updateBarVisibility(true)
+            viewModel.updateTitle("Users")
+            viewModel.updateBackButtonVisibility(false)
+            viewModel.updateProfileButtonVisibility(true)
+        }
+
         else -> {
             viewModel.updateBarVisibility(false)
         }
@@ -96,7 +121,7 @@ fun WietTopAppBar(
                     )
                 }
             },
-            modifier = modifier,
+            modifier = modifier.fillMaxWidth().wrapContentHeight(),
             navigationIcon = {
                 if (state.isBackButtonVisible) {
                     IconButton(
@@ -119,8 +144,9 @@ fun WietTopAppBar(
                         }
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.Person,
-                            contentDescription = "Account Details"
+                            imageVector = Icons.Filled.AccountCircle,
+                            contentDescription = "Account Details",
+                            modifier = Modifier.size(Constants.ICON_SIZE)
                         )
                     }
                 }
