@@ -16,8 +16,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.sharp.Person
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,11 +28,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.edu.wiet_admin.R
 import com.edu.wiet_admin.common.presentation.PreviewWrapper
 import com.edu.wiet_admin.common.presentation.ScreenPreview
 import com.edu.wiet_admin.common.presentation.components.WietAlertDialog
@@ -97,9 +95,9 @@ fun AdminDetailsScreen(
                 modifier = Modifier
                     .size(90.dp)
                     .clip(CircleShape),
-                imageVector = Icons.Sharp.Person,
+                imageVector = Icons.Filled.AccountCircle,
                 contentDescription = null,
-                tint = colorResource(R.color.icon_color)
+                tint = MaterialTheme.colorScheme.primary
             )
 
 
@@ -124,13 +122,12 @@ fun AdminDetailsScreen(
                         style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
                     )
                     IconButton(
-                        onClick = { onEvent(AdminDetailsEvent.EditDetailsClicked) },
-                        enabled = !state.isUpdatingDetails
+                        onClick = { onEvent(AdminDetailsEvent.EditDetailsClicked) }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = null,
-                            tint = colorResource(R.color.icon_color)
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 }
@@ -212,7 +209,7 @@ fun AdminDetailsScreen(
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = null,
-                            tint = colorResource(R.color.icon_color)
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 }

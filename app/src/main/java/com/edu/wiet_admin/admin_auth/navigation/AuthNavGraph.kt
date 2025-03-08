@@ -19,7 +19,7 @@ import com.edu.wiet_admin.admin_auth.presentation.verify_code.VerifyCodeViewMode
 import com.edu.wiet_admin.admin_mgt.navigation.AdminMgtDestination
 import com.edu.wiet_admin.navigation.AppDestination
 
-fun NavGraphBuilder.adminAuthGraph(
+fun NavGraphBuilder.adminAuthNavGraph(
     navController: NavController
 ) {
 
@@ -46,7 +46,7 @@ fun NavGraphBuilder.adminAuthGraph(
                 onEvent = viewModel::onEvent,
                 state = state,
                 navigateToHomeScreen = {
-                    navController.navigate(AppDestination.HomeScreen.route) {
+                    navController.navigate(AppDestination.Users.route) {
                         popUpTo(AuthDestination.LoginScreen.route) {
                             inclusive = true
                         }
@@ -109,7 +109,7 @@ fun NavGraphBuilder.adminAuthGraph(
 
             LaunchedEffect(email) {
                 email?.let {
-                    Log.d("verifyCode", "adminAuthGraph: $it")
+                    Log.d("verifyCode", "adminAuthNavGraph: $it")
                     viewModel.setEmail(it)
                 }
             }
@@ -127,7 +127,7 @@ fun NavGraphBuilder.adminAuthGraph(
                             }
                         }
                     } else if(prevDestination == AuthDestination.ForgotPasswordScreen.route){
-                        navController.navigate(AppDestination.HomeScreen.route) {
+                        navController.navigate(AppDestination.Users.route) {
                             popUpTo(AuthDestination.LoginScreen.route) {
                                 inclusive = true
                             }
