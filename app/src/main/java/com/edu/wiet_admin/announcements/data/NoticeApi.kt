@@ -15,7 +15,7 @@ import retrofit2.http.Query
 
 interface NoticeApi {
 
-    @GET("api/v1/admin/get-notices")
+    @GET("api/v1/notice/get-notices")
     suspend fun getNotices(
         @Query("searchQuery") searchQuery: String?,
         @Query("audiences") audiences: String?,
@@ -26,11 +26,11 @@ interface NoticeApi {
         @Query("limit") limit: Int
     ): Response<WietApiResponse<List<Notice>>>
 
-    @GET("api/v1/admin/get-notice-by-id")
+    @GET("api/v1/notice/get-notice-by-id")
     suspend fun getNoticeById(@Query("noticeId") noticeId: Int): Response<WietApiResponse<Notice>>
 
     @Multipart
-    @POST("api/v1/admin/add-notice")
+    @POST("api/v1/notice/add-notice")
     suspend fun addNotice(
         @Part("title") title: RequestBody,
         @Part("description") description: RequestBody?,
@@ -41,7 +41,7 @@ interface NoticeApi {
     ): Response<WietApiResponse<Notice>>
 
     @Multipart
-    @PUT("api/v1/admin/update-notice")
+    @PUT("api/v1/notice/update-notice")
     suspend fun updateNotice(
         @Part("noticeId") noticeId: RequestBody,
         @Part("title") title: RequestBody?,
@@ -52,6 +52,6 @@ interface NoticeApi {
         @Part imageFile: MultipartBody.Part?
     ): Response<WietApiResponse<Notice>>
 
-    @DELETE("api/v1/admin/delete-notice")
+    @DELETE("api/v1/notice/delete-notice")
     suspend fun deleteNotice(@Query("noticeId") noticeId: Int): Response<WietApiResponse<Unit>>
 }

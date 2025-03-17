@@ -16,7 +16,7 @@ import retrofit2.http.Query
 
 interface DivisionApi {
 
-    @GET("api/v1/admin/get-divisions")
+    @GET("api/v1/division/get-divisions")
     suspend fun getDivisions(
         @Query("semesterNumber") semesterNumber: Int?,
         @Query("branchId") branchId: String?,
@@ -27,15 +27,15 @@ interface DivisionApi {
         @Query("limit") limit: Int
     ): Response<WietApiResponse<List<Division?>>>
 
-    @POST("api/v1/admin/add")
+    @POST("api/v1/division/add")
     suspend fun addDivision(@Body requestBody: AddDivisionRequest): Response<WietApiResponse<Division?>>
 
-    @PUT("api/v1/admin/update")
+    @PUT("api/v1/division/update")
     suspend fun updateDivision(@Body requestBody: UpdateDivisionRequest): Response<WietApiResponse<Division?>>
 
-    @DELETE("api/v1/admin/remove")
+    @DELETE("api/v1/division/remove")
     suspend fun removeDivision(@Query("id") divisionId: String): Response<WietApiResponse<String?>>
 
-    @GET("api/v1/admin/get-division-by-id")
+    @GET("api/v1/division/get-division-by-id")
     suspend fun getDivisionById(@Query("divisionId") divisionId: String): Response<WietApiResponse<Division?>>
 }

@@ -34,8 +34,8 @@ interface StaffRepository {
         gender: String,
         highestQualification: String?,
         role: String,
-        password: String,
-        confirmPassword: String,
+//        password: String,
+//        confirmPassword: String,
         isActive: Boolean,
         staffImageFile: File?
     ): Response<WietApiResponse<Staff>>

@@ -14,7 +14,7 @@ import retrofit2.http.Query
 
 interface TimetableApi {
 
-    @GET("api/v1/admin/get-timetables")
+    @GET("api/v1/timetable/get-timetables")
     suspend fun getTimetables(
         @Query("semesterNumber") semesterNumber: Int?,
         @Query("academicStartYearOfSemester") academicStartYearOfSemester: Int?,
@@ -23,15 +23,15 @@ interface TimetableApi {
         @Query("limit") limit: Int
     ): Response<WietApiResponse<List<Timetable>>>
 
-    @GET("api/v1/admin/get-timetable-by-id")
+    @GET("api/v1/timetable/get-timetable-by-id")
     suspend fun getTimetableById(@Query("timetableId") timetableId: Int): Response<WietApiResponse<Timetable>>
 
-    @POST("api/v1/admin/add-timetable")
+    @POST("api/v1/timetable/add-timetable")
     suspend fun addTimetable(@Body requestBody: AddTimetableRequest): Response<WietApiResponse<Timetable>>
 
-    @PUT("api/v1/admin/update-timetable")
+    @PUT("api/v1/timetable/update-timetable")
     suspend fun updateTimetable(@Body requestBody: UpdateTimetableRequest): Response<WietApiResponse<Timetable>>
 
-    @DELETE("api/v1/admin/remove-timetable")
+    @DELETE("api/v1/timetable/remove-timetable")
     suspend fun removeTimetable(@Query("timetableId") timetableId: Int): Response<WietApiResponse<Unit>>
 }

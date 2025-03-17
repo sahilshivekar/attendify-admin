@@ -15,7 +15,7 @@ import retrofit2.http.Query
 
 interface EventApi {
 
-    @GET("api/v1/admin/get-events")
+    @GET("api/v1/event/get-events")
     suspend fun getEvents(
         @Query("searchQuery") searchQuery: String?,
         @Query("startDatetime") startDatetime: String?,
@@ -25,11 +25,11 @@ interface EventApi {
         @Query("limit") limit: Int
     ): Response<WietApiResponse<List<Event>>>
 
-    @GET("api/v1/admin/get-event-by-id")
+    @GET("api/v1/event/get-event-by-id")
     suspend fun getEventById(@Query("eventId") eventId: Int): Response<WietApiResponse<Event>>
 
     @Multipart
-    @POST("api/v1/admin/add-event")
+    @POST("api/v1/event/add-event")
     suspend fun addEvent(
         @Part("title") title: RequestBody,
         @Part("description") description: RequestBody?,
@@ -42,7 +42,7 @@ interface EventApi {
     ): Response<WietApiResponse<Event>>
 
     @Multipart
-    @PUT("api/v1/admin/update-event")
+    @PUT("api/v1/event/update-event")
     suspend fun updateEvent(
         @Part("eventId") eventId: RequestBody,
         @Part("title") title: RequestBody?,
@@ -55,6 +55,6 @@ interface EventApi {
         @Part imageFile: MultipartBody.Part?
     ): Response<WietApiResponse<Event>>
 
-    @DELETE("api/v1/admin/delete-event")
+    @DELETE("api/v1/event/delete-event")
     suspend fun deleteEvent(@Query("eventId") eventId: Int): Response<WietApiResponse<Unit>>
 }

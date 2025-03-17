@@ -42,8 +42,8 @@ class StaffRepositoryImpl(
         gender: String,
         highestQualification: String?,
         role: String,
-        password: String,
-        confirmPassword: String,
+//        password: String,
+//        confirmPassword: String,
         isActive: Boolean,
         staffImageFile: File?
     ): Response<WietApiResponse<Staff>> {
@@ -56,8 +56,8 @@ class StaffRepositoryImpl(
         val highestQualificationBody =
             highestQualification?.toRequestBody("text/plain".toMediaTypeOrNull())
         val roleBody = role.toRequestBody("text/plain".toMediaTypeOrNull())
-        val passwordBody = password.toRequestBody("text/plain".toMediaTypeOrNull())
-        val confirmPasswordBody = confirmPassword.toRequestBody("text/plain".toMediaTypeOrNull())
+//        val passwordBody = password.toRequestBody("text/plain".toMediaTypeOrNull())
+//        val confirmPasswordBody = confirmPassword.toRequestBody("text/plain".toMediaTypeOrNull())
         val isActiveBody = isActive.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
         val staffImagePart = if (staffImageFile != null) {
@@ -76,8 +76,8 @@ class StaffRepositoryImpl(
             genderBody,
             highestQualificationBody,
             roleBody,
-            passwordBody,
-            confirmPasswordBody,
+//            passwordBody,
+//            confirmPasswordBody,
             isActiveBody,
             staffImagePart
         )

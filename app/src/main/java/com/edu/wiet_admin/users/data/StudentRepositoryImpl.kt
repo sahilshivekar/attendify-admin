@@ -78,9 +78,9 @@ class StudentRepositoryImpl(
         email: String,
         phoneNumber: String,
         gender: String,
-        dob: Date?,
-        password: String,
-        confirmPassword: String,
+        dob: String?,
+//        password: String,
+//        confirmPassword: String,
         schemeId: String,
         academicStatus: String,
         admissionYear: String,
@@ -96,8 +96,8 @@ class StudentRepositoryImpl(
         val phoneNumberBody = phoneNumber.toRequestBody("text/plain".toMediaTypeOrNull())
         val genderBody = gender.toRequestBody("text/plain".toMediaTypeOrNull())
         val dobBody = dob?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
-        val passwordBody = password.toRequestBody("text/plain".toMediaTypeOrNull())
-        val confirmPasswordBody = confirmPassword.toRequestBody("text/plain".toMediaTypeOrNull())
+//        val passwordBody = password.toRequestBody("text/plain".toMediaTypeOrNull())
+//        val confirmPasswordBody = confirmPassword.toRequestBody("text/plain".toMediaTypeOrNull())
         val schemeIdBody = schemeId.toRequestBody("text/plain".toMediaTypeOrNull())
         val academicStatusBody = academicStatus.toRequestBody("text/plain".toMediaTypeOrNull())
         val admissionYearBody = admissionYear.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -123,8 +123,8 @@ class StudentRepositoryImpl(
             phoneNumberBody,
             genderBody,
             dobBody,
-            passwordBody,
-            confirmPasswordBody,
+//            passwordBody,
+//            confirmPasswordBody,
             schemeIdBody,
             academicStatusBody,
             admissionYearBody,

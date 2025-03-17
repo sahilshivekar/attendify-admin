@@ -27,15 +27,15 @@ interface BatchApi {
         @Query("limit") limit: Int
     ): Response<WietApiResponse<List<Batch?>>>
 
-    @POST("api/v1/admin/add")
+    @POST("api/v1/batch/add")
     suspend fun addBatch(@Body requestBody: AddBatchRequest): Response<WietApiResponse<Batch?>>
 
-    @PUT("api/v1/admin/update")
+    @PUT("api/v1/batch/update")
     suspend fun updateBatch(@Body requestBody: UpdateBatchRequest): Response<WietApiResponse<Batch?>>
 
-    @DELETE("api/v1/admin/remove")
+    @DELETE("api/v1/batch/remove")
     suspend fun removeBatch(@Query("id") batchId: String): Response<WietApiResponse<String?>>
 
-    @GET("api/v1/admin/get-batch-by-id")
+    @GET("api/v1/batch/get-batch-by-id")
     suspend fun getBatchById(@Query("batchId") batchId: String): Response<WietApiResponse<Batch?>>
 }

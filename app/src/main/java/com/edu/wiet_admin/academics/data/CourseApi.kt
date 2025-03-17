@@ -17,7 +17,7 @@ import retrofit2.http.Query
 
 interface CourseApi {
 
-    @GET("api/v1/admin/get-courses")
+    @GET("api/v1/course/get-courses")
     suspend fun getCourses(
         @Query("searchQuery") searchQuery: String?,
         @Query("branchId") branchId: String?,
@@ -27,21 +27,21 @@ interface CourseApi {
         @Query("limit") limit: Int
     ): Response<WietApiResponse<List<Course?>>>
 
-    @POST("api/v1/admin/add")
+    @POST("api/v1/course/add")
     suspend fun addCourse(@Body requestBody: AddCourseRequest): Response<WietApiResponse<Course?>>
 
-    @PUT("api/v1/admin/update")
+    @PUT("api/v1/course/update")
     suspend fun updateCourse(@Body requestBody: UpdateCourseRequest): Response<WietApiResponse<Course?>>
 
-    @DELETE("api/v1/admin/remove")
+    @DELETE("api/v1/course/remove")
     suspend fun removeCourse(@Query("id") courseId: String): Response<WietApiResponse<String?>>
 
-    @POST("api/v1/admin/add-to-branch-with-semester-number")
+    @POST("api/v1/course/add-to-branch-with-semester-number")
     suspend fun addCourseToBranchWithSemesterNumber(@Body requestBody: AddCourseToBranchWithSemesterNumberRequest): Response<WietApiResponse<Course?>>
 
-    @DELETE("api/v1/admin/remove-from-branch-with-semester-number")
+    @DELETE("api/v1/course/remove-from-branch-with-semester-number")
     suspend fun removeCourseFromBranchWithSemesterNumber(@Query("branchCourseSemesterId") branchCourseSemesterId: String): Response<WietApiResponse<String?>>
 
-    @GET("api/v1/admin/get-course-by-id")
+    @GET("api/v1/course/get-course-by-id")
     suspend fun getCourseById(@Query("courseId") courseId: String): Response<WietApiResponse<Course?>>
 }

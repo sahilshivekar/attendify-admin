@@ -22,7 +22,7 @@ import retrofit2.http.Query
 
 interface StaffApi {
 
-    @GET("api/v1/admin/get-staff")
+    @GET("api/v1/staff/get-staff")
     suspend fun getStaff(
         @Query("searchQuery") searchQuery: String?,
         @Query("courseId") courseId: Int?,
@@ -30,11 +30,11 @@ interface StaffApi {
         @Query("limit") limit: Int
     ): Response<WietApiResponse<List<Staff>>>
 
-    @GET("api/v1/admin/get-staff-by-id")
+    @GET("api/v1/staff/get-staff-by-id")
     suspend fun getStaffById(@Query("staffId") staffId: Int): Response<WietApiResponse<Staff>>
 
     @Multipart
-    @POST("api/v1/admin/add")
+    @POST("api/v1/staff/add")
     suspend fun addStaff(
         @Part("firstName") firstName: RequestBody,
         @Part("middleName") middleName: RequestBody?,
@@ -44,37 +44,37 @@ interface StaffApi {
         @Part("gender") gender: RequestBody,
         @Part("highestQualification") highestQualification: RequestBody?,
         @Part("role") role: RequestBody,
-        @Part("password") password: RequestBody,
-        @Part("confirmPassword") confirmPassword: RequestBody,
+//        @Part("password") password: RequestBody,
+//        @Part("confirmPassword") confirmPassword: RequestBody,
         @Part("isActive") isActive: RequestBody,
         @Part("staffImageFile") staffImageFile: MultipartBody.Part?
     ): Response<WietApiResponse<Staff>>
 
-    @PUT("api/v1/admin/update-details")
+    @PUT("api/v1/staff/update-details")
     suspend fun updateStaffDetails(@Body requestBody: UpdateStaffDetailsRequest): Response<WietApiResponse<Staff>>
 
-    @PUT("api/v1/admin/update-password")
+    @PUT("api/v1/staff/update-password")
     suspend fun updateStaffPassword(@Body requestBody: UpdateStaffPasswordRequest): Response<WietApiResponse<Staff>>
 
     @Multipart
-    @PUT("api/v1/admin/update-image")
+    @PUT("api/v1/staff/update-image")
     suspend fun updateStaffImage(
         @Part("id") id: RequestBody,
         @Part("staffImageFile") staffImageFile: MultipartBody.Part
     ): Response<WietApiResponse<Staff>>
 
-    @DELETE("api/v1/admin/remove")
+    @DELETE("api/v1/staff/remove")
     suspend fun removeStaff(@Body requestBody: RemoveStaffRequest): Response<WietApiResponse<Unit>>
 
-    @DELETE("api/v1/admin/remove-image")
+    @DELETE("api/v1/staff/remove-image")
     suspend fun removeImage(@Body requestBody: RemoveImageRequest): Response<WietApiResponse<Staff>>
 
-    @GET("api/v1/admin/get-teaching-subjects")
+    @GET("api/v1/staff/get-teaching-subjects")
     suspend fun getTeachingSubjects(@Query("staffId") staffId: Int): Response<WietApiResponse<List<TeacherTeaches>>>
 
-    @POST("api/v1/admin/add-teaching-subject")
+    @POST("api/v1/staff/add-teaching-subject")
     suspend fun addTeachingSubject(@Body requestBody: AddTeachingSubjectRequest): Response<WietApiResponse<TeacherTeaches>>
 
-    @DELETE("api/v1/admin/remove-teaching-subject")
+    @DELETE("api/v1/staff/remove-teaching-subject")
     suspend fun removeTeachingSubject(@Query("teacherSubjectId") teacherSubjectId: Int): Response<WietApiResponse<Unit>>
 }

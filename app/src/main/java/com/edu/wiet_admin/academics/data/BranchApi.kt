@@ -15,18 +15,18 @@ import retrofit2.http.Query
 
 interface BranchApi {
 
-    @GET("api/v1/admin/get-branches")
+    @GET("api/v1/branch/get-branches")
     suspend fun getBranches(@Query("searchQuery") searchQuery: String?): Response<WietApiResponse<List<Branch?>>>
 
-    @POST("api/v1/admin/add")
+    @POST("api/v1/branch/add")
     suspend fun addBranch(@Body requestBody: AddBranchRequest): Response<WietApiResponse<Branch?>>
 
-    @PUT("api/v1/admin/update")
+    @PUT("api/v1/branch/update")
     suspend fun updateBranch(@Body requestBody: UpdateBranchRequest): Response<WietApiResponse<Branch?>>
 
-    @DELETE("api/v1/admin/remove")
+    @DELETE("api/v1/branch/remove")
     suspend fun removeBranch(@Query("id") branchId: String): Response<WietApiResponse<String?>>
 
-    @GET("api/v1/admin/get-branch-by-id")
+    @GET("api/v1/branch/get-branch-by-id")
     suspend fun getBranchById(@Query("branchId") branchId: String): Response<WietApiResponse<Branch?>>
 }

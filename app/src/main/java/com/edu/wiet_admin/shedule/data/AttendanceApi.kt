@@ -17,19 +17,19 @@ import retrofit2.http.Query
 
 interface AttendanceApi {
 
-    @POST("api/v1/admin/create-attendance")
+    @POST("api/v1/attendance/create-attendance")
     suspend fun createAttendance(@Body requestBody: CreateAttendanceRequest): Response<WietApiResponse<Attendance?>>
 
-    @POST("api/v1/admin/add-students-to-attendance")
+    @POST("api/v1/attendance/add-students-to-attendance")
     suspend fun addStudentsAttendance(@Body requestBody: AddStudentsAttendanceRequest): Response<WietApiResponse<List<AttendanceStudent?>>>
 
-    @PUT("api/v1/admin/update-student-attendance")
+    @PUT("api/v1/attendance/update-student-attendance")
     suspend fun updateStudentAttendance(@Body requestBody: UpdateStudentAttendanceRequest): Response<WietApiResponse<AttendanceStudent?>>
 
-    @DELETE("api/v1/admin/remove-attendance")
+    @DELETE("api/v1/attendance/remove-attendance")
     suspend fun removeAttendance(@Query("attendanceId") attendanceId: String): Response<WietApiResponse<String?>>
 
-    @GET("api/v1/admin/get-attendance")
+    @GET("api/v1/attendance/get-attendance")
     suspend fun getAttendance(
         @Query("date") date: String?,
         @Query("attendanceId") attendanceId: String?,
@@ -40,21 +40,21 @@ interface AttendanceApi {
         @Query("divisionId") divisionId: String?
     ): Response<WietApiResponse<List<AttendanceStudent?>>>
 
-    @GET("api/v1/admin/get-attendance-of-student-for-specific-semester")
+    @GET("api/v1/attendance/get-attendance-of-student-for-specific-semester")
     suspend fun getAttendanceOfStudentForSpecificCourseInSemester(
         @Query("studentId") studentId: String,
         @Query("courseId") courseId: String,
         @Query("semesterId") semesterId: String
     ): Response<WietApiResponse<List<AttendanceStudentCount?>>>
 
-    @GET("api/v1/admin/get-attendance-date-course")
+    @GET("api/v1/attendance/get-attendance-date-course")
     suspend fun getAttendanceOfCourseOnDate(
         @Query("date") date: String,
         @Query("courseId") courseId: String,
         @Query("divisionId") divisionId: String
     ): Response<WietApiResponse<List<AttendanceStudentCount?>>>
 
-    @GET("api/v1/admin/get-attendance-course-division")
+    @GET("api/v1/attendance/get-attendance-course-division")
     suspend fun getAttendanceOfCourseThroughoutSemester(
         @Query("courseId") courseId: String,
         @Query("divisionId") divisionId: String

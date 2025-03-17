@@ -29,7 +29,7 @@ import retrofit2.http.Query
 
 interface StudentApi {
 
-    @GET("api/v1/admin/get-students")
+    @GET("api/v1/student/get-students")
     suspend fun getStudents(
         @Query("searchQuery") searchQuery: String?,
         @Query("branchId") branchId: Int?,
@@ -52,7 +52,7 @@ interface StudentApi {
     ): Response<WietApiResponse<List<Student>>>
 
     @Multipart
-    @POST("api/v1/admin/add")
+    @POST("api/v1/student/add")
     suspend fun addStudent(
         @Part("prn") prn: RequestBody,
         @Part("firstName") firstName: RequestBody,
@@ -62,8 +62,8 @@ interface StudentApi {
         @Part("phoneNumber") phoneNumber: RequestBody,
         @Part("gender") gender: RequestBody,
         @Part("dob") dob: RequestBody?,
-        @Part("password") password: RequestBody,
-        @Part("confirmPassword") confirmPassword: RequestBody,
+//        @Part("password") password: RequestBody,
+//        @Part("confirmPassword") confirmPassword: RequestBody,
         @Part("schemeId") schemeId: RequestBody,
         @Part("academicStatus") academicStatus: RequestBody,
         @Part("admissionYear") admissionYear: RequestBody,
@@ -72,56 +72,56 @@ interface StudentApi {
         @Part("studentImageFile") studentImageFile: MultipartBody.Part?
     ): Response<WietApiResponse<Student>>
 
-    @PUT("api/v1/admin/update-details")
+    @PUT("api/v1/student/update-details")
     suspend fun updateStudentDetails(@Body requestBody: UpdateStudentDetailsRequest): Response<WietApiResponse<Student>>
 
-    @PUT("api/v1/admin/update-password")
+    @PUT("api/v1/student/update-password")
     suspend fun updateStudentPassword(@Body requestBody: UpdateStudentPasswordRequest): Response<WietApiResponse<Student>>
 
     @Multipart
-    @PUT("api/v1/admin/update-image")
+    @PUT("api/v1/student/update-image")
     suspend fun updateStudentImage(
         @Part("studentId") studentId: RequestBody,
         @Part("studentImageFile") studentImageFile: MultipartBody.Part
     ): Response<WietApiResponse<Student>>
 
-    @DELETE("api/v1/admin/remove-image")
+    @DELETE("api/v1/student/remove-image")
     suspend fun removeStudentImage(@Body requestBody: RemoveStudentImageRequest): Response<WietApiResponse<Student>>
 
-    @DELETE("api/v1/admin/remove")
+    @DELETE("api/v1/student/remove")
     suspend fun removeStudent(@Body requestBody: RemoveStudentRequest): Response<WietApiResponse<Unit>>
 
-    @GET("api/v1/admin/get-student-details-by-id")
+    @GET("api/v1/student/get-student-details-by-id")
     suspend fun getStudentDetailsById(@Query("studentId") studentId: Int): Response<WietApiResponse<Student>>
 
-    @POST("api/v1/admin/add-to-semester")
+    @POST("api/v1/student/add-to-semester")
     suspend fun addStudentToSemester(@Body requestBody: AddStudentToSemesterRequest): Response<WietApiResponse<StudentSemester>>
 
-    @DELETE("api/v1/admin/remove-from-semester")
+    @DELETE("api/v1/student/remove-from-semester")
     suspend fun removeStudentFromSemester(@Body requestBody: RemoveStudentFromSemesterRequest): Response<WietApiResponse<Unit>>
 
-    @POST("api/v1/admin/add-to-division")
+    @POST("api/v1/student/add-to-division")
     suspend fun addStudentToDivision(@Body requestBody: AddStudentToDivisionRequest): Response<WietApiResponse<StudentDivision>>
 
-    @PUT("api/v1/admin/change-division")
+    @PUT("api/v1/student/change-division")
     suspend fun changeStudentDivision(@Body requestBody: ChangeStudentDivisionRequest): Response<WietApiResponse<StudentDivision>>
 
-    @POST("api/v1/admin/add-to-batch")
+    @POST("api/v1/student/add-to-batch")
     suspend fun addStudentToBatch(@Body requestBody: AddStudentToBatchRequest): Response<WietApiResponse<StudentBatch>>
 
-    @PUT("api/v1/admin/change-batch")
+    @PUT("api/v1/student/change-batch")
     suspend fun changeStudentBatch(@Body requestBody: ChangeStudentBatchRequest): Response<WietApiResponse<StudentBatch>>
 
-    @GET("api/v1/admin/get-student-semesters-by-id")
+    @GET("api/v1/student/get-student-semesters-by-id")
     suspend fun getStudentSemestersById(@Query("studentId") studentId: Int): Response<WietApiResponse<List<StudentSemester>>>
 
-    @GET("api/v1/admin/get-student-divisions-by-id")
+    @GET("api/v1/student/get-student-divisions-by-id")
     suspend fun getStudentDivisionsById(
         @Query("studentId") studentId: Int,
         @Query("semesterNumber") semesterNumber: Int?
     ): Response<WietApiResponse<List<StudentDivision>>>
 
-    @GET("api/v1/admin/get-student-batches-by-id")
+    @GET("api/v1/student/get-student-batches-by-id")
     suspend fun getStudentBatchesById(
         @Query("studentId") studentId: Int,
         @Query("semesterNumber") semesterNumber: Int?

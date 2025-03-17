@@ -15,18 +15,18 @@ import retrofit2.http.Query
 
 interface UniversityApi {
 
-    @GET("api/v1/admin/get-universities")
+    @GET("api/v1/university/get-universities")
     suspend fun getUniversities(): Response<WietApiResponse<List<University?>>>
 
-    @POST("api/v1/admin/add")
+    @POST("api/v1/university/add")
     suspend fun addUniversity(@Body requestBody: AddUniversityRequest): Response<WietApiResponse<University?>>
 
-    @PUT("api/v1/admin/update")
+    @PUT("api/v1/university/update")
     suspend fun updateUniversity(@Body requestBody: UpdateUniversityRequest): Response<WietApiResponse<University?>>
 
-    @DELETE("api/v1/admin/remove")
+    @DELETE("api/v1/university/remove")
     suspend fun removeUniversity(@Query("id") universityId: String): Response<WietApiResponse<String?>>
 
-    @GET("api/v1/admin/get-university-by-id")
+    @GET("api/v1/university/get-university-by-id")
     suspend fun getUniversityById(@Query("universityId") universityId: String): Response<WietApiResponse<University?>>
 }
