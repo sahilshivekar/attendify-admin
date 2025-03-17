@@ -2,4 +2,16 @@
 <resources>
 
     <style name="Theme.WietAdmin" parent="android:Theme.Material.Light.NoActionBar" />
+
+
+    <style name="CustomDatePickerDialog" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:datePickerStyle">@style/CustomDatePicker</item>
+        <item name="android:colorAccent">@color/primary</item>
+        <item name="android:colorBackground">@color/surface</item>
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <style name="CustomDatePicker" parent="android:Widget.Material.DatePicker">
+        <item name="android:headerBackground">@color/secondary</item>
+    </style>
 </resources>

@@ -40,8 +40,8 @@ fun WietButton(
     colors: ButtonColors = buttonColors(
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary,
-        disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
-        disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
+        disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+        disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f)
     ),
 
     // following parameters i will use to avoid writing the logic to show circular progress bar in button on loading else the text

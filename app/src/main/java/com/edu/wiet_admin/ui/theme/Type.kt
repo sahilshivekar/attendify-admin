@@ -82,7 +82,7 @@ val Typography = Typography(
     ),
     headlineSmall = TextStyle(
         fontFamily = Poppins,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 24.sp
     ),
     labelLarge = TextStyle(
@@ -107,8 +107,8 @@ val Typography = Typography(
     ),
     titleMedium = TextStyle(
         fontFamily = Poppins,
-        fontWeight = FontWeight.Bold,
-        fontSize = 16.sp
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 18.sp
     ),
     titleSmall = TextStyle(
         fontFamily = Poppins,

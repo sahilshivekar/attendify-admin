@@ -62,6 +62,7 @@ dependencies {
     ksp(libs.room.compiler) // Room compiler for generating code related to database entities and DAOs
     implementation(libs.room.ktx) // Room KTX for Kotlin extensions to simplify Room database interactions
     implementation(libs.kotlinx.serialization.json) // Kotlin serialization for data serialization and deserialization
+    implementation(libs.libphonenumber)
 
     //predefined
     implementation(libs.androidx.core.ktx)

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.edu.wiet_admin.admin_mgt.domain.use_case.UpdateAdminPasswordUseCase
 import com.edu.wiet_admin.common.data.remote.Resource
-import com.edu.wiet_admin.common.domain.Validators
+import com.edu.wiet_admin.common.validation.Validators
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn

@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="splash_screen_background">#FFFFFFFF</color>
+    <color name="primary">#FF0b57cf</color>
+    <color name="onPrimary">#FFfefefa</color>
+    <color name="secondary">#FFC3E7ff</color>
+    <color name="onSecondary">#FF02406A</color>
+    <color name="background">#FFFFFFFF</color>
+    <color name="onBackground">#FF222222</color>
+    <color name="surface">#FFF0F3F8</color>
+    <color name="onSurface">#FF434448</color>
 
+
+    <color name="splash_screen_background">#FFFFFFFF</color>
     <color name="text_field_border_label">#801A1D1F</color>
     <color name="normal_text">#E6000000</color>
-
     <color name="icon_color">#FF0954CF</color>
-
     <color name="divider">#331A1D1F</color>
 </resources>

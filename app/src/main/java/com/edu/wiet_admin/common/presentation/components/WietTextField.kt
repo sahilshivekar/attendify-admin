@@ -1,7 +1,9 @@
 package com.edu.wiet_admin.common.presentation.components
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -13,8 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.edu.wiet_admin.R
@@ -36,6 +40,7 @@ fun WietTextField(
     textStyle: TextStyle = Typography.bodyLarge,
     isError: Boolean = false,
     supportingText: String? = null,
+    placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     prefix: @Composable (() -> Unit)? = null,
@@ -79,14 +84,17 @@ fun WietTextField(
             label?.let {
                 Text(
                     text = label,
-                    style = Typography.bodyMedium
+                    style = MaterialTheme.typography.labelLarge,
+                    maxLines = 1,
+//                    overflow = TextOverflow.Visible,
+                    modifier = Modifier.wrapContentWidth(unbounded = true)
                 )
             }
         },
         isError = isError,
         supportingText = {
             if (supportingText != null) {
-                Text(text = supportingText, fontSize = 12.sp)
+                Text(text = supportingText, style = MaterialTheme.typography.labelSmall)
             }
         },
         leadingIcon = leadingIcon,
@@ -99,7 +107,9 @@ fun WietTextField(
         maxLines = maxLines,
         minLines = minLines,
         shape = shape,
-        colors = colors
+        colors = colors,
+        placeholder = placeholder,
+        singleLine = singleLine
     )
 }
 

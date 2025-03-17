@@ -14,10 +14,10 @@ import com.edu.wiet_admin.common.data.remote.response_dto.Class
 
 interface ClassApi {
 
-    @POST("api/v1/admin/add-class")
+    @POST("api/v1/class/add-class")
     suspend fun addClass(@Body requestBody: AddClassRequest): Response<WietApiResponse<Class>>
 
-    @GET("api/v1/admin/get-classes")
+    @GET("api/v1/class/get-classes")
     suspend fun getClasses(
         @Query("searchQuery") searchQuery: String?,
         @Query("timetableId") timetableId: Int?,
@@ -37,12 +37,12 @@ interface ClassApi {
         @Query("limit") limit: Int
     ): Response<WietApiResponse<List<Class>>>
 
-    @GET("api/v1/admin/get-class-by-id")
+    @GET("api/v1/class/get-class-by-id")
     suspend fun getClassById(@Query("classId") classId: Int): Response<WietApiResponse<Class>>
 
-    @PUT("api/v1/admin/extend-active-till-date-of-class")
+    @PUT("api/v1/class/extend-active-till-date-of-class")
     suspend fun extendActiveTillDateOfClass(@Body requestBody: ExtendActiveTillDateRequest): Response<WietApiResponse<Class>>
 
-    @DELETE("api/v1/admin/remove-class")
+    @DELETE("api/v1/class/remove-class")
     suspend fun removeClass(@Query("classId") classId: Int): Response<WietApiResponse<Unit>>
 }

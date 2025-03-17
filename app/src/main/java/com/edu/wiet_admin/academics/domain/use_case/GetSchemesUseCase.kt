@@ -1,5 +1,6 @@
 package com.edu.wiet_admin.academics.domain.use_case
 
+import android.util.Log
 import com.edu.wiet_admin.academics.domain.repository.SchemeRepository
 import com.edu.wiet_admin.common.data.remote.Resource
 import com.edu.wiet_admin.common.data.remote.WietApiResponse
@@ -11,6 +12,7 @@ import javax.inject.Inject
 // SchemeRepository Use Cases
 class GetSchemesUseCase @Inject constructor(private val schemeRepository: SchemeRepository) {
     operator fun invoke(searchQuery: String?): Flow<Resource<WietApiResponse<List<Scheme?>>>> {
+        Log.d("use_case", "here in the schemes use case")
         return RemoteUtils.responseFlow { schemeRepository.getSchemes(searchQuery) }
     }
 }

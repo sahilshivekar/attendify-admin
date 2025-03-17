@@ -1,6 +1,7 @@
 [versions]
 hiltVersion = "2.53.1"
 kspVersion = "2.1.0-1.0.29"
+libphonenumber = "8.13.16"
 roomVersion = "2.6.1"
 pagingVersion = "3.3.6"
 navVersion = "2.8.9"
@@ -26,6 +27,7 @@ androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version = "1.
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.2.0" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version = "1.0.1" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navVersion" }
+libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumber" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVersion" }
 retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofitVersion" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.4.0" }

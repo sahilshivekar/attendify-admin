@@ -19,8 +19,8 @@ class AddStaffUseCase @Inject constructor(private val staffRepository: StaffRepo
         gender: String,
         highestQualification: String?,
         role: String,
-        password: String,
-        confirmPassword: String,
+//        password: String,
+//        confirmPassword: String,
         isActive: Boolean,
         staffImageFile: File?
     ): Flow<Resource<WietApiResponse<Staff>>> {
@@ -34,8 +34,8 @@ class AddStaffUseCase @Inject constructor(private val staffRepository: StaffRepo
                 gender,
                 highestQualification,
                 role,
-                password,
-                confirmPassword,
+//                password,
+//                confirmPassword,
                 isActive,
                 staffImageFile
             )

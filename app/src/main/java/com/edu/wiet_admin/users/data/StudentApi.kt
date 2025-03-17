@@ -62,14 +62,12 @@ interface StudentApi {
         @Part("phoneNumber") phoneNumber: RequestBody,
         @Part("gender") gender: RequestBody,
         @Part("dob") dob: RequestBody?,
-//        @Part("password") password: RequestBody,
-//        @Part("confirmPassword") confirmPassword: RequestBody,
         @Part("schemeId") schemeId: RequestBody,
         @Part("academicStatus") academicStatus: RequestBody,
         @Part("admissionYear") admissionYear: RequestBody,
         @Part("admissionType") admissionType: RequestBody,
         @Part("branchId") branchId: RequestBody,
-        @Part("studentImageFile") studentImageFile: MultipartBody.Part?
+        @Part studentImageFile: MultipartBody.Part?
     ): Response<WietApiResponse<Student>>
 
     @PUT("api/v1/student/update-details")

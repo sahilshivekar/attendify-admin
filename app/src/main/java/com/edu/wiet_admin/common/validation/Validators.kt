@@ -1,4 +1,4 @@
-package com.edu.wiet_admin.common.domain
+package com.edu.wiet_admin.common.validation
 
 object Validators {
 
@@ -15,6 +15,7 @@ object Validators {
             username.isNullOrEmpty() -> "Username cannot be empty"
             username.contains(" ") -> "Username cannot contain spaces"
             username != username.lowercase() -> "Username must be in lowercase"
+            username.length < 8 -> "Username must be at least 8 characters long"
             else -> null
         }
     }

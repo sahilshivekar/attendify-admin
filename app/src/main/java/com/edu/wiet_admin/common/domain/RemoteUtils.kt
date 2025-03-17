@@ -45,7 +45,6 @@ object RemoteUtils {
                 errorMessage?.let { Log.d("responseFlow", it) }
             }
         } catch (e: IOException) {
-
             emit(Resource.Error(message = NETWORK_IO))
         } catch (e: Exception) {
             Log.d("responseFlow", e.toString())
