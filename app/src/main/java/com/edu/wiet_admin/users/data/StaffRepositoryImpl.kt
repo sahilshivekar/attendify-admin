@@ -1,5 +1,8 @@
 package com.edu.wiet_admin.users.data
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.edu.wiet_admin.common.data.remote.WietApiResponse
 import com.edu.wiet_admin.common.data.remote.response_dto.Staff
 import com.edu.wiet_admin.common.data.remote.response_dto.TeacherTeaches
@@ -9,6 +12,7 @@ import com.edu.wiet_admin.users.data.dto.request.RemoveStaffRequest
 import com.edu.wiet_admin.users.data.dto.request.UpdateStaffDetailsRequest
 import com.edu.wiet_admin.users.data.dto.request.UpdateStaffPasswordRequest
 import com.edu.wiet_admin.users.domain.repository.StaffRepository
+import kotlinx.coroutines.flow.Flow
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -20,13 +24,14 @@ class StaffRepositoryImpl(
     private val staffApi: StaffApi
 ) : StaffRepository {
 
-    override suspend fun getStaff(
+    override fun getStaff(
         searchQuery: String?,
-        courseId: Int?,
-        page: Int,
-        limit: Int
-    ): Response<WietApiResponse<List<Staff>>> {
-        return staffApi.getStaff(searchQuery, courseId, page, limit)
+        courseId: Int?
+    ): Flow<PagingData<Staff>> {
+        return Pager(
+            config = PagingConfig(pageSize = 10),
+            pagingSourceFactory = { GetStaffPagingSource(staffApi, searchQuery, courseId) }
+        ).flow
     }
 
     override suspend fun getStaffById(staffId: Int): Response<WietApiResponse<Staff>> {

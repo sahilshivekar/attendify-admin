@@ -225,7 +225,7 @@ fun AddStudentScreen(
                     label = "Gender",
                     readOnly = true,
                     maxLines = 1,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryEditable),
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
                             expanded = state.isGenderDropDownOpen,
@@ -244,6 +244,7 @@ fun AddStudentScreen(
                                 false
                             )
                         )
+                        localFocusManager.clearFocus()
                     },
                     shape = MaterialTheme.shapes.medium,
                     containerColor = MaterialTheme.colorScheme.surface
@@ -254,6 +255,7 @@ fun AddStudentScreen(
                             onClick = {
                                 onEvent(AddStudentEvent.GenderChanged(option))
                                 onEvent(AddStudentEvent.GenderDropDownVisibilityChanged(false))
+                                localFocusManager.clearFocus()
                             },
                             text = {
                                 Text(text = option, color = MaterialTheme.colorScheme.onSurface)
@@ -370,7 +372,7 @@ fun AddStudentScreen(
                     value = state.admissionYear,
                     onValueChange = { onEvent(AddStudentEvent.AdmissionYearChanged(it)) },
                     label = "Admission Year",
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryEditable),
                     readOnly = true,
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
@@ -391,9 +393,11 @@ fun AddStudentScreen(
                                 false
                             )
                         )
+                        localFocusManager.clearFocus()
                     },
                     modifier = Modifier.heightIn(max = 160.dp),
-                    shape = MaterialTheme.shapes.medium
+                    shape = MaterialTheme.shapes.medium,
+                    containerColor = MaterialTheme.colorScheme.surface
                 ) {
                     state.admissionYearOptions.forEach {
                         DropdownMenuItem(
@@ -401,7 +405,9 @@ fun AddStudentScreen(
                             onClick = {
                                 onEvent(AddStudentEvent.AdmissionYearChanged(it))
                                 onEvent(AddStudentEvent.AdmissionYearDropDownVisibilityChanged(false))
+                                localFocusManager.clearFocus()
                             }
+
                         )
                     }
                 }
@@ -425,7 +431,7 @@ fun AddStudentScreen(
                     value = state.admissionType,
                     onValueChange = { onEvent(AddStudentEvent.AdmissionTypeChanged(it)) },
                     label = "Admission Type",
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryEditable),
                     readOnly = true,
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
@@ -446,8 +452,10 @@ fun AddStudentScreen(
                                 false
                             )
                         )
+                        localFocusManager.clearFocus()
                     },
-                    shape = MaterialTheme.shapes.medium
+                    shape = MaterialTheme.shapes.medium,
+                    containerColor = MaterialTheme.colorScheme.surface
                 ) {
                     state.admissionTypeOptions.forEach {
                         DropdownMenuItem(
@@ -455,6 +463,7 @@ fun AddStudentScreen(
                             onClick = {
                                 onEvent(AddStudentEvent.AdmissionTypeChanged(it))
                                 onEvent(AddStudentEvent.AdmissionTypeDropDownVisibilityChanged(false))
+                                localFocusManager.clearFocus()
                             }
                         )
                     }
@@ -487,8 +496,8 @@ fun AddStudentScreen(
                 WietTextField(
                     value = state.academicStatus,
                     onValueChange = { onEvent(AddStudentEvent.AcademicStatusChanged(it)) },
-                    label = "Academic status",
-                    modifier = Modifier.fillMaxWidth(),
+                    label = "Academic Status",
+                    modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryEditable),
                     readOnly = true,
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
@@ -509,6 +518,7 @@ fun AddStudentScreen(
                                 false
                             )
                         )
+                        localFocusManager.clearFocus()
                     },
                     modifier = Modifier.heightIn(max = 160.dp),
                     shape = MaterialTheme.shapes.medium,
@@ -526,6 +536,7 @@ fun AddStudentScreen(
                                         false
                                     )
                                 )
+                                localFocusManager.clearFocus()
                             }
                         )
                     }
@@ -639,7 +650,7 @@ fun AddStudentScreen(
                     value = state.selectedBranch?.abbreviation ?: "",
                     onValueChange = { },
                     label = "Branch",
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryEditable),
                     readOnly = true,
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
@@ -660,6 +671,7 @@ fun AddStudentScreen(
                                 false
                             )
                         )
+                        localFocusManager.clearFocus()
                     },
                     modifier = Modifier.heightIn(max = 160.dp),
                     shape = MaterialTheme.shapes.medium,
@@ -679,6 +691,7 @@ fun AddStudentScreen(
                                         false
                                     )
                                 )
+                                localFocusManager.clearFocus()
                             }
                         )
                     }
@@ -704,7 +717,7 @@ fun AddStudentScreen(
                     value = state.selectedScheme?.name ?: "",
                     onValueChange = { },
                     label = "Scheme",
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryEditable),
                     readOnly = true,
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
@@ -725,6 +738,7 @@ fun AddStudentScreen(
                                 false
                             )
                         )
+                        localFocusManager.clearFocus()
                     },
                     modifier = Modifier.heightIn(max = 160.dp),
                     shape = MaterialTheme.shapes.medium,
@@ -744,6 +758,7 @@ fun AddStudentScreen(
                                         false
                                     )
                                 )
+                                localFocusManager.clearFocus()
                             }
                         )
                     }

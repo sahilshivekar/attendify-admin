@@ -4,6 +4,7 @@ import com.edu.wiet_admin.common.data.remote.WietApiResponse
 import com.edu.wiet_admin.common.data.remote.response_dto.Student
 import com.edu.wiet_admin.common.data.remote.response_dto.StudentBatch
 import com.edu.wiet_admin.common.data.remote.response_dto.StudentDivision
+import com.edu.wiet_admin.common.data.remote.response_dto.StudentListWithTotal
 import com.edu.wiet_admin.common.data.remote.response_dto.StudentSemester
 import com.edu.wiet_admin.users.data.dto.request.AddStudentToBatchRequest
 import com.edu.wiet_admin.users.data.dto.request.AddStudentToDivisionRequest
@@ -32,24 +33,24 @@ interface StudentApi {
     @GET("api/v1/student/get-students")
     suspend fun getStudents(
         @Query("searchQuery") searchQuery: String?,
-        @Query("branchId") branchId: Int?,
-        @Query("semesterNumber") semesterNumber: Int?,
+        @Query("branchIds") branchIds: List<Int>?,
+        @Query("semesterNumbers") semesterNumbers: List<Int>?,
         @Query("academicStartYearOfSemester") academicStartYearOfSemester: Int?,
         @Query("academicEndYearOfSemester") academicEndYearOfSemester: Int?,
         @Query("batchId") batchId: Int?,
         @Query("schemeId") schemeId: Int?,
         @Query("divisionId") divisionId: Int?,
-        @Query("academicStatus") academicStatus: String?,
-        @Query("admissionType") admissionType: String?,
+        @Query("academicStatuses") academicStatuses: List<String>?,
+        @Query("admissionTypes") admissionTypes: List<String>?,
         @Query("admissionYear") admissionYear: Int?,
         @Query("currentBatch") currentBatch: Boolean?,
         @Query("currentDivision") currentDivision: Boolean?,
-        @Query("studentStatus") studentStatus: String?,
+        @Query("currentSemester") currentSemester: Boolean?,
         @Query("divisionCode") divisionCode: String?,
         @Query("batchCode") batchCode: String?,
         @Query("page") page: Int,
-        @Query("limit") limit: Int
-    ): Response<WietApiResponse<List<Student>>>
+//        @Query("limit") limit: Int
+    ): Response<WietApiResponse<StudentListWithTotal>>
 
     @Multipart
     @POST("api/v1/student/add")

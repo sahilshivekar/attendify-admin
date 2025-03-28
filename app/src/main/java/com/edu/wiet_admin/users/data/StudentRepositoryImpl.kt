@@ -1,5 +1,8 @@
 package com.edu.wiet_admin.users.data
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.edu.wiet_admin.common.data.remote.WietApiResponse
 import com.edu.wiet_admin.common.data.remote.response_dto.Student
 import com.edu.wiet_admin.common.data.remote.response_dto.StudentBatch
@@ -16,58 +19,62 @@ import com.edu.wiet_admin.users.data.dto.request.RemoveStudentRequest
 import com.edu.wiet_admin.users.data.dto.request.UpdateStudentDetailsRequest
 import com.edu.wiet_admin.users.data.dto.request.UpdateStudentPasswordRequest
 import com.edu.wiet_admin.users.domain.repository.StudentRepository
+import kotlinx.coroutines.flow.Flow
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 import java.io.File
-import java.util.Date
 
 class StudentRepositoryImpl(
     private val studentApi: StudentApi
 ) : StudentRepository {
 
-    override suspend fun getStudents(
+    override fun getStudents(
         searchQuery: String?,
-        branchId: Int?,
-        semesterNumber: Int?,
+        branchIds: List<Int>?,
+        semesterNumbers: List<Int>?,
         academicStartYearOfSemester: Int?,
         academicEndYearOfSemester: Int?,
         batchId: Int?,
         schemeId: Int?,
         divisionId: Int?,
-        academicStatus: String?,
-        admissionType: String?,
+        academicStatuses: List<String>?,
+        admissionTypes: List<String>?,
         admissionYear: Int?,
         currentBatch: Boolean?,
         currentDivision: Boolean?,
-        studentStatus: String?,
+        currentSemester: Boolean?,
         divisionCode: String?,
-        batchCode: String?,
-        page: Int,
-        limit: Int
-    ): Response<WietApiResponse<List<Student>>> {
-        return studentApi.getStudents(
-            searchQuery,
-            branchId,
-            semesterNumber,
-            academicStartYearOfSemester,
-            academicEndYearOfSemester,
-            batchId,
-            schemeId,
-            divisionId,
-            academicStatus,
-            admissionType,
-            admissionYear,
-            currentBatch,
-            currentDivision,
-            studentStatus,
-            divisionCode,
-            batchCode,
-            page,
-            limit
-        )
+        batchCode: String?
+    ): Flow<PagingData<Student>> {
+
+        return Pager(
+            config = PagingConfig(pageSize = 10),
+            pagingSourceFactory = {
+                GetStudentsPagingSource(
+                    studentApi = studentApi,
+                    searchQuery,
+                    branchIds,
+                    semesterNumbers,
+                    academicStartYearOfSemester,
+                    academicEndYearOfSemester,
+                    batchId,
+                    schemeId,
+                    divisionId,
+                    academicStatuses,
+                    admissionTypes,
+                    admissionYear,
+                    currentBatch,
+                    currentDivision,
+                    currentSemester,
+                    divisionCode,
+                    batchCode
+                )
+            }
+        ).flow
+
     }
 
     override suspend fun addStudent(
@@ -95,9 +102,7 @@ class StudentRepositoryImpl(
         val emailBody = email.toRequestBody("text/plain".toMediaTypeOrNull())
         val phoneNumberBody = phoneNumber.toRequestBody("text/plain".toMediaTypeOrNull())
         val genderBody = gender.toRequestBody("text/plain".toMediaTypeOrNull())
-        val dobBody = dob?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
-//        val passwordBody = password.toRequestBody("text/plain".toMediaTypeOrNull())
-//        val confirmPasswordBody = confirmPassword.toRequestBody("text/plain".toMediaTypeOrNull())
+        val dobBody = dob?.toRequestBody("text/plain".toMediaTypeOrNull())
         val schemeIdBody = schemeId.toRequestBody("text/plain".toMediaTypeOrNull())
         val academicStatusBody = academicStatus.toRequestBody("text/plain".toMediaTypeOrNull())
         val admissionYearBody = admissionYear.toRequestBody("text/plain".toMediaTypeOrNull())

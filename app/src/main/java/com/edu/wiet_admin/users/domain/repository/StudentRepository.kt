@@ -1,5 +1,6 @@
 package com.edu.wiet_admin.users.domain.repository
 
+import androidx.paging.PagingData
 import com.edu.wiet_admin.common.data.remote.WietApiResponse
 import com.edu.wiet_admin.common.data.remote.response_dto.Student
 import com.edu.wiet_admin.common.data.remote.response_dto.StudentBatch
@@ -15,33 +16,31 @@ import com.edu.wiet_admin.users.data.dto.request.RemoveStudentImageRequest
 import com.edu.wiet_admin.users.data.dto.request.RemoveStudentRequest
 import com.edu.wiet_admin.users.data.dto.request.UpdateStudentDetailsRequest
 import com.edu.wiet_admin.users.data.dto.request.UpdateStudentPasswordRequest
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import java.io.File
-import java.util.Date
 
 interface StudentRepository {
 
     // Get all students
-    suspend fun getStudents(
+    fun getStudents(
         searchQuery: String?,
-        branchId: Int?,
-        semesterNumber: Int?,
+        branchIds: List<Int>?,
+        semesterNumbers: List<Int>?,
         academicStartYearOfSemester: Int?,
         academicEndYearOfSemester: Int?,
         batchId: Int?,
         schemeId: Int?,
         divisionId: Int?,
-        academicStatus: String?,
-        admissionType: String?,
+        academicStatuses: List<String>?,
+        admissionTypes: List<String>?,
         admissionYear: Int?,
         currentBatch: Boolean?,
         currentDivision: Boolean?,
-        studentStatus: String?,
+        currentSemester: Boolean?,
         divisionCode: String?,
         batchCode: String?,
-        page: Int = 1,
-        limit: Int = 10
-    ): Response<WietApiResponse<List<Student>>>
+    ): Flow<PagingData<Student>>
 
     // Add a student
     suspend fun addStudent(

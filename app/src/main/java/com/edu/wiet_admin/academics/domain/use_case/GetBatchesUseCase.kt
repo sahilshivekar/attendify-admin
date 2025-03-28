@@ -12,11 +12,11 @@ class GetBatchesUseCase @Inject constructor(
     private val batchRepository: BatchRepository
 ) {
     operator fun invoke(
-        semesterNumber: Int?,
-        branchId: String?,
-        academicStartYear: Int?,
-        academicEndYear: Int?,
-        searchQuery: String?,
+        semesterNumber: Int? = null,
+        branchId: String? = null,
+        academicStartYear: Int? = null,
+        academicEndYear: Int? = null,
+        searchQuery: String? = null,
         page: Int,
         limit: Int
     ): Flow<Resource<WietApiResponse<List<Batch?>>>> {

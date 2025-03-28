@@ -1,6 +1,5 @@
 package com.edu.wiet_admin.common.presentation.components
 
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -15,12 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.edu.wiet_admin.R
 import com.edu.wiet_admin.common.presentation.ComponentPreview
 import com.edu.wiet_admin.common.presentation.PreviewWrapper
@@ -71,7 +67,7 @@ fun WietTextField(
         unfocusedSupportingTextColor = colorResource(R.color.text_field_border_label),
         disabledSupportingTextColor = colorResource(R.color.text_field_border_label).copy(alpha = 0.30f),
         errorSupportingTextColor = MaterialTheme.colorScheme.error,
-    )
+    ),
 ) {
     OutlinedTextField(
         modifier = modifier,

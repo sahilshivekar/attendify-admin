@@ -10,7 +10,15 @@ import javax.inject.Inject
 
 // DivisionRepository Use Cases
 class GetDivisionsUseCase @Inject constructor(private val divisionRepository: DivisionRepository) {
-    operator fun invoke(semesterNumber: Int?, branchId: String?, academicStartYear: Int?, academicEndYear: Int?, searchQuery: String?, page: Int, limit: Int): Flow<Resource<WietApiResponse<List<Division?>>>> {
+    operator fun invoke(
+        semesterNumber: Int? = null,
+        branchId: String? = null,
+        academicStartYear: Int? = null,
+        academicEndYear: Int? = null,
+        searchQuery: String? = null,
+        page: Int,
+        limit: Int
+    ): Flow<Resource<WietApiResponse<List<Division?>>>> {
         return RemoteUtils.responseFlow {
             divisionRepository.getDivisions(
                 semesterNumber,

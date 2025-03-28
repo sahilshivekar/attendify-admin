@@ -14,4 +14,5 @@
     <color name="normal_text">#E6FFFFFF</color>
     <color name="icon_color">#FFA8C7F7</color>
     <color name="divider">#33C9DAFF</color>
+    <color name="search_bar">#292a2c</color>
 </resources>

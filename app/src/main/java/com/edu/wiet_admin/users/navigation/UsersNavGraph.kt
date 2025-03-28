@@ -1,16 +1,19 @@
 package com.edu.wiet_admin.users.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.edu.wiet_admin.users.presentation.add_staff.AddStaffScreen
+import com.edu.wiet_admin.users.presentation.add_staff.AddStaffViewModel
 import com.edu.wiet_admin.users.presentation.add_student.AddStudentScreen
 import com.edu.wiet_admin.users.presentation.add_student.AddStudentViewModel
+import com.edu.wiet_admin.users.presentation.search_staff.SearchStaffScreen
+import com.edu.wiet_admin.users.presentation.search_staff.SearchStaffViewModel
+import com.edu.wiet_admin.users.presentation.search_student.SearchStudentScreen
+import com.edu.wiet_admin.users.presentation.search_student.SearchStudentViewModel
 import com.edu.wiet_admin.users.presentation.user_dashboard.UserDashboardScreen
 
 @Composable
@@ -25,21 +28,21 @@ fun UsersNavHost() {
                 onAddStudentClick = {
                     navController.navigate(UsersDestination.AddStudent.route)
                 },
-                onEditStudentClick = {},
-                onRemoveStudentClick = {},
-                onSearchStudentClick = {},
-                onAddStaffClick = {},
-                onEditStaffClick = {},
-                onRemoveStaffClick = {},
-                onSearchStaffClick = {},
+                onSearchStudentClick = {
+                    navController.navigate(UsersDestination.SearchStudent.route)
+                },
+                onAddStaffClick = {
+                    navController.navigate(UsersDestination.AddStaff.route)
+                },
+                onSearchStaffClick = {
+                    navController.navigate(UsersDestination.SearchStaff.route)
+                },
                 onAssignStudentToSemesterClick = {},
                 onRemoveStudentFromSemesterClick = {},
                 onAssignStudentToDivisionClick = {},
                 onModifyStudentDivisionClick = {},
-                onRemoveStudentFromDivisionClick = {},
                 onAssignStudentToBatchClick = {},
-                onModifyStudentBatchClick = {},
-                onRemoveStudentFromBatchClick = {}
+                onModifyStudentBatchClick = {}
             )
         }
 
@@ -51,6 +54,33 @@ fun UsersNavHost() {
                 onAddStudentSuccess = {
                     navController.navigateUp()
                 }
+            )
+        }
+
+        composable(route = UsersDestination.SearchStudent.route) {
+            val viewModel = hiltViewModel<SearchStudentViewModel>()
+            SearchStudentScreen(
+                onEvent = viewModel::onEvent,
+                state = viewModel.state.collectAsState().value,
+            )
+        }
+
+        composable(route = UsersDestination.AddStaff.route){
+            val viewModel = hiltViewModel<AddStaffViewModel>()
+            AddStaffScreen(
+                onEvent = viewModel::onEvent,
+                state = viewModel.state.collectAsState().value,
+                onAddStaffSuccess = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        composable(route = UsersDestination.SearchStaff.route){
+            val viewModel = hiltViewModel<SearchStaffViewModel>()
+            SearchStaffScreen(
+                onEvent = viewModel::onEvent,
+                state = viewModel.state.collectAsState().value,
             )
         }
     }

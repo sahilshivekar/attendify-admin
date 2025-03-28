@@ -2,6 +2,7 @@ package com.edu.wiet_admin.users.data
 
 import com.edu.wiet_admin.common.data.remote.WietApiResponse
 import com.edu.wiet_admin.common.data.remote.response_dto.Staff
+import com.edu.wiet_admin.common.data.remote.response_dto.StaffListWithTotal
 import com.edu.wiet_admin.common.data.remote.response_dto.TeacherTeaches
 import com.edu.wiet_admin.users.data.dto.request.AddTeachingSubjectRequest
 import com.edu.wiet_admin.users.data.dto.request.RemoveImageRequest
@@ -26,9 +27,8 @@ interface StaffApi {
     suspend fun getStaff(
         @Query("searchQuery") searchQuery: String?,
         @Query("courseId") courseId: Int?,
-        @Query("page") page: Int,
-        @Query("limit") limit: Int
-    ): Response<WietApiResponse<List<Staff>>>
+        @Query("page") page: Int
+    ): Response<WietApiResponse<StaffListWithTotal>>
 
     @GET("api/v1/staff/get-staff-by-id")
     suspend fun getStaffById(@Query("staffId") staffId: Int): Response<WietApiResponse<Staff>>
@@ -44,10 +44,8 @@ interface StaffApi {
         @Part("gender") gender: RequestBody,
         @Part("highestQualification") highestQualification: RequestBody?,
         @Part("role") role: RequestBody,
-//        @Part("password") password: RequestBody,
-//        @Part("confirmPassword") confirmPassword: RequestBody,
         @Part("isActive") isActive: RequestBody,
-        @Part("staffImageFile") staffImageFile: MultipartBody.Part?
+        @Part staffImageFile: MultipartBody.Part?
     ): Response<WietApiResponse<Staff>>
 
     @PUT("api/v1/staff/update-details")

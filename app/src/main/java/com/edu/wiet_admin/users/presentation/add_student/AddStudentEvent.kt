@@ -16,8 +16,6 @@ sealed class AddStudentEvent {
     data class PhoneNumberCountryCodeChanged(val newPhoneNumberCountryCode: String) : AddStudentEvent()
     data class GenderChanged(val newGender: String) : AddStudentEvent()
     data class DobChanged(val newDob: LocalDate) : AddStudentEvent()
-//    data class PasswordChanged(val newPassword: String) : AddStudentEvent()
-//    data class ConfirmPasswordChanged(val newConfirmPassword: String) : AddStudentEvent()
     data class AdmissionYearChanged(val newAdmissionYear: String) : AddStudentEvent()
     data class AdmissionTypeChanged(val newAdmissionType: String) : AddStudentEvent()
     data class BranchChanged(val newBranch: Branch?) : AddStudentEvent()

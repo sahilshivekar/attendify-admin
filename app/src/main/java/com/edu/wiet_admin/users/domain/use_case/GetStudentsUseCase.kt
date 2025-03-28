@@ -1,9 +1,7 @@
 package com.edu.wiet_admin.users.domain.use_case
 
-import com.edu.wiet_admin.common.data.remote.Resource
-import com.edu.wiet_admin.common.data.remote.WietApiResponse
+import androidx.paging.PagingData
 import com.edu.wiet_admin.common.data.remote.response_dto.Student
-import com.edu.wiet_admin.common.domain.RemoteUtils
 import com.edu.wiet_admin.users.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -11,32 +9,28 @@ import javax.inject.Inject
 // StudentRepository Use Cases
 class GetStudentsUseCase @Inject constructor(private val studentRepository: StudentRepository) {
     operator fun invoke(
-        searchQuery: String?,
-        branchId: Int?,
-        semesterNumber: Int?,
-        academicStartYearOfSemester: Int?,
-        academicEndYearOfSemester: Int?,
-        batchId: Int?,
-        schemeId: Int?,
-        divisionId: Int?,
-        academicStatus: String?,
-        admissionType: String?,
-        admissionYear: Int?,
-        currentBatch: Boolean?,
-        currentDivision: Boolean?,
-        studentStatus: String?,
-        divisionCode: String?,
-        batchCode: String?,
-        page: Int,
-        limit: Int
-    ): Flow<Resource<WietApiResponse<List<Student>>>> {
-        return RemoteUtils.responseFlow {
-            studentRepository.getStudents(
-                searchQuery, branchId, semesterNumber, academicStartYearOfSemester,
-                academicEndYearOfSemester, batchId, schemeId, divisionId, academicStatus,
-                admissionType, admissionYear, currentBatch, currentDivision, studentStatus,
-                divisionCode, batchCode, page, limit
-            )
-        }
+        searchQuery: String? = null,
+        branchIds: List<Int>? = null,
+        semesterNumbers: List<Int>? = null,
+        academicStartYearOfSemester: Int? = null,
+        academicEndYearOfSemester: Int? = null,
+        batchId: Int? = null,
+        schemeId: Int? = null,
+        divisionId: Int? = null,
+        academicStatuses: List<String>? = null,
+        admissionTypes: List<String>? = null,
+        admissionYear: Int? = null,
+        currentBatch: Boolean? = null,
+        currentDivision: Boolean? = null,
+        currentSemester: Boolean? = null,
+        divisionCode: String? = null,
+        batchCode: String? = null,
+    ): Flow<PagingData<Student>> {
+        return studentRepository.getStudents(
+            searchQuery, branchIds, semesterNumbers, academicStartYearOfSemester,
+            academicEndYearOfSemester, batchId, schemeId, divisionId, academicStatuses,
+            admissionTypes, admissionYear, currentBatch, currentDivision, currentSemester,
+            divisionCode, batchCode
+        )
     }
 }

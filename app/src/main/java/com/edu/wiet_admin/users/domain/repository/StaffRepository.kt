@@ -1,5 +1,6 @@
 package com.edu.wiet_admin.users.domain.repository
 
+import androidx.paging.PagingData
 import com.edu.wiet_admin.common.data.remote.WietApiResponse
 import com.edu.wiet_admin.common.data.remote.response_dto.Staff
 import com.edu.wiet_admin.common.data.remote.response_dto.TeacherTeaches
@@ -8,18 +9,17 @@ import com.edu.wiet_admin.users.data.dto.request.RemoveImageRequest
 import com.edu.wiet_admin.users.data.dto.request.RemoveStaffRequest
 import com.edu.wiet_admin.users.data.dto.request.UpdateStaffDetailsRequest
 import com.edu.wiet_admin.users.data.dto.request.UpdateStaffPasswordRequest
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import java.io.File
 
 interface StaffRepository {
 
     // Get all staff
-    suspend fun getStaff(
+    fun getStaff(
         searchQuery: String?,
-        courseId: Int?,
-        page: Int = 1,
-        limit: Int = 10
-    ): Response<WietApiResponse<List<Staff>>>
+        courseId: Int?
+    ): Flow<PagingData<Staff>>
 
     // Get staff by ID
     suspend fun getStaffById(staffId: Int): Response<WietApiResponse<Staff>>

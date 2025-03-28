@@ -45,7 +45,8 @@ android {
 
 dependencies {
     implementation(libs.hilt.android) // Dagger Hilt for Dependency Injection (DI) in Android
-    implementation(libs.hilt.navigation.compose)// Hilt integration with Jetpack Compose navigation
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.androidx.constraintlayout)// Hilt integration with Jetpack Compose navigation
     ksp(libs.hilt.android.compiler) // Compiler for Hilt to generate necessary code for DI
     ksp(libs.androidx.hilt.compiler)
     implementation(libs.androidx.core.splashscreen) // Provides the SplashScreen API to show a splash screen on app launch

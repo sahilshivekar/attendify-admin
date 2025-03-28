@@ -25,8 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AddStudentViewModel @Inject constructor(
     private val addStudentUseCase: AddStudentUseCase,
-    private val getBranchesUseCase: GetBranchesUseCase,
-    private val getSchemesUseCase: GetSchemesUseCase,
+    getBranchesUseCase: GetBranchesUseCase,
+    getSchemesUseCase: GetSchemesUseCase,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -37,7 +37,7 @@ class AddStudentViewModel @Inject constructor(
         getBranchesUseCase(searchQuery = null).onEach { result ->
             when (result) {
                 is Resource.Error -> {
-                    state.value = state.value.copy(dialogText = result.message)
+                    state.value = state.value.copy(dialogText = result.message, )
                 }
 
                 is Resource.Loading -> {
@@ -316,7 +316,7 @@ class AddStudentViewModel @Inject constructor(
             }
 
             state.value.academicStatus.isBlank() -> {
-                state.value = state.value.copy(isAcademicStatusError = "Academic status cannot be empty")
+                state.value = state.value.copy(isAcademicStatusError = "Academic academicStatus cannot be empty")
                 false
             }
 

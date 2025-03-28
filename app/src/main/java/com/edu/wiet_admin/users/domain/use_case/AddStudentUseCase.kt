@@ -7,8 +7,6 @@ import com.edu.wiet_admin.common.domain.RemoteUtils
 import com.edu.wiet_admin.users.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.Flow
 import java.io.File
-import java.time.LocalDate
-import java.util.Date
 import javax.inject.Inject
 
 class AddStudentUseCase @Inject constructor(private val studentRepository: StudentRepository) {
@@ -21,8 +19,6 @@ class AddStudentUseCase @Inject constructor(private val studentRepository: Stude
         phoneNumber: String,
         gender: String,
         dob: String?,
-//        password: String,
-//        confirmPassword: String,
         schemeId: String,
         academicStatus: String,
         admissionYear: String,
@@ -40,8 +36,6 @@ class AddStudentUseCase @Inject constructor(private val studentRepository: Stude
                 phoneNumber,
                 gender,
                 dob,
-//                password,
-//                confirmPassword,
                 schemeId,
                 academicStatus,
                 admissionYear,

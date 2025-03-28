@@ -4,9 +4,9 @@ import android.net.Uri
 import com.edu.wiet_admin.common.data.remote.response_dto.Branch
 import com.edu.wiet_admin.common.data.remote.response_dto.Scheme
 import com.edu.wiet_admin.common.utils.PhoneNumberUtil
+import com.edu.wiet_admin.common.utils.TimeUtil
 import java.io.File
 import java.time.LocalDate
-import java.util.Calendar
 
 data class AddStudentState(
     val prn: String = "",
@@ -38,7 +38,7 @@ data class AddStudentState(
     val isAdmissionYearDropDownOpen: Boolean = false,
     val isAcademicStatusDropDownOpen: Boolean = false,
     val admissionTypeOptions: List<String> = listOf("FE", "DSE"),
-    val admissionYearOptions: List<String> = getPastTwentyYears(),
+    val admissionYearOptions: List<String> = TimeUtil.getPastTwentyYears(),
     val academicStatusOptions: List<String> = listOf("Active", "Drop out", "Graduated"),
 
     val isSchemeDropDownOpen: Boolean = false,
@@ -63,11 +63,3 @@ data class AddStudentState(
     val isPRNError: String? = null,
 )
 
-fun getPastTwentyYears(): List<String> {
-    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-    val pastTwentyYears = mutableListOf<String>()
-    repeat(20) {
-        pastTwentyYears.add((currentYear - it).toString())
-    }
-    return pastTwentyYears
-}

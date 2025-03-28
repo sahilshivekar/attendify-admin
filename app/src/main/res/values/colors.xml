@@ -15,4 +15,5 @@
     <color name="normal_text">#E6000000</color>
     <color name="icon_color">#FF0954CF</color>
     <color name="divider">#331A1D1F</color>
+    <color name="search_bar">#e9edf6</color>
 </resources>
