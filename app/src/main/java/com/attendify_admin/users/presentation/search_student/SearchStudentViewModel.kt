@@ -3,9 +3,7 @@ package com.attendify_admin.users.presentation.search_student
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.attendify_admin.academics.domain.use_case.GetBatchesUseCase
 import com.attendify_admin.academics.domain.use_case.GetBranchesUseCase
-import com.attendify_admin.academics.domain.use_case.GetDivisionsUseCase
 import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.users.domain.use_case.GetStudentsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

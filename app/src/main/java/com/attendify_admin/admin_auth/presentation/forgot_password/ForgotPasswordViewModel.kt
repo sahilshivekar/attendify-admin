@@ -1,10 +1,8 @@
 package com.attendify_admin.admin_auth.presentation.forgot_password
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.attendify_admin.admin_auth.domain.use_case.ForgotPasswordUseCase
-import com.attendify_admin.admin_auth.presentation.login.LoginEvent
 import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.domain.RemoteUtils
 import dagger.hilt.android.lifecycle.HiltViewModel

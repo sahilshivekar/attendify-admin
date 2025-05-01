@@ -1,14 +1,11 @@
 package com.attendify_admin.users.presentation.student_details
 
 import android.net.Uri
-import com.attendify_admin.common.data.remote.response_dto.Batch
-import com.attendify_admin.common.data.remote.response_dto.Division
 import com.attendify_admin.common.data.remote.response_dto.Semester
 import com.attendify_admin.common.data.remote.response_dto.Student
 import com.attendify_admin.common.data.remote.response_dto.StudentBatch
 import com.attendify_admin.common.data.remote.response_dto.StudentDivision
 import java.io.File
-import java.time.LocalDate
 
 data class StudentDetailsState(
     val dialogText: String? = null,

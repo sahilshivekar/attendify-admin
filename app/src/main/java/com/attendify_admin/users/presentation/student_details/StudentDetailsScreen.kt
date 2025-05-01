@@ -1,6 +1,5 @@
 package com.attendify_admin.users.presentation.student_details
 
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -34,7 +33,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -633,7 +631,7 @@ fun StudentDetailsScreen(
                             modifier = Modifier
                         )
                     }
-                    state.semesters?.forEach { semester ->
+                    state.semesters.forEach { semester ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()

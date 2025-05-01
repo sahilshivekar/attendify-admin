@@ -25,12 +25,12 @@ import com.attendify_admin.ui.theme.Typography
 
 @Composable
 fun AttendifyTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: String? = null,
     modifier: Modifier = Modifier
         .widthIn(max = 500.dp)
         .fillMaxWidth(),
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String? = null,
     enabled: Boolean = true,
     readOnly: Boolean = false,
     textStyle: TextStyle = Typography.bodyLarge,

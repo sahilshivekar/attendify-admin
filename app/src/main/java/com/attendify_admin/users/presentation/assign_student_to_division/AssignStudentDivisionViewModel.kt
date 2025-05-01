@@ -1,7 +1,6 @@
 package com.attendify_admin.users.presentation.assign_student_to_division
 
 import androidx.lifecycle.ViewModel
-import com.attendify_admin.users.presentation.assign_student_to_batch.AssignStudentBatchEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject

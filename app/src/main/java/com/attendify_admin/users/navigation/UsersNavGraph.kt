@@ -1,5 +1,7 @@
 package com.attendify_admin.users.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,6 +32,7 @@ import com.attendify_admin.users.presentation.unassign_subject_to_teacher.Unassi
 import com.attendify_admin.users.presentation.unassign_subject_to_teacher.UnassignSubjectTeacherViewModel
 import com.attendify_admin.users.presentation.user_dashboard.UserDashboardScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun UsersNavHost() {
     val navController = rememberNavController()

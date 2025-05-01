@@ -1,7 +1,6 @@
     package com.attendify_admin.academics.data
 
 
-    import android.util.Log
     import com.attendify_admin.academics.data.dto.request.AddSchemeRequest
     import com.attendify_admin.academics.data.dto.request.UpdateSchemeRequest
     import com.attendify_admin.academics.domain.repository.SchemeRepository
