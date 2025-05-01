@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "wiet-admin"
+rootProject.name = "attendify-admin"
 include(":app")

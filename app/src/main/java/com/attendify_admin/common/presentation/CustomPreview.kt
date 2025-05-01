@@ -1,0 +1,61 @@
+package com.attendify_admin.common.presentation
+
+
+import android.content.res.Configuration
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
+import com.attendify_admin.ui.theme.AttendifyAdminTheme
+
+/**
+ * This preview annotation class is used to show component previews in light mode.
+ */
+@Preview(
+    showBackground = true
+)
+annotation class ComponentPreview()
+
+
+/**
+ * This preview annotation class is used to show component previews in dark mode.
+ */
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
+annotation class ComponentPreviewDarkMode()
+
+
+/**
+ * This preview annotation class is used to show screen previews in light mode.
+ */
+@Preview(
+    showSystemUi = true,
+    device = Devices.PIXEL_7_PRO
+)
+annotation class ScreenPreview()
+
+
+/**
+ * This preview annotation class is used to show screen previews in dark mode.
+ */
+@Preview(
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    device = Devices.PIXEL_7_PRO
+)
+annotation class ScreenPreviewDarkMode()
+
+
+/**
+ * This function is used to apply the [AttendifyAdminTheme] and a [Surface] behind the composable.
+ */
+@Composable
+fun PreviewWrapper(content: @Composable () -> Unit) {
+    AttendifyAdminTheme() {
+        Surface {
+            content()
+        }
+    }
+}

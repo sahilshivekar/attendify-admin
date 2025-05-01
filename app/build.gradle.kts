@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "com.edu.wiet_admin"
+    namespace = "com.attendify_admin"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.edu.wiet_admin"
+        applicationId = "com.attendify_admin"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

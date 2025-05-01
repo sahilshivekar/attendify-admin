@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.WietAdmin" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.AttendifyAdmin" parent="android:Theme.Material.Light.NoActionBar" />
 
 
     <style name="CustomDatePickerDialog" parent="android:Theme.Material.Light.Dialog.Alert">
