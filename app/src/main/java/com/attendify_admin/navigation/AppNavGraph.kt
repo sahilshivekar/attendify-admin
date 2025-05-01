@@ -1,5 +1,7 @@
 package com.attendify_admin.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -12,6 +14,7 @@ import com.attendify_admin.announcements.navigation.AnnouncementsNavHost
 import com.attendify_admin.shedule.navigation.ScheduleNavHost
 import com.attendify_admin.users.navigation.UsersNavHost
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavGraph(
     startDestination: String,

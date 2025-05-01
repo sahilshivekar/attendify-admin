@@ -1,5 +1,7 @@
 package com.attendify_admin.common.presentation.scaffold
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -11,6 +13,7 @@ import com.attendify_admin.common.presentation.scaffold.top_bar.AttendifyTopAppB
 import com.attendify_admin.navigation.AppDestination
 import com.attendify_admin.navigation.AppNavGraph
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppScaffold(
     startDestination: String
