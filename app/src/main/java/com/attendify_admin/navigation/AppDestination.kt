@@ -8,12 +8,6 @@ sealed class AppDestination(
 
     data object AdminMgt : AppDestination("admin_mgt")
 
-    data object Users : AppDestination("users")
-
-    data object Academics : AppDestination("academics")
-
-    data object Announcements : AppDestination("announcements")
-
-    data object Schedule : AppDestination("schedule")
+    data object HomeScaffold : AppDestination("home_scaffold")
 
 }

@@ -1,8 +1,11 @@
 package com.attendify_admin.admin_auth.navigation
 
 import android.util.Log
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,7 +23,7 @@ import com.attendify_admin.admin_mgt.navigation.AdminMgtDestination
 import com.attendify_admin.navigation.AppDestination
 
 fun NavGraphBuilder.adminAuthNavGraph(
-    navController: NavController
+    rootNavController: NavController,
 ) {
 
     navigation(
@@ -31,10 +34,16 @@ fun NavGraphBuilder.adminAuthNavGraph(
         composable(
             route = AuthDestination.LoginScreen.route,
             enterTransition = {
-                EnterTransition.None
+                fadeIn() + slideInVertically { it / 2 }
             },
             exitTransition = {
-                ExitTransition.None
+                fadeOut() + slideOutHorizontally { -it / 2 }
+            },
+            popEnterTransition = {
+                fadeIn() + slideInHorizontally { -it / 2 }
+            },
+            popExitTransition = {
+                fadeOut() + slideOutHorizontally { -it / 2 }
             }
         )
         {
@@ -46,14 +55,14 @@ fun NavGraphBuilder.adminAuthNavGraph(
                 onEvent = viewModel::onEvent,
                 state = state,
                 navigateToHomeScreen = {
-                    navController.navigate(AppDestination.Users.route) {
+                    rootNavController.navigate(AppDestination.HomeScaffold.route) {
                         popUpTo(AuthDestination.LoginScreen.route) {
                             inclusive = true
                         }
                     }
                 },
                 navigateToForgotPasswordScreen = {
-                    navController.navigate(AuthDestination.ForgotPasswordScreen.route)
+                    rootNavController.navigate(AuthDestination.ForgotPasswordScreen.route)
                 }
             )
 
@@ -64,10 +73,16 @@ fun NavGraphBuilder.adminAuthNavGraph(
         composable(
             route = AuthDestination.ForgotPasswordScreen.route,
             enterTransition = {
-                EnterTransition.None
+                fadeIn() + slideInHorizontally{ it / 2 }
             },
             exitTransition = {
-                ExitTransition.None
+                fadeOut() + slideOutHorizontally { -it / 2 }
+            },
+            popEnterTransition = {
+                fadeIn() + slideInHorizontally { -it / 2 }
+            },
+            popExitTransition = {
+                fadeOut() + slideOutHorizontally { it / 2 }
             }
         )
         {
@@ -79,13 +94,16 @@ fun NavGraphBuilder.adminAuthNavGraph(
                 state = state,
                 onEvent = viewModel::onEvent,
                 navigateToVerifyCodeScreen = {
-                    navController.navigate(
+                    rootNavController.navigate(
                         AuthDestination.VerifyCodeScreen.route
                             .replace(
                                 "{email}",
                                 state.email
                             )
                     )
+                },
+                onBackIconButtonClick = {
+                    rootNavController.navigateUp()
                 }
             )
 
@@ -94,7 +112,19 @@ fun NavGraphBuilder.adminAuthNavGraph(
 
 
         composable(
-            route = AuthDestination.VerifyCodeScreen.route
+            route = AuthDestination.VerifyCodeScreen.route,
+            enterTransition = {
+                fadeIn() + slideInHorizontally{ it / 2 }
+            },
+            exitTransition = {
+                fadeOut() + slideOutHorizontally { -it / 2 }
+            },
+            popEnterTransition = {
+                fadeIn() + slideInHorizontally { -it / 2 }
+            },
+            popExitTransition = {
+                fadeOut() + slideOutHorizontally { it / 2 }
+            }
         )
         { backStackEntry ->
 
@@ -113,21 +143,21 @@ fun NavGraphBuilder.adminAuthNavGraph(
                 state = state,
                 onEvent = viewModel::onEvent,
                 navigateToHomeOrAdminDetailsScreen = {
-                    val prevDestination = navController.previousBackStackEntry?.destination?.route
+                    val prevDestination =
+                        rootNavController.previousBackStackEntry?.destination?.route
 
                     if (prevDestination == AdminMgtDestination.AdminDetails.route) {
-                        navController.navigate(AdminMgtDestination.AdminDetails.route) {
-                            popUpTo(AdminMgtDestination.AdminDetails.route) {
-                                inclusive = true
-                            }
-                        }
+                        rootNavController.navigateUp()
                     } else if (prevDestination == AuthDestination.ForgotPasswordScreen.route) {
-                        navController.navigate(AppDestination.Users.route) {
+                        rootNavController.navigate(AppDestination.HomeScaffold.route) {
                             popUpTo(AuthDestination.LoginScreen.route) {
                                 inclusive = true
                             }
                         }
                     }
+                },
+                onBackIconButtonClick = {
+                    rootNavController.navigateUp()
                 }
             )
         }

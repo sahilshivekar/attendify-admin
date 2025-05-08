@@ -1,5 +1,9 @@
 package com.attendify_admin.admin_mgt.navigation
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -17,7 +21,7 @@ import com.attendify_admin.navigation.AppDestination
 
 
 fun NavGraphBuilder.adminMgtNavGraph(
-    navController: NavController
+    rootNavController: NavController
 ) {
 
     navigation(
@@ -26,7 +30,19 @@ fun NavGraphBuilder.adminMgtNavGraph(
     ) {
 
         composable(
-            route = AdminMgtDestination.AdminDetails.route
+            route = AdminMgtDestination.AdminDetails.route,
+            enterTransition = {
+                fadeIn() + slideInHorizontally{ it / 2 }
+            },
+            exitTransition = {
+                fadeOut() + slideOutHorizontally { -it / 2 }
+            },
+            popEnterTransition = {
+                fadeIn() + slideInHorizontally { -it / 2 }
+            },
+            popExitTransition = {
+                fadeOut() + slideOutHorizontally { it / 2 }
+            }
         )
         {
 
@@ -37,10 +53,10 @@ fun NavGraphBuilder.adminMgtNavGraph(
                 onEvent = viewModel::onEvent,
                 state = state,
                 navigateToUpdatePassword = {
-                    navController.navigate(AdminMgtDestination.UpdatePassword.route)
+                    rootNavController.navigate(AdminMgtDestination.UpdatePassword.route)
                 },
                 navigateToVerifyCode = {
-                    navController.navigate(
+                    rootNavController.navigate(
                         route = AuthDestination.VerifyCodeScreen.route.replace(
                             oldValue = "{email}",
                             newValue = state.orgEmail
@@ -48,13 +64,28 @@ fun NavGraphBuilder.adminMgtNavGraph(
                     )
                 },
                 navigateToAddAdmin = {
-                    navController.navigate(AdminMgtDestination.AddAdmin.route)
+                    rootNavController.navigate(AdminMgtDestination.AddAdmin.route)
                 },
+                onBackIconButtonClick = {
+                    rootNavController.navigateUp()
+                }
             )
         }
 
         composable(
-            route = AdminMgtDestination.UpdatePassword.route
+            route = AdminMgtDestination.UpdatePassword.route,
+            enterTransition = {
+                fadeIn() + slideInHorizontally{ it / 2 }
+            },
+            exitTransition = {
+                fadeOut() + slideOutHorizontally { -it / 2 }
+            },
+            popEnterTransition = {
+                fadeIn() + slideInHorizontally { -it / 2 }
+            },
+            popExitTransition = {
+                fadeOut() + slideOutHorizontally { it / 2 }
+            }
         )
         {
             val viewModel = hiltViewModel<UpdatePasswordViewModel>()
@@ -64,13 +95,28 @@ fun NavGraphBuilder.adminMgtNavGraph(
                 onEvent = viewModel::onEvent,
                 state = state,
                 navigateToAdminDetailsScreen = {
-                    navController.navigateUp()
+                    rootNavController.navigateUp()
+                },
+                onBackIconButtonClick = {
+                    rootNavController.navigateUp()
                 }
             )
         }
 
         composable(
-            route = AdminMgtDestination.AddAdmin.route
+            route = AdminMgtDestination.AddAdmin.route,
+            enterTransition = {
+                fadeIn() + slideInHorizontally{ it / 2 }
+            },
+            exitTransition = {
+                fadeOut() + slideOutHorizontally { -it / 2 }
+            },
+            popEnterTransition = {
+                fadeIn() + slideInHorizontally { -it / 2 }
+            },
+            popExitTransition = {
+                fadeOut() + slideOutHorizontally { it / 2 }
+            }
         )
         {
             val viewModel = hiltViewModel<AddAdminViewModel>()
@@ -80,7 +126,10 @@ fun NavGraphBuilder.adminMgtNavGraph(
                 onEvent = viewModel::onEvent,
                 state = state,
                 navigateToAdminDetailsScreen = {
-                    navController.navigateUp()
+                    rootNavController.navigateUp()
+                },
+                onBackIconButtonClick = {
+                    rootNavController.navigateUp()
                 }
             )
         }

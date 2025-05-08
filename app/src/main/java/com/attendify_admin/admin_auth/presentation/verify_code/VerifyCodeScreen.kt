@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import com.attendify_admin.common.presentation.components.AttendifyAlertDialog
 import com.attendify_admin.common.presentation.components.AttendifyButton
 import com.attendify_admin.common.presentation.components.AttendifyTextField
+import com.attendify_admin.common.presentation.components.top_bar.AttendifyTopAppBar
+import com.attendify_admin.common.presentation.components.top_bar.TopAppBarState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,7 +30,8 @@ fun VerifyCodeScreen(
     modifier: Modifier = Modifier,
     state: VerifyCodeState,
     onEvent: (VerifyCodeEvent) -> Unit,
-    navigateToHomeOrAdminDetailsScreen: () -> Unit
+    navigateToHomeOrAdminDetailsScreen: () -> Unit,
+    onBackIconButtonClick: () -> Unit
 ) {
 
     if (state.isVerified) {
@@ -43,43 +47,58 @@ fun VerifyCodeScreen(
     }
 
 
-    Column(
-        modifier = modifier
-            .padding(16.dp)
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-
+    Scaffold(
+        topBar = {
+            AttendifyTopAppBar(
+                topAppBarState = TopAppBarState(
+                    title = "Verify Code",
+                    isTopAppBarVisible = true,
+                    isBackIconButtonVisible = true,
+                    isProfileIconButtonVisible = false
+                ),
+                onBackIconButtonClick = onBackIconButtonClick,
+            )
+        },
+    ) { paddingValues ->
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = modifier
+                .padding(paddingValues)
+                .padding(16.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
 
-            Text(
-                text = "Enter the six digit verification code sent to your email address ${state.email}" +
-                        "(Code will be invalid after 5 minutes)",
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.bodyLarge
-            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-            Spacer(modifier = Modifier.height(8.dp))
-            AttendifyTextField(
-                value = state.code,
-                onValueChange = { updatedCode ->
-                    onEvent(VerifyCodeEvent.CodeChanged(updatedCode))
-                },
-                label = "Verification code",
-                isError = state.codeError != null,
-                supportingText = state.codeError,
+                Text(
+                    text = "Enter the six digit verification code sent to your email address ${state.email}" +
+                            "(Code will be invalid after 5 minutes)",
+                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+                AttendifyTextField(
+                    value = state.code,
+                    onValueChange = { updatedCode ->
+                        onEvent(VerifyCodeEvent.CodeChanged(updatedCode))
+                    },
+                    label = "Verification code",
+                    isError = state.codeError != null,
+                    supportingText = state.codeError,
+                    enabled = !state.isVerified && !state.isLoading,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+            }
+
+            AttendifyButton(
+                onClick = { onEvent(VerifyCodeEvent.VerifyCodeClicked) },
                 enabled = !state.isVerified && !state.isLoading,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                isLoading = state.isLoading,
+                text = "Verify Code"
             )
         }
-
-        AttendifyButton(
-            onClick = { onEvent(VerifyCodeEvent.VerifyCodeClicked) },
-            enabled = !state.isVerified && !state.isLoading,
-            isLoading = state.isLoading,
-            text = "Verify Code"
-        )
     }
 }

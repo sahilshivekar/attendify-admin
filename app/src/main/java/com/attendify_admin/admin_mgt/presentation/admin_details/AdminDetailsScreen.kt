@@ -23,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,6 +39,8 @@ import com.attendify_admin.common.presentation.components.AttendifyButton
 import com.attendify_admin.common.presentation.components.AttendifyOptionRow
 import com.attendify_admin.common.presentation.components.AttendifyOutlinedButton
 import com.attendify_admin.common.presentation.components.AttendifyTextField
+import com.attendify_admin.common.presentation.components.top_bar.AttendifyTopAppBar
+import com.attendify_admin.common.presentation.components.top_bar.TopAppBarState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,6 +51,7 @@ fun AdminDetailsScreen(
     navigateToAddAdmin: () -> Unit,
     state: AdminDetailsState,
     onEvent: (AdminDetailsEvent) -> Unit,
+    onBackIconButtonClick: () -> Unit
 ) {
 
     if (state.isVerificationCodeSent) {
@@ -71,212 +75,229 @@ fun AdminDetailsScreen(
         )
     }
 
-    if (state.isInitialDataLoading) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center),
-                color = MaterialTheme.colorScheme.primary
+    Scaffold(
+        topBar = {
+            AttendifyTopAppBar(
+                topAppBarState = TopAppBarState(
+                    title = "Admin Details",
+                    isTopAppBarVisible = true,
+                    isBackIconButtonVisible = true,
+                    isProfileIconButtonVisible = false
+                ),
+                onBackIconButtonClick = onBackIconButtonClick
             )
         }
-    } else {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            // icon on top
-            Spacer(modifier = Modifier.height(16.dp))
-            Icon(
+    ) { paddingValues ->
+        if (state.isInitialDataLoading) {
+            Box(
                 modifier = Modifier
-                    .size(90.dp)
-                    .clip(CircleShape),
-                imageVector = Icons.Filled.AccountCircle,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
-            )
-
-
-            // email and username
-            Spacer(modifier = Modifier.height(16.dp))
+                    .fillMaxSize()
+                    .padding(paddingValues),
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center),
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        } else {
             Column(
                 modifier = modifier
-                    .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.medium)
-                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
                     .padding(16.dp)
-                    .wrapContentSize(),
-                horizontalAlignment = Alignment.Start
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+
+                // icon on top
+                Spacer(modifier = Modifier.height(16.dp))
+                Icon(
+                    modifier = Modifier
+                        .size(90.dp)
+                        .clip(CircleShape),
+                    imageVector = Icons.Filled.AccountCircle,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+
+
+                // email and username
+                Spacer(modifier = Modifier.height(16.dp))
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(16.dp)
+                        .wrapContentSize(),
+                    horizontalAlignment = Alignment.Start
                 ) {
-                    Text(
-                        text = "Admin Details",
-                        style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
-                    )
-                    IconButton(
-                        onClick = { onEvent(AdminDetailsEvent.EditDetailsClicked) }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                AttendifyTextField(
-                    value = if (state.isEditingDetails) state.editableUsername else state.orgUsername,
-                    onValueChange = { onEvent(AdminDetailsEvent.UsernameChanged(it)) },
-                    isError = state.usernameError != null,
-                    supportingText = state.usernameError,
-                    label = "Username",
-                    enabled = state.isUsernameEmailEnabled
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                AttendifyTextField(
-                    value = if (state.isEditingDetails) state.editableEmail else state.orgEmail,
-                    onValueChange = { onEvent(AdminDetailsEvent.EmailChanged(it)) },
-                    isError = state.emailError != null,
-                    supportingText = state.emailError,
-                    label = "Email",
-                    enabled = state.isUsernameEmailEnabled
-                )
-                if (state.isEditingDetails) {
-                    Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        AttendifyOutlinedButton(
-                            onClick = { onEvent(AdminDetailsEvent.CancelEditingDetailsClicked) },
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(end = 8.dp),
-                            enabled = !state.isUpdatingDetails
+                        Text(
+                            text = "Admin Details",
+                            style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
+                        )
+                        IconButton(
+                            onClick = { onEvent(AdminDetailsEvent.EditDetailsClicked) }
                         ) {
-                            Text(
-                                text = "Cancel",
-                                style = MaterialTheme.typography.bodyMedium,
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
                             )
                         }
-                        AttendifyButton(
-                            onClick = { onEvent(AdminDetailsEvent.UpdateDetailsClicked) },
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(start = 8.dp),
-                            text = "Update",
-                            isLoading = state.isUpdatingDetails,
-                            enabled = !state.isUpdatingDetails
-                        )
                     }
-                }
-
-            }
-
-
-            // password
-            Spacer(modifier = Modifier.height(16.dp))
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.medium)
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(16.dp)
-                    .wrapContentSize(),
-                horizontalAlignment = Alignment.Start
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Password",
-                        style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
+                    Spacer(modifier = Modifier.height(8.dp))
+                    AttendifyTextField(
+                        value = if (state.isEditingDetails) state.editableUsername else state.orgUsername,
+                        onValueChange = { onEvent(AdminDetailsEvent.UsernameChanged(it)) },
+                        isError = state.usernameError != null,
+                        supportingText = state.usernameError,
+                        label = "Username",
+                        enabled = state.isUsernameEmailEnabled
                     )
-                    IconButton(
-                        onClick = { navigateToUpdatePassword() }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    AttendifyTextField(
+                        value = if (state.isEditingDetails) state.editableEmail else state.orgEmail,
+                        onValueChange = { onEvent(AdminDetailsEvent.EmailChanged(it)) },
+                        isError = state.emailError != null,
+                        supportingText = state.emailError,
+                        label = "Email",
+                        enabled = state.isUsernameEmailEnabled
+                    )
+                    if (state.isEditingDetails) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            AttendifyOutlinedButton(
+                                onClick = { onEvent(AdminDetailsEvent.CancelEditingDetailsClicked) },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(end = 8.dp),
+                                enabled = !state.isUpdatingDetails
+                            ) {
+                                Text(
+                                    text = "Cancel",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
+                            }
+                            AttendifyButton(
+                                onClick = { onEvent(AdminDetailsEvent.UpdateDetailsClicked) },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(start = 8.dp),
+                                text = "Update",
+                                isLoading = state.isUpdatingDetails,
+                                enabled = !state.isUpdatingDetails
+                            )
+                        }
                     }
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                AttendifyTextField(
-                    value = "........",
-                    onValueChange = {},
-                    label = "Password",
-                    visualTransformation = PasswordVisualTransformation(),
-                    enabled = false
-                )
-            }
 
-            // account settings
-            Spacer(modifier = Modifier.height(16.dp))
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.medium)
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(16.dp)
-                    .wrapContentSize(),
-                horizontalAlignment = Alignment.Start
-            ) {
-                Row(
-                    modifier = Modifier
+                }
+
+
+                // password
+                Spacer(modifier = Modifier.height(16.dp))
+                Column(
+                    modifier = modifier
                         .fillMaxWidth()
-                        .height(40.dp), // to match the height of the icons and continue the ux size
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(16.dp)
+                        .wrapContentSize(),
+                    horizontalAlignment = Alignment.Start
                 ) {
-                    Text(
-                        text = "Account settings",
-                        style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Password",
+                            style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
+                        )
+                        IconButton(
+                            onClick = { navigateToUpdatePassword() }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    AttendifyTextField(
+                        value = "........",
+                        onValueChange = {},
+                        label = "Password",
+                        visualTransformation = PasswordVisualTransformation(),
+                        enabled = false
                     )
                 }
-                Spacer(modifier = Modifier.height(8.dp))
 
-                // options
-                AttendifyOptionRow(
-                    onClick = navigateToAddAdmin,
-                    optionText = "Add another admin",
-                    isLoading = false
-                )
-                state.isVerified?.let {
-                    if (!state.isVerified) {
-                        AttendifyOptionRow(
-                            onClick = {
-                                onEvent(AdminDetailsEvent.VerifyEmailClicked)
-                            },
-                            optionText = "Verify email address",
-                            isLoading = state.isSendingVerificationCode
+                // account settings
+                Spacer(modifier = Modifier.height(16.dp))
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(16.dp)
+                        .wrapContentSize(),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(40.dp), // to match the height of the icons and continue the ux size
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Account settings",
+                            style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
                         )
                     }
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // options
+                    AttendifyOptionRow(
+                        onClick = navigateToAddAdmin,
+                        optionText = "Add another admin",
+                        isLoading = false
+                    )
+                    state.isVerified?.let {
+                        if (!state.isVerified) {
+                            AttendifyOptionRow(
+                                onClick = {
+                                    onEvent(AdminDetailsEvent.VerifyEmailClicked)
+                                },
+                                optionText = "Verify email address",
+                                isLoading = state.isSendingVerificationCode
+                            )
+                        }
+                    }
+                    AttendifyOptionRow(
+                        onClick = { onEvent(AdminDetailsEvent.LogoutClicked) },
+                        optionText = "Log out",
+                        isLoading = state.isLoggingOut
+                    )
+                    AttendifyOptionRow(
+                        onClick = { onEvent(AdminDetailsEvent.RemoveAdminClicked) },
+                        optionText = "Remove account",
+                        isLoading = state.isRemovingAccount,
+                        isRisky = true,
+                        showDivider = false,
+                    )
                 }
-                AttendifyOptionRow(
-                    onClick = { onEvent(AdminDetailsEvent.LogoutClicked) },
-                    optionText = "Log out",
-                    isLoading = state.isLoggingOut
-                )
-                AttendifyOptionRow(
-                    onClick = { onEvent(AdminDetailsEvent.RemoveAdminClicked) },
-                    optionText = "Remove account",
-                    isLoading = state.isRemovingAccount,
-                    isRisky = true,
-                    showDivider = false,
-                )
             }
         }
     }
@@ -293,6 +314,7 @@ fun AdminDetailsScreenPreview() {
             navigateToVerifyCode = {},
             state = AdminDetailsState(),
             onEvent = {},
+            onBackIconButtonClick = {}
         )
     }
 }

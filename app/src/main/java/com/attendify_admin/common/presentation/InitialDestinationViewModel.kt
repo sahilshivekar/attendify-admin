@@ -25,7 +25,7 @@ class InitialDestinationViewModel @Inject constructor(
             state = if (token == null) {
                 AppDestination.AdminAuth.route
             } else {
-                AppDestination.Users.route
+                AppDestination.HomeScaffold.route
             }
         }.launchIn(viewModelScope)
     }

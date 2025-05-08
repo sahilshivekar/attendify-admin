@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.attendify_admin.common.presentation.scaffold.AppScaffold
+import com.attendify_admin.navigation.AttendifyNavHost
 import com.attendify_admin.ui.theme.AttendifyAdminTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
             AttendifyAdminTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     viewModel.state?.let { appDestination ->
-                        AppScaffold(
+                        AttendifyNavHost(
                             startDestination = appDestination
                         )
                     }
