@@ -9,7 +9,7 @@ import retrofit2.Response
 interface BatchRepository {
     suspend fun getBatches(
         semesterNumber: Int?,
-        branchId: String?,
+        branchId: Int?,
         academicStartYear: Int?,
         academicEndYear: Int?,
         searchQuery: String?,
@@ -21,7 +21,7 @@ interface BatchRepository {
 
     suspend fun updateBatch(requestBody: UpdateBatchRequest): Response<AttendifyApiResponse<Batch?>>
 
-    suspend fun removeBatch(batchId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeBatch(batchId: Int): Response<AttendifyApiResponse<String?>>
 
-    suspend fun getBatchById(batchId: String): Response<AttendifyApiResponse<Batch?>>
+    suspend fun getBatchById(batchId: Int): Response<AttendifyApiResponse<Batch?>>
 }

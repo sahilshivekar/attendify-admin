@@ -3,10 +3,10 @@ package com.attendify_admin.home.shedule.data.dto.request
 // Request DTO for getting attendance
 data class GetAttendanceRequest(
     val date: String?,
-    val attendanceId: String?,
-    val classId: String?,
-    val studentId: String?,
-    val courseId: String?,
-    val semesterId: String?,
-    val divisionId: String?
+    val attendanceId: Int?,
+    val classId: Int?,
+    val studentId: Int?,
+    val courseId: Int?,
+    val semesterId: Int?,
+    val divisionId: Int?
 )

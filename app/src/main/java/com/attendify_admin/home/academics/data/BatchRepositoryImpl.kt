@@ -14,7 +14,7 @@ class BatchRepositoryImpl @Inject constructor(
 
     override suspend fun getBatches(
         semesterNumber: Int?,
-        branchId: String?,
+        branchId: Int?,
         academicStartYear: Int?,
         academicEndYear: Int?,
         searchQuery: String?,
@@ -29,9 +29,9 @@ class BatchRepositoryImpl @Inject constructor(
     override suspend fun updateBatch(requestBody: UpdateBatchRequest): Response<AttendifyApiResponse<Batch?>> =
         batchApi.updateBatch(requestBody)
 
-    override suspend fun removeBatch(batchId: String): Response<AttendifyApiResponse<String?>> =
+    override suspend fun removeBatch(batchId: Int): Response<AttendifyApiResponse<String?>> =
         batchApi.removeBatch(batchId)
 
-    override suspend fun getBatchById(batchId: String): Response<AttendifyApiResponse<Batch?>> =
+    override suspend fun getBatchById(batchId: Int): Response<AttendifyApiResponse<Batch?>> =
         batchApi.getBatchById(batchId)
 }

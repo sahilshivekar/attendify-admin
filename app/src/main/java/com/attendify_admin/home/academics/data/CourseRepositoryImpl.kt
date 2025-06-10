@@ -16,9 +16,9 @@ class CourseRepositoryImpl @Inject constructor(
 
     override suspend fun getCourses(
         searchQuery: String?,
-        branchId: String?,
+        branchId: Int?,
         semesterNumber: Int?,
-        schemeId: String?,
+        schemeId: Int?,
         page: Int,
         limit: Int
     ): Response<AttendifyApiResponse<List<Course?>>> =
@@ -30,7 +30,7 @@ class CourseRepositoryImpl @Inject constructor(
     override suspend fun updateCourse(requestBody: UpdateCourseRequest): Response<AttendifyApiResponse<Course?>> =
         courseApi.updateCourse(requestBody)
 
-    override suspend fun removeCourse(courseId: String): Response<AttendifyApiResponse<String?>> =
+    override suspend fun removeCourse(courseId: Int): Response<AttendifyApiResponse<String?>> =
         courseApi.removeCourse(courseId)
 
     override suspend fun addCourseToBranchWithSemesterNumber(requestBody: AddCourseToBranchWithSemesterNumberRequest): Response<AttendifyApiResponse<Course?>> =
@@ -39,6 +39,6 @@ class CourseRepositoryImpl @Inject constructor(
     override suspend fun removeCourseFromBranchWithSemesterNumber(requestBody: RemoveCourseFromBranchWithSemesterNumberRequest): Response<AttendifyApiResponse<String?>> =
         courseApi.removeCourseFromBranchWithSemesterNumber(requestBody.branchCourseSemesterId)
 
-    override suspend fun getCourseById(courseId: String): Response<AttendifyApiResponse<Course?>> =
+    override suspend fun getCourseById(courseId: Int): Response<AttendifyApiResponse<Course?>> =
         courseApi.getCourseById(courseId)
 }

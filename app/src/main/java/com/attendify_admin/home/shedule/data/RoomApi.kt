@@ -29,11 +29,11 @@ interface RoomApi {
     ): Response<AttendifyApiResponse<List<Room?>>>
 
     @GET("api/v1/room/admin/get-room-by-id")
-    suspend fun getRoomById(@Query("roomId") roomId: String): Response<AttendifyApiResponse<Room?>>
+    suspend fun getRoomById(@Query("roomId") roomId: Int): Response<AttendifyApiResponse<Room?>>
 
     @PUT("api/v1/room/admin/update-room")
     suspend fun updateRoom(@Body requestBody: UpdateRoomRequest): Response<AttendifyApiResponse<Room?>>
 
     @DELETE("api/v1/room/admin/remove-room")
-    suspend fun removeRoom(@Query("roomId") roomId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeRoom(@Query("roomId") roomId: Int): Response<AttendifyApiResponse<String?>>
 }

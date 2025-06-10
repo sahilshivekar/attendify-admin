@@ -13,7 +13,7 @@ data class Staff(
     val phoneNumber: String,
     val refreshToken: Any,
     val role: String,
-    val staffImagePublicId: String?,
+    val staffImagePublicId: Int?,
     val staffImageUrl: String?,
     val createdAt: String,
     val updatedAt: String

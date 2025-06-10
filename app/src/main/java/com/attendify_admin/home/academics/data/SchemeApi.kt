@@ -25,8 +25,8 @@ interface SchemeApi {
     suspend fun updateScheme(@Body requestBody: UpdateSchemeRequest): Response<AttendifyApiResponse<Scheme?>>
 
     @DELETE("api/v1/scheme/admin/remove")
-    suspend fun removeScheme(@Query("id") schemeId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeScheme(@Query("id") schemeId: Int): Response<AttendifyApiResponse<String?>>
 
     @GET("api/v1/scheme/admin/get-scheme-by-id")
-    suspend fun getSchemeById(@Query("schemeId") schemeId: String): Response<AttendifyApiResponse<Scheme?>>
+    suspend fun getSchemeById(@Query("schemeId") schemeId: Int): Response<AttendifyApiResponse<Scheme?>>
 }

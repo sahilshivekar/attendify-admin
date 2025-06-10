@@ -13,7 +13,7 @@ class GetBatchesUseCase @Inject constructor(
 ) {
     operator fun invoke(
         semesterNumber: Int? = null,
-        branchId: String? = null,
+        branchId: Int? = null,
         academicStartYear: Int? = null,
         academicEndYear: Int? = null,
         searchQuery: String? = null,

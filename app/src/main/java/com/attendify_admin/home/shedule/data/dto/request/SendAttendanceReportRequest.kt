@@ -5,5 +5,5 @@ data class SendAttendanceReportRequest (
     val endDate: String,
     val studentIds: List<String>,
     val courseIds: List<String>,
-    val semesterId: String,
+    val semesterId: Int,
 )

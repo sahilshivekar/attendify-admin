@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetSemesterByIdUseCase @Inject constructor(private val semesterRepository: SemesterRepository) {
-    operator fun invoke(semesterId: String): Flow<Resource<AttendifyApiResponse<Semester?>>> {
+    operator fun invoke(semesterId: Int): Flow<Resource<AttendifyApiResponse<Semester?>>> {
         return RemoteUtils.responseFlow { semesterRepository.getSemesterById(semesterId) }
     }
 }

@@ -14,7 +14,7 @@ class SendAttendanceReportUseCase @Inject constructor(private val attendanceRepo
         endDate: String,
         studentIds: List<String>,
         courseIds: List<String>,
-        semesterId: String,
+        semesterId: Int,
     ): Flow<Resource<AttendifyApiResponse<List<NoParentEmailStudents>?>>> {
         return RemoteUtils.responseFlow {
             attendanceRepository.sendAttendanceReport(

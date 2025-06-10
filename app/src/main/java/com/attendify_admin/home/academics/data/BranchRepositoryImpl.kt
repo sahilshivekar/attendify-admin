@@ -22,9 +22,9 @@ class BranchRepositoryImpl @Inject constructor(
     override suspend fun updateBranch(requestBody: UpdateBranchRequest): Response<AttendifyApiResponse<Branch?>> =
         branchApi.updateBranch(requestBody)
 
-    override suspend fun removeBranch(branchId: String): Response<AttendifyApiResponse<String?>> =
+    override suspend fun removeBranch(branchId: Int): Response<AttendifyApiResponse<String?>> =
         branchApi.removeBranch(branchId)
 
-    override suspend fun getBranchById(branchId: String): Response<AttendifyApiResponse<Branch?>> =
+    override suspend fun getBranchById(branchId: Int): Response<AttendifyApiResponse<Branch?>> =
         branchApi.getBranchById(branchId)
 }

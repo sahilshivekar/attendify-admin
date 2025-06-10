@@ -14,8 +14,8 @@ class GetSemestersUseCase @Inject constructor(private val semesterRepository: Se
         semesterNumber: Int?,
         academicStartYear: Int?,
         academicEndYear: Int?,
-        branchId: String?,
-        schemeId: String?,
+        branchId: Int?,
+        schemeId: Int?,
         page: Int,
         limit: Int
     ): Flow<Resource<AttendifyApiResponse<List<Semester?>>>> {

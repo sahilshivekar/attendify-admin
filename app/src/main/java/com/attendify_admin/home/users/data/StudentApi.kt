@@ -139,10 +139,10 @@ interface StudentApi {
     suspend fun removeStudentFromDropout(@Body requestBody: RemoveDropoutRequest): Response<AttendifyApiResponse<Unit>>
 
     @GET("api/v1/dropout/admin/get-dropout-by-id")
-    suspend fun getDropoutById(@Query("dropoutId") dropoutId: String): Response<AttendifyApiResponse<Dropout?>>
+    suspend fun getDropoutById(@Query("dropoutId") dropoutId: Int): Response<AttendifyApiResponse<Dropout?>>
 
     @GET("api/v1/dropout/admin/get-dropout-details-of-student")
-    suspend fun getDropoutDetailsOfStudent(@Query("studentId") studentId: String): Response<AttendifyApiResponse<List<Dropout>?>>
+    suspend fun getDropoutDetailsOfStudent(@Query("studentId") studentId: Int): Response<AttendifyApiResponse<List<Dropout>?>>
 
     @POST("api/v1/student-fcm-token/admin/add-student-fcm-token")
     suspend fun addStudentFcmToken(@Body requestBody: AddStudentFcmTokenRequest): Response<AttendifyApiResponse<StudentFcmToken?>>

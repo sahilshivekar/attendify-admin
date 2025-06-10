@@ -48,7 +48,7 @@ interface StaffRepository {
 
     // Update staff image
     suspend fun updateStaffImage(
-        studentId: String,
+        studentId: Int,
         staffImageFile: File
     ): Response<AttendifyApiResponse<Staff>>
 

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RemoveDivisionUseCase @Inject constructor(private val divisionRepository: DivisionRepository) {
-    operator fun invoke(divisionId: String): Flow<Resource<AttendifyApiResponse<String?>>> {
+    operator fun invoke(divisionId: Int): Flow<Resource<AttendifyApiResponse<String?>>> {
         return RemoteUtils.responseFlow { divisionRepository.removeDivision(divisionId) }
     }
 }

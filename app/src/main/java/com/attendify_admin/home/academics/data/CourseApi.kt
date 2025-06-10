@@ -20,9 +20,9 @@ interface CourseApi {
     @GET("api/v1/course/admin/get-courses")
     suspend fun getCourses(
         @Query("searchQuery") searchQuery: String?,
-        @Query("branchId") branchId: String?,
+        @Query("branchId") branchId: Int?,
         @Query("semesterNumber") semesterNumber: Int?,
-        @Query("schemeId") schemeId: String?,
+        @Query("schemeId") schemeId: Int?,
         @Query("page") page: Int,
         @Query("limit") limit: Int
     ): Response<AttendifyApiResponse<List<Course?>>>
@@ -34,14 +34,14 @@ interface CourseApi {
     suspend fun updateCourse(@Body requestBody: UpdateCourseRequest): Response<AttendifyApiResponse<Course?>>
 
     @DELETE("api/v1/course/admin/remove")
-    suspend fun removeCourse(@Query("id") courseId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeCourse(@Query("id") courseId: Int): Response<AttendifyApiResponse<String?>>
 
     @POST("api/v1/course/admin/add-to-branch-with-semester-number")
     suspend fun addCourseToBranchWithSemesterNumber(@Body requestBody: AddCourseToBranchWithSemesterNumberRequest): Response<AttendifyApiResponse<Course?>>
 
     @DELETE("api/v1/course/admin/remove-from-branch-with-semester-number")
-    suspend fun removeCourseFromBranchWithSemesterNumber(@Query("branchCourseSemesterId") branchCourseSemesterId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeCourseFromBranchWithSemesterNumber(@Query("branchCourseSemesterId") branchCourseSemesterId: Int): Response<AttendifyApiResponse<String?>>
 
     @GET("api/v1/course/admin/get-course-by-id")
-    suspend fun getCourseById(@Query("courseId") courseId: String): Response<AttendifyApiResponse<Course?>>
+    suspend fun getCourseById(@Query("courseId") courseId: Int): Response<AttendifyApiResponse<Course?>>
 }

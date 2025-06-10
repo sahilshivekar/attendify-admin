@@ -15,7 +15,7 @@ class DivisionRepositoryImpl @Inject constructor(
 
     override suspend fun getDivisions(
         semesterNumber: Int?,
-        branchId: String?,
+        branchId: Int?,
         academicStartYear: Int?,
         academicEndYear: Int?,
         searchQuery: String?,
@@ -30,9 +30,9 @@ class DivisionRepositoryImpl @Inject constructor(
     override suspend fun updateDivision(requestBody: UpdateDivisionRequest): Response<AttendifyApiResponse<Division?>> =
         divisionApi.updateDivision(requestBody)
 
-    override suspend fun removeDivision(divisionId: String): Response<AttendifyApiResponse<String?>> =
+    override suspend fun removeDivision(divisionId: Int): Response<AttendifyApiResponse<String?>> =
         divisionApi.removeDivision(divisionId)
 
-    override suspend fun getDivisionById(divisionId: String): Response<AttendifyApiResponse<Division?>> =
+    override suspend fun getDivisionById(divisionId: Int): Response<AttendifyApiResponse<Division?>> =
         divisionApi.getDivisionById(divisionId)
 }

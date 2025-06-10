@@ -5,7 +5,7 @@ data class Notice(
     val title: String,
     val audiences: String,
     val description: String,
-    val imageFilePublicId: String,
+    val imageFilePublicId: Int,
     val imageFileUrl: String,
     val isPinned: Boolean,
     val uploadedBy: Int,

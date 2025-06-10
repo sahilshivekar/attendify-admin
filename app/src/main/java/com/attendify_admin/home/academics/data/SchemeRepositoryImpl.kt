@@ -23,9 +23,9 @@
         override suspend fun updateScheme(requestBody: UpdateSchemeRequest): Response<AttendifyApiResponse<Scheme?>> =
             schemeApi.updateScheme(requestBody)
 
-        override suspend fun removeScheme(schemeId: String): Response<AttendifyApiResponse<String?>> =
+        override suspend fun removeScheme(schemeId: Int): Response<AttendifyApiResponse<String?>> =
             schemeApi.removeScheme(schemeId)
 
-        override suspend fun getSchemeById(schemeId: String): Response<AttendifyApiResponse<Scheme?>> =
+        override suspend fun getSchemeById(schemeId: Int): Response<AttendifyApiResponse<Scheme?>> =
             schemeApi.getSchemeById(schemeId)
     }

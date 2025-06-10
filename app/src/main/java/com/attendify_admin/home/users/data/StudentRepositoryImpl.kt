@@ -95,10 +95,10 @@ class StudentRepositoryImpl(
         dob: String?,
 //        password: String,
 //        confirmPassword: String,
-        schemeId: String,
+        schemeId: Int,
         admissionYear: String,
         admissionType: String,
-        branchId: String,
+        branchId: Int,
         studentImageFile: File?,
     ): Response<AttendifyApiResponse<Student>> {
         val prnBody = prn.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -152,7 +152,7 @@ class StudentRepositoryImpl(
     }
 
     override suspend fun updateStudentImage(
-        studentId: String,
+        studentId: Int,
         studentImageFile: File,
     ): Response<AttendifyApiResponse<Student>> {
         val studentIdBody = studentId.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -230,11 +230,11 @@ class StudentRepositoryImpl(
         return studentApi.removeStudentFromDropout(requestBody)
     }
 
-    override suspend fun getDropoutById(dropoutId: String): Response<AttendifyApiResponse<Dropout?>> {
+    override suspend fun getDropoutById(dropoutId: Int): Response<AttendifyApiResponse<Dropout?>> {
         return studentApi.getDropoutById(dropoutId)
     }
 
-    override suspend fun getDropoutDetailsOfStudent(studentId: String): Response<AttendifyApiResponse<List<Dropout>?>> {
+    override suspend fun getDropoutDetailsOfStudent(studentId: Int): Response<AttendifyApiResponse<List<Dropout>?>> {
         return studentApi.getDropoutDetailsOfStudent(studentId)
     }
 

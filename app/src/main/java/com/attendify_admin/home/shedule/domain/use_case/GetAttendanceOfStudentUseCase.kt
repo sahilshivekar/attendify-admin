@@ -10,11 +10,11 @@ import javax.inject.Inject
 
 class GetAttendanceOfStudentUseCase @Inject constructor(private val attendanceRepository: AttendanceRepository) {
     operator fun invoke(
-        studentId: String,
-        courseId: String,
-        semesterId: String,
-        divisionId: String,
-        batchId: String,
+        studentId: Int,
+        courseId: Int,
+        semesterId: Int,
+        divisionId: Int,
+        batchId: Int,
         startDate: String,
         endDate: String,
     ): Flow<Resource<AttendifyApiResponse<AttendanceStudentAggregatedAndDetailedAttendance>>> {

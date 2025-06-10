@@ -24,12 +24,12 @@ class RoomRepositoryImpl @Inject constructor(
     ): Response<AttendifyApiResponse<List<Room?>>> =
         roomApi.getRooms(searchQuery, sortBy, sortOrder, page, limit)
 
-    override suspend fun getRoomById(roomId: String): Response<AttendifyApiResponse<Room?>> =
+    override suspend fun getRoomById(roomId: Int): Response<AttendifyApiResponse<Room?>> =
         roomApi.getRoomById(roomId)
 
     override suspend fun updateRoom(requestBody: UpdateRoomRequest): Response<AttendifyApiResponse<Room?>> =
         roomApi.updateRoom(requestBody)
 
-    override suspend fun removeRoom(roomId: String): Response<AttendifyApiResponse<String?>> =
+    override suspend fun removeRoom(roomId: Int): Response<AttendifyApiResponse<String?>> =
         roomApi.removeRoom(roomId)
 }

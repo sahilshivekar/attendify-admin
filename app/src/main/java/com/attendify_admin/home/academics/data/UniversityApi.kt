@@ -25,8 +25,8 @@ interface UniversityApi {
     suspend fun updateUniversity(@Body requestBody: UpdateUniversityRequest): Response<AttendifyApiResponse<University?>>
 
     @DELETE("api/v1/university/admin/remove")
-    suspend fun removeUniversity(@Query("id") universityId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeUniversity(@Query("id") universityId: Int): Response<AttendifyApiResponse<String?>>
 
     @GET("api/v1/university/admin/get-university-by-id")
-    suspend fun getUniversityById(@Query("universityId") universityId: String): Response<AttendifyApiResponse<University?>>
+    suspend fun getUniversityById(@Query("universityId") universityId: Int): Response<AttendifyApiResponse<University?>>
 }

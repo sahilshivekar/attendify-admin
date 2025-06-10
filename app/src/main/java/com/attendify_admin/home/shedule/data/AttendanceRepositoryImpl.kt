@@ -35,12 +35,12 @@ class AttendanceRepositoryImpl @Inject constructor(
 
     override suspend fun getAttendance(
         date: String?,
-        attendanceId: String?,
-        classId: String?,
-        studentId: String?,
-        courseId: String?,
-        semesterId: String?,
-        divisionId: String?,
+        attendanceId: Int?,
+        classId: Int?,
+        studentId: Int?,
+        courseId: Int?,
+        semesterId: Int?,
+        divisionId: Int?,
     ): Response<AttendifyApiResponse<List<AttendanceStudent?>>> =
         attendanceApi.getAttendance(
             date,
@@ -53,11 +53,11 @@ class AttendanceRepositoryImpl @Inject constructor(
         )
 
     override suspend fun getAttendanceOfStudent(
-        studentId: String,
-        courseId: String,
-        semesterId: String,
-        divisionId: String,
-        batchId: String,
+        studentId: Int,
+        courseId: Int,
+        semesterId: Int,
+        divisionId: Int,
+        batchId: Int,
         startDate: String,
         endDate: String,
     ): Response<AttendifyApiResponse<AttendanceStudentAggregatedAndDetailedAttendance>> =
@@ -72,10 +72,10 @@ class AttendanceRepositoryImpl @Inject constructor(
         )
 
     override suspend fun getAttendanceOfAllForSemesterDivisionBatchCourse(
-        courseId: String,
-        semesterId: String,
-        divisionId: String,
-        batchId: String,
+        courseId: Int,
+        semesterId: Int,
+        divisionId: Int,
+        batchId: Int,
         startDate: String,
         endDate: String,
     ): Response<AttendifyApiResponse<AttendanceAllStudents>> =
@@ -104,7 +104,7 @@ class AttendanceRepositoryImpl @Inject constructor(
         endDate: String,
         studentIds: List<String>,
         courseIds: List<String>,
-        semesterId: String,
+        semesterId: Int,
     ): Response<AttendifyApiResponse<List<NoParentEmailStudents>?>> =
         attendanceApi.sendAttendanceReport(
             SendAttendanceReportRequest(
@@ -117,8 +117,8 @@ class AttendanceRepositoryImpl @Inject constructor(
         )
 
     override suspend fun getActiveAttendanceSheet(
-        studentId: String,
-        divisionId: String,
+        studentId: Int,
+        divisionId: Int,
     ): Response<AttendifyApiResponse<List<Attendance>?>> =
         attendanceApi.getActiveAttendanceSheet(
             studentId,

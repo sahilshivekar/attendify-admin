@@ -14,7 +14,7 @@ interface BranchRepository {
 
     suspend fun updateBranch(requestBody: UpdateBranchRequest): Response<AttendifyApiResponse<Branch?>>
 
-    suspend fun removeBranch(branchId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeBranch(branchId: Int): Response<AttendifyApiResponse<String?>>
 
-    suspend fun getBranchById(branchId: String): Response<AttendifyApiResponse<Branch?>>
+    suspend fun getBranchById(branchId: Int): Response<AttendifyApiResponse<Branch?>>
 }

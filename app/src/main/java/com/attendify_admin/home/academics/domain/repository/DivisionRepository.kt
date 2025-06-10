@@ -10,7 +10,7 @@ import retrofit2.Response
 interface DivisionRepository {
     suspend fun getDivisions(
         semesterNumber: Int?,
-        branchId: String?,
+        branchId: Int?,
         academicStartYear: Int?,
         academicEndYear: Int?,
         searchQuery: String?,
@@ -22,7 +22,7 @@ interface DivisionRepository {
 
     suspend fun updateDivision(requestBody: UpdateDivisionRequest): Response<AttendifyApiResponse<Division?>>
 
-    suspend fun removeDivision(divisionId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeDivision(divisionId: Int): Response<AttendifyApiResponse<String?>>
 
-    suspend fun getDivisionById(divisionId: String): Response<AttendifyApiResponse<Division?>>
+    suspend fun getDivisionById(divisionId: Int): Response<AttendifyApiResponse<Division?>>
 }

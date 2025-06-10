@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RemoveBranchUseCase @Inject constructor(private val branchRepository: BranchRepository) {
-    operator fun invoke(branchId: String): Flow<Resource<AttendifyApiResponse<String?>>> {
+    operator fun invoke(branchId: Int): Flow<Resource<AttendifyApiResponse<String?>>> {
         return RemoteUtils.responseFlow { branchRepository.removeBranch(branchId) }
     }
 }

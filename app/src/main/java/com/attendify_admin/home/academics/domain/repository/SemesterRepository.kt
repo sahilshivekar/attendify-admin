@@ -12,8 +12,8 @@ interface SemesterRepository {
         semesterNumber: Int?,
         academicStartYear: Int?,
         academicEndYear: Int?,
-        branchId: String?,
-        schemeId: String?,
+        branchId: Int?,
+        schemeId: Int?,
         page: Int,
         limit: Int
     ): Response<AttendifyApiResponse<List<Semester?>>>
@@ -22,9 +22,9 @@ interface SemesterRepository {
 
     suspend fun updateSemester(requestBody: UpdateSemesterRequest): Response<AttendifyApiResponse<Semester?>>
 
-    suspend fun removeSemester(semesterId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeSemester(semesterId: Int): Response<AttendifyApiResponse<String?>>
 
-    suspend fun getCoursesOfSemester(semesterId: String): Response<AttendifyApiResponse<List<Semester?>>>
+    suspend fun getCoursesOfSemester(semesterId: Int): Response<AttendifyApiResponse<List<Semester?>>>
 
-    suspend fun getSemesterById(semesterId: String): Response<AttendifyApiResponse<Semester?>>
+    suspend fun getSemesterById(semesterId: Int): Response<AttendifyApiResponse<Semester?>>
 }

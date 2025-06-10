@@ -97,10 +97,10 @@ class StaffRepositoryImpl(
     }
 
     override suspend fun updateStaffImage(
-        studentId: String,
+        studentId: Int,
         staffImageFile: File
     ): Response<AttendifyApiResponse<Staff>> {
-        val studentIdBody = studentId.toRequestBody("text/plain".toMediaTypeOrNull())
+        val studentIdBody = studentId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val requestFile = staffImageFile.asRequestBody("image/*".toMediaTypeOrNull())
         val staffImagePart = MultipartBody.Part.createFormData("staffImageFile", staffImageFile.name, requestFile)
         return staffApi.updateStaffImage(

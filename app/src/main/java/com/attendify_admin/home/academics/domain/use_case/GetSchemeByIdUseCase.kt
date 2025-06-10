@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetSchemeByIdUseCase @Inject constructor(private val schemeRepository: SchemeRepository) {
-    operator fun invoke(schemeId: String): Flow<Resource<AttendifyApiResponse<Scheme?>>> {
+    operator fun invoke(schemeId: Int): Flow<Resource<AttendifyApiResponse<Scheme?>>> {
         return RemoteUtils.responseFlow { schemeRepository.getSchemeById(schemeId) }
     }
 }

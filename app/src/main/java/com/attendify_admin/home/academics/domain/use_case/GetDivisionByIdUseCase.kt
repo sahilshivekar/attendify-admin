@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetDivisionByIdUseCase @Inject constructor(private val divisionRepository: DivisionRepository) {
-    operator fun invoke(divisionId: String): Flow<Resource<AttendifyApiResponse<Division?>>> {
+    operator fun invoke(divisionId: Int): Flow<Resource<AttendifyApiResponse<Division?>>> {
         return RemoteUtils.responseFlow { divisionRepository.getDivisionById(divisionId) }
     }
 }

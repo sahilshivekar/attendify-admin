@@ -25,8 +25,8 @@ interface BranchApi {
     suspend fun updateBranch(@Body requestBody: UpdateBranchRequest): Response<AttendifyApiResponse<Branch?>>
 
     @DELETE("api/v1/branch/admin/remove")
-    suspend fun removeBranch(@Query("id") branchId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeBranch(@Query("id") branchId: Int): Response<AttendifyApiResponse<String?>>
 
     @GET("api/v1/branch/admin/get-branch-by-id")
-    suspend fun getBranchById(@Query("branchId") branchId: String): Response<AttendifyApiResponse<Branch?>>
+    suspend fun getBranchById(@Query("branchId") branchId: Int): Response<AttendifyApiResponse<Branch?>>
 }

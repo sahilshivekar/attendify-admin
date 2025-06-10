@@ -6,5 +6,5 @@ data class UpdateCourseRequest(
     val code: String?,
     val name: String?,
     val abbreviation: String?,
-    val schemeId: String?
+    val schemeId: Int?
 )

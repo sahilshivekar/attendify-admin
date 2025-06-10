@@ -19,8 +19,8 @@ interface SemesterApi {
         @Query("semesterNumber") semesterNumber: Int?,
         @Query("academicStartYear") academicStartYear: Int?,
         @Query("academicEndYear") academicEndYear: Int?,
-        @Query("branchId") branchId: String?,
-        @Query("schemeId") schemeId: String?,
+        @Query("branchId") branchId: Int?,
+        @Query("schemeId") schemeId: Int?,
         @Query("page") page: Int,
         @Query("limit") limit: Int
     ): Response<AttendifyApiResponse<List<Semester?>>>
@@ -32,11 +32,11 @@ interface SemesterApi {
     suspend fun updateSemester(@Body requestBody: UpdateSemesterRequest): Response<AttendifyApiResponse<Semester?>>
 
     @DELETE("api/v1/semester/admin/remove")
-    suspend fun removeSemester(@Query("id") semesterId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeSemester(@Query("id") semesterId: Int): Response<AttendifyApiResponse<String?>>
 
     @GET("api/v1/semester/admin/get-courses-of-semester")
-    suspend fun getCoursesOfSemester(@Query("semesterId") semesterId: String): Response<AttendifyApiResponse<List<Semester?>>>
+    suspend fun getCoursesOfSemester(@Query("semesterId") semesterId: Int): Response<AttendifyApiResponse<List<Semester?>>>
 
     @GET("api/v1/semester/admin/get-semester-by-id")
-    suspend fun getSemesterById(@Query("semesterId") semesterId: String): Response<AttendifyApiResponse<Semester?>>
+    suspend fun getSemesterById(@Query("semesterId") semesterId: Int): Response<AttendifyApiResponse<Semester?>>
 }

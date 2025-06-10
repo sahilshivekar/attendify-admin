@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetBranchByIdUseCase @Inject constructor(private val branchRepository: BranchRepository) {
-    operator fun invoke(branchId: String): Flow<Resource<AttendifyApiResponse<Branch?>>> {
+    operator fun invoke(branchId: Int): Flow<Resource<AttendifyApiResponse<Branch?>>> {
         return RemoteUtils.responseFlow { branchRepository.getBranchById(branchId) }
     }
 }

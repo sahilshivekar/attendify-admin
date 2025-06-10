@@ -2,5 +2,5 @@ package com.attendify_admin.home.shedule.data.dto.request
 
 // Request DTO for removing attendance
 data class RemoveAttendanceRequest(
-    val attendanceId: String
+    val attendanceId: Int
 )

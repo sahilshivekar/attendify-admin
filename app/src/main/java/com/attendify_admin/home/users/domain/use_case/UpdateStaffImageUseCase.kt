@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class UpdateStaffImageUseCase @Inject constructor(private val staffRepository: StaffRepository) {
     operator fun invoke(
-        staffId: String,
+        staffId: Int,
         staffImageFile: File
     ): Flow<Resource<AttendifyApiResponse<Staff>>> {
         return RemoteUtils.responseFlow {

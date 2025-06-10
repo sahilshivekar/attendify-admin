@@ -12,7 +12,7 @@ import javax.inject.Inject
 class GetDivisionsUseCase @Inject constructor(private val divisionRepository: DivisionRepository) {
     operator fun invoke(
         semesterNumber: Int? = null,
-        branchId: String? = null,
+        branchId: Int? = null,
         academicStartYear: Int? = null,
         academicEndYear: Int? = null,
         searchQuery: String? = null,

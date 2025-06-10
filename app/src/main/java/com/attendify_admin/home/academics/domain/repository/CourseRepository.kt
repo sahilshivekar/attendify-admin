@@ -12,9 +12,9 @@ import retrofit2.Response
 interface CourseRepository {
     suspend fun getCourses(
         searchQuery: String?,
-        branchId: String?,
+        branchId: Int?,
         semesterNumber: Int?,
-        schemeId: String?,
+        schemeId: Int?,
         page: Int,
         limit: Int
     ): Response<AttendifyApiResponse<List<Course?>>>
@@ -23,11 +23,11 @@ interface CourseRepository {
 
     suspend fun updateCourse(requestBody: UpdateCourseRequest): Response<AttendifyApiResponse<Course?>>
 
-    suspend fun removeCourse(courseId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeCourse(courseId: Int): Response<AttendifyApiResponse<String?>>
 
     suspend fun addCourseToBranchWithSemesterNumber(requestBody: AddCourseToBranchWithSemesterNumberRequest): Response<AttendifyApiResponse<Course?>>
 
     suspend fun removeCourseFromBranchWithSemesterNumber(requestBody: RemoveCourseFromBranchWithSemesterNumberRequest): Response<AttendifyApiResponse<String?>>
 
-    suspend fun getCourseById(courseId: String): Response<AttendifyApiResponse<Course?>>
+    suspend fun getCourseById(courseId: Int): Response<AttendifyApiResponse<Course?>>
 }

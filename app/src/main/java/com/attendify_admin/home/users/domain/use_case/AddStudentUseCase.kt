@@ -19,10 +19,10 @@ class AddStudentUseCase @Inject constructor(private val studentRepository: Stude
         phoneNumber: String,
         gender: String,
         dob: String?,
-        schemeId: String,
+        schemeId: Int,
         admissionYear: String,
         admissionType: String,
-        branchId: String,
+        branchId: Int,
         studentImageFile: File?
     ): Flow<Resource<AttendifyApiResponse<Student>>> {
         return RemoteUtils.responseFlow {

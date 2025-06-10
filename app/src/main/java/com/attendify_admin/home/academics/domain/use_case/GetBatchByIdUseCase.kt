@@ -11,7 +11,7 @@ import javax.inject.Inject
 class GetBatchByIdUseCase @Inject constructor(
     private val batchRepository: BatchRepository
 ) {
-    operator fun invoke(batchId: String): Flow<Resource<AttendifyApiResponse<Batch?>>> {
+    operator fun invoke(batchId: Int): Flow<Resource<AttendifyApiResponse<Batch?>>> {
         return RemoteUtils.responseFlow {
             batchRepository.getBatchById(batchId)
         }

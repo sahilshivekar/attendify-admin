@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetDropoutByIdUseCase @Inject constructor(private val studentRepository: StudentRepository) {
-    operator fun invoke(dropoutId: String): Flow<Resource<AttendifyApiResponse<Dropout?>>> {
+    operator fun invoke(dropoutId: Int): Flow<Resource<AttendifyApiResponse<Dropout?>>> {
         return RemoteUtils.responseFlow { studentRepository.getDropoutById(dropoutId) }
     }
 }

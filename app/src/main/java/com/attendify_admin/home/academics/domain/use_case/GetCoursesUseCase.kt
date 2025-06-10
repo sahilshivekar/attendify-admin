@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 // CourseRepository Use Cases
 class GetCoursesUseCase @Inject constructor(private val courseRepository: CourseRepository) {
-    operator fun invoke(searchQuery: String?, branchId: String?, semesterNumber: Int?, schemeId: String?, page: Int, limit: Int): Flow<Resource<AttendifyApiResponse<List<Course?>>>> {
+    operator fun invoke(searchQuery: String?, branchId: Int?, semesterNumber: Int?, schemeId: Int?, page: Int, limit: Int): Flow<Resource<AttendifyApiResponse<List<Course?>>>> {
         return RemoteUtils.responseFlow {
             courseRepository.getCourses(
                 searchQuery,

@@ -14,7 +14,7 @@ interface SchemeRepository {
 
     suspend fun updateScheme(requestBody: UpdateSchemeRequest): Response<AttendifyApiResponse<Scheme?>>
 
-    suspend fun removeScheme(schemeId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeScheme(schemeId: Int): Response<AttendifyApiResponse<String?>>
 
-    suspend fun getSchemeById(schemeId: String): Response<AttendifyApiResponse<Scheme?>>
+    suspend fun getSchemeById(schemeId: Int): Response<AttendifyApiResponse<Scheme?>>
 }

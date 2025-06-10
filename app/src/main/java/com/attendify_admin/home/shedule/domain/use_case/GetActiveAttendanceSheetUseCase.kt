@@ -10,8 +10,8 @@ import javax.inject.Inject
 
 class GetActiveAttendanceSheetUseCase @Inject constructor(private val attendanceRepository: AttendanceRepository) {
     operator fun invoke(
-        studentId: String,
-        divisionId: String,
+        studentId: Int,
+        divisionId: Int,
     ): Flow<Resource<AttendifyApiResponse<List<Attendance>?>>> {
         return RemoteUtils.responseFlow {
             attendanceRepository.getActiveAttendanceSheet(

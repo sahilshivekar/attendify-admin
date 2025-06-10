@@ -10,7 +10,7 @@ import javax.inject.Inject
 class RemoveBatchUseCase @Inject constructor(
     private val batchRepository: BatchRepository
 ) {
-    operator fun invoke(batchId: String): Flow<Resource<AttendifyApiResponse<String?>>> {
+    operator fun invoke(batchId: Int): Flow<Resource<AttendifyApiResponse<String?>>> {
         return RemoteUtils.responseFlow {
             batchRepository.removeBatch(batchId)
         }

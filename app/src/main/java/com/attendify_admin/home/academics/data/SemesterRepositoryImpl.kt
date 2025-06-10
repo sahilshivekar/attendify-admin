@@ -17,8 +17,8 @@ class SemesterRepositoryImpl @Inject constructor(
         semesterNumber: Int?,
         academicStartYear: Int?,
         academicEndYear: Int?,
-        branchId: String?,
-        schemeId: String?,
+        branchId: Int?,
+        schemeId: Int?,
         page: Int,
         limit: Int
     ): Response<AttendifyApiResponse<List<Semester?>>> =
@@ -30,12 +30,12 @@ class SemesterRepositoryImpl @Inject constructor(
     override suspend fun updateSemester(requestBody: UpdateSemesterRequest): Response<AttendifyApiResponse<Semester?>> =
         semesterApi.updateSemester(requestBody)
 
-    override suspend fun removeSemester(semesterId: String): Response<AttendifyApiResponse<String?>> =
+    override suspend fun removeSemester(semesterId: Int): Response<AttendifyApiResponse<String?>> =
         semesterApi.removeSemester(semesterId)
 
-    override suspend fun getCoursesOfSemester(semesterId: String): Response<AttendifyApiResponse<List<Semester?>>> =
+    override suspend fun getCoursesOfSemester(semesterId: Int): Response<AttendifyApiResponse<List<Semester?>>> =
         semesterApi.getCoursesOfSemester(semesterId)
 
-    override suspend fun getSemesterById(semesterId: String): Response<AttendifyApiResponse<Semester?>> =
+    override suspend fun getSemesterById(semesterId: Int): Response<AttendifyApiResponse<Semester?>> =
         semesterApi.getSemesterById(semesterId)
 }

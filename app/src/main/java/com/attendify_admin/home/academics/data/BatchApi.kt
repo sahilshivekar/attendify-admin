@@ -19,7 +19,7 @@ interface BatchApi {
     @GET("api/v1/admin/admin/get-batches")
     suspend fun getBatches(
         @Query("semesterNumber") semesterNumber: Int?,
-        @Query("branchId") branchId: String?,
+        @Query("branchId") branchId: Int?,
         @Query("academicStartYear") academicStartYear: Int?,
         @Query("academicEndYear") academicEndYear: Int?,
         @Query("searchQuery") searchQuery: String?,
@@ -34,8 +34,8 @@ interface BatchApi {
     suspend fun updateBatch(@Body requestBody: UpdateBatchRequest): Response<AttendifyApiResponse<Batch?>>
 
     @DELETE("api/v1/batch/admin/remove")
-    suspend fun removeBatch(@Query("id") batchId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeBatch(@Query("id") batchId: Int): Response<AttendifyApiResponse<String?>>
 
     @GET("api/v1/batch/admin/get-batch-by-id")
-    suspend fun getBatchById(@Query("batchId") batchId: String): Response<AttendifyApiResponse<Batch?>>
+    suspend fun getBatchById(@Query("batchId") batchId: Int): Response<AttendifyApiResponse<Batch?>>
 }

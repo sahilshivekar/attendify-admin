@@ -15,7 +15,7 @@ data class Student(
     val parentEmail: String?,
     val prn: String,
     val refreshToken: String?,
-    val studentImgPublicId: String?,
+    val studentImgPublicId: Int?,
     val studentImgUrl: String?,
     val schemeId: Int,
     val Scheme: Scheme?,

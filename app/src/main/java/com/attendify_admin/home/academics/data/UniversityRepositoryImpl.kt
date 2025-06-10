@@ -21,9 +21,9 @@ class UniversityRepositoryImpl @Inject constructor(
     override suspend fun updateUniversity(requestBody: UpdateUniversityRequest): Response<AttendifyApiResponse<University?>> =
         universityApi.updateUniversity(requestBody)
 
-    override suspend fun removeUniversity(universityId: String): Response<AttendifyApiResponse<String?>> =
+    override suspend fun removeUniversity(universityId: Int): Response<AttendifyApiResponse<String?>> =
         universityApi.removeUniversity(universityId)
 
-    override suspend fun getUniversityById(universityId: String): Response<AttendifyApiResponse<University?>> =
+    override suspend fun getUniversityById(universityId: Int): Response<AttendifyApiResponse<University?>> =
         universityApi.getUniversityById(universityId)
 }

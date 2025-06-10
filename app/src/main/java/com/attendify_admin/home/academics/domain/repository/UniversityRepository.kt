@@ -13,7 +13,7 @@ interface UniversityRepository {
 
     suspend fun updateUniversity(requestBody: UpdateUniversityRequest): Response<AttendifyApiResponse<University?>>
 
-    suspend fun removeUniversity(universityId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeUniversity(universityId: Int): Response<AttendifyApiResponse<String?>>
 
-    suspend fun getUniversityById(universityId: String): Response<AttendifyApiResponse<University?>>
+    suspend fun getUniversityById(universityId: Int): Response<AttendifyApiResponse<University?>>
 }

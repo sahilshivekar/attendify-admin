@@ -61,10 +61,10 @@ interface StudentRepository {
         dob: String?,
 //        password: String,
 //        confirmPassword: String,
-        schemeId: String,
+        schemeId: Int,
         admissionYear: String,
         admissionType: String,
-        branchId: String,
+        branchId: Int,
         studentImageFile: File?
     ): Response<AttendifyApiResponse<Student>>
 
@@ -76,7 +76,7 @@ interface StudentRepository {
 
     // Update student image
     suspend fun updateStudentImage(
-        studentId: String,
+        studentId: Int,
         studentImageFile: File
     ): Response<AttendifyApiResponse<Student>>
 
@@ -120,9 +120,9 @@ interface StudentRepository {
 
     suspend fun removeStudentFromDropout(requestBody: RemoveDropoutRequest): Response<AttendifyApiResponse<Unit>>
 
-    suspend fun getDropoutById(dropoutId: String): Response<AttendifyApiResponse<Dropout?>>
+    suspend fun getDropoutById(dropoutId: Int): Response<AttendifyApiResponse<Dropout?>>
 
-    suspend fun getDropoutDetailsOfStudent(studentId: String): Response<AttendifyApiResponse<List<Dropout>?>>
+    suspend fun getDropoutDetailsOfStudent(studentId: Int): Response<AttendifyApiResponse<List<Dropout>?>>
 
     suspend fun addStudentFcmToken(requestBody: AddStudentFcmTokenRequest): Response<AttendifyApiResponse<StudentFcmToken?>>
 

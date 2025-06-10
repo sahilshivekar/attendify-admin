@@ -18,9 +18,9 @@ interface RoomRepository {
         limit: Int
     ): Response<AttendifyApiResponse<List<Room?>>>
 
-    suspend fun getRoomById(roomId: String): Response<AttendifyApiResponse<Room?>>
+    suspend fun getRoomById(roomId: Int): Response<AttendifyApiResponse<Room?>>
 
     suspend fun updateRoom(requestBody: UpdateRoomRequest): Response<AttendifyApiResponse<Room?>>
 
-    suspend fun removeRoom(roomId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeRoom(roomId: Int): Response<AttendifyApiResponse<String?>>
 }

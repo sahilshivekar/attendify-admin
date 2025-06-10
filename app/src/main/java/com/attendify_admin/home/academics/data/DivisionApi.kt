@@ -19,7 +19,7 @@ interface DivisionApi {
     @GET("api/v1/division/admin/get-divisions")
     suspend fun getDivisions(
         @Query("semesterNumber") semesterNumber: Int?,
-        @Query("branchId") branchId: String?,
+        @Query("branchId") branchId: Int?,
         @Query("academicStartYear") academicStartYear: Int?,
         @Query("academicEndYear") academicEndYear: Int?,
         @Query("searchQuery") searchQuery: String?,
@@ -34,8 +34,8 @@ interface DivisionApi {
     suspend fun updateDivision(@Body requestBody: UpdateDivisionRequest): Response<AttendifyApiResponse<Division?>>
 
     @DELETE("api/v1/division/admin/remove")
-    suspend fun removeDivision(@Query("id") divisionId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeDivision(@Query("id") divisionId: Int): Response<AttendifyApiResponse<String?>>
 
     @GET("api/v1/division/admin/get-division-by-id")
-    suspend fun getDivisionById(@Query("divisionId") divisionId: String): Response<AttendifyApiResponse<Division?>>
+    suspend fun getDivisionById(@Query("divisionId") divisionId: Int): Response<AttendifyApiResponse<Division?>>
 }

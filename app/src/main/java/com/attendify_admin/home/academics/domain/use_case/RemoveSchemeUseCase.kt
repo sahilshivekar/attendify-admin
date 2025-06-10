@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RemoveSchemeUseCase @Inject constructor(private val schemeRepository: SchemeRepository) {
-    operator fun invoke(schemeId: String): Flow<Resource<AttendifyApiResponse<String?>>> {
+    operator fun invoke(schemeId: Int): Flow<Resource<AttendifyApiResponse<String?>>> {
         return RemoteUtils.responseFlow { schemeRepository.removeScheme(schemeId) }
     }
 }

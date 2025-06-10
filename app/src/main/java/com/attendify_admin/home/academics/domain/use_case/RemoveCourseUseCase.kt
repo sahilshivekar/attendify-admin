@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RemoveCourseUseCase @Inject constructor(private val courseRepository: CourseRepository) {
-    operator fun invoke(courseId: String): Flow<Resource<AttendifyApiResponse<String?>>> {
+    operator fun invoke(courseId: Int): Flow<Resource<AttendifyApiResponse<String?>>> {
         return RemoteUtils.responseFlow { courseRepository.removeCourse(courseId) }
     }
 }

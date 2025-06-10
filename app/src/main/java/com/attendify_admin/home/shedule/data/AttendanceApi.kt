@@ -31,36 +31,36 @@ interface AttendanceApi {
     suspend fun updateStudentAttendance(@Body requestBody: UpdateStudentAttendanceRequest): Response<AttendifyApiResponse<AttendanceStudent?>>
 
     @DELETE("api/v1/attendance/admin/remove-attendance")
-    suspend fun removeAttendance(@Query("attendanceId") attendanceId: String): Response<AttendifyApiResponse<String?>>
+    suspend fun removeAttendance(@Query("attendanceId") attendanceId: Int): Response<AttendifyApiResponse<String?>>
 
     @GET("api/v1/attendance/admin/get-attendance")
     suspend fun getAttendance(
         @Query("date") date: String?,
-        @Query("attendanceId") attendanceId: String?,
-        @Query("classId") classId: String?,
-        @Query("studentId") studentId: String?,
-        @Query("courseId") courseId: String?,
-        @Query("semesterId") semesterId: String?,
-        @Query("divisionId") divisionId: String?,
+        @Query("attendanceId") attendanceId: Int?,
+        @Query("classId") classId: Int?,
+        @Query("studentId") studentId: Int?,
+        @Query("courseId") courseId: Int?,
+        @Query("semesterId") semesterId: Int?,
+        @Query("divisionId") divisionId: Int?,
     ): Response<AttendifyApiResponse<List<AttendanceStudent?>>>
 
     @GET("api/v1/attendance/admin/get-attendance-of-student")
     suspend fun getAttendanceOfStudent(
-        @Query("studentId") studentId: String,
-        @Query("courseId") courseId: String,
-        @Query("semesterId") semesterId: String,
-        @Query("divisionId") divisionId: String,
-        @Query("batchId") batchId: String,
+        @Query("studentId") studentId: Int,
+        @Query("courseId") courseId: Int,
+        @Query("semesterId") semesterId: Int,
+        @Query("divisionId") divisionId: Int,
+        @Query("batchId") batchId: Int,
         @Query("startDate") startDate: String,
         @Query("endDate") endDate: String
     ): Response<AttendifyApiResponse<AttendanceStudentAggregatedAndDetailedAttendance>>
 
     @GET("api/v1/attendance/admin/get-attendance-of-all")
     suspend fun getAttendanceOfAllForSemesterDivisionBatchCourse(
-        @Query("courseId") courseId: String,
-        @Query("semesterId") semesterId: String,
-        @Query("divisionId") divisionId: String,
-        @Query("batchId") batchId: String,
+        @Query("courseId") courseId: Int,
+        @Query("semesterId") semesterId: Int,
+        @Query("divisionId") divisionId: Int,
+        @Query("batchId") batchId: Int,
         @Query("startDate") startDate: String,
         @Query("endDate") endDate: String
     ): Response<AttendifyApiResponse<AttendanceAllStudents>>
@@ -77,8 +77,8 @@ interface AttendanceApi {
 
     @GET("api/v1/attendance/admin/get-active-attendance-sheet")
     suspend fun getActiveAttendanceSheet(
-        @Query("studentId") studentId: String,
-        @Query("divisionId") divisionId: String
+        @Query("studentId") studentId: Int,
+        @Query("divisionId") divisionId: Int
     ): Response<AttendifyApiResponse<List<Attendance>?>>
 
 }
