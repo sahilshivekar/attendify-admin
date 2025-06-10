@@ -1,7 +1,7 @@
 package com.attendify_admin.home.academics.data
 
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
-import com.attendify_admin.common.data.remote.response_dto.Course
+import com.attendify_admin.common.data.dto.response.Course
 import com.attendify_admin.home.academics.data.dto.request.AddCourseRequest
 import com.attendify_admin.home.academics.data.dto.request.AddCourseToBranchWithSemesterNumberRequest
 import com.attendify_admin.home.academics.data.dto.request.RemoveCourseFromBranchWithSemesterNumberRequest

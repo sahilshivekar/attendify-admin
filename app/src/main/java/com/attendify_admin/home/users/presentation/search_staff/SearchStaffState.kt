@@ -1,7 +1,7 @@
 package com.attendify_admin.home.users.presentation.search_staff
 
 import androidx.paging.PagingData
-import com.attendify_admin.common.data.remote.response_dto.Staff
+import com.attendify_admin.common.data.dto.response.Staff
 import kotlinx.coroutines.flow.Flow
 
 data class SearchStaffState (

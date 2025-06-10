@@ -45,15 +45,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil.compose.rememberAsyncImagePainter
 import com.attendify_admin.R
-import com.attendify_admin.common.data.remote.response_dto.Batch
-import com.attendify_admin.common.data.remote.response_dto.Branch
-import com.attendify_admin.common.data.remote.response_dto.Division
-import com.attendify_admin.common.data.remote.response_dto.Scheme
-import com.attendify_admin.common.data.remote.response_dto.Semester
-import com.attendify_admin.common.data.remote.response_dto.Student
-import com.attendify_admin.common.data.remote.response_dto.StudentBatch
-import com.attendify_admin.common.data.remote.response_dto.StudentDivision
-import com.attendify_admin.common.data.remote.response_dto.StudentSemester
+import com.attendify_admin.common.data.dto.response.Batch
+import com.attendify_admin.common.data.dto.response.Branch
+import com.attendify_admin.common.data.dto.response.Division
+import com.attendify_admin.common.data.dto.response.Scheme
+import com.attendify_admin.common.data.dto.response.Semester
+import com.attendify_admin.common.data.dto.response.Student
+import com.attendify_admin.common.data.dto.response.StudentBatch
+import com.attendify_admin.common.data.dto.response.StudentDivision
+import com.attendify_admin.common.data.dto.response.StudentSemester
 import com.attendify_admin.common.presentation.PreviewWrapper
 import com.attendify_admin.common.presentation.ScreenPreview
 import com.attendify_admin.common.presentation.components.AttendifyButton
@@ -587,11 +587,6 @@ fun StudentDetailsScreen(
                         modifier = Modifier.weight(.05f),
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium)
                     )
-                    Text(
-                        text = state.student.academicStatus,
-                        modifier = Modifier.weight(.5f),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
                 }
             }
 
@@ -940,7 +935,6 @@ fun StudentDetailsScreenPreview() {
             state = StudentDetailsState(
                 student = Student(
                     id = 1,
-                    academicStatus = "Active",
                     admissionType = "Regular",
                     admissionYear = 2023,
                     dob = "2000-01-01",
@@ -963,6 +957,7 @@ fun StudentDetailsScreenPreview() {
                     createdAt = "2024-04-27T10:00:00Z",
                     updatedAt = "2024-04-27T10:30:00Z",
                     branchId = 1,
+                    parentEmail = "parent1@example.com",
                     Branch = createSampleBranch()// Assuming you have a function to create a sample Branch
                 ),
                 semesters = listOf(

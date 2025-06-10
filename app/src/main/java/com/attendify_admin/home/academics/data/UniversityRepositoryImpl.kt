@@ -1,7 +1,7 @@
 package com.attendify_admin.home.academics.data
 
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
-import com.attendify_admin.common.data.remote.response_dto.University
+import com.attendify_admin.common.data.dto.response.University
 import com.attendify_admin.home.academics.data.dto.request.AddUniversityRequest
 import com.attendify_admin.home.academics.data.dto.request.UpdateUniversityRequest
 import com.attendify_admin.home.academics.domain.repository.UniversityRepository

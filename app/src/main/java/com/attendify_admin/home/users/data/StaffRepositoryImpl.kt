@@ -4,8 +4,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
-import com.attendify_admin.common.data.remote.response_dto.Staff
-import com.attendify_admin.common.data.remote.response_dto.TeacherTeaches
+import com.attendify_admin.common.data.dto.response.Staff
+import com.attendify_admin.common.data.dto.response.TeacherTeaches
 import com.attendify_admin.home.users.data.dto.request.AddTeachingSubjectRequest
 import com.attendify_admin.home.users.data.dto.request.RemoveImageRequest
 import com.attendify_admin.home.users.data.dto.request.RemoveStaffRequest

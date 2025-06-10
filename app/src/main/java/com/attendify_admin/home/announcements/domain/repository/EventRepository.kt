@@ -1,7 +1,7 @@
 package com.attendify_admin.home.announcements.domain.repository
 
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
-import com.attendify_admin.common.data.remote.response_dto.Event
+import com.attendify_admin.common.data.dto.response.Event
 import retrofit2.Response
 import java.io.File
 

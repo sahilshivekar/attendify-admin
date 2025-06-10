@@ -1,4 +1,4 @@
-package com.attendify_admin.common.data.remote.response_dto
+package com.attendify_admin.common.data.dto.response
 
 data class Student(
     val id: Int,
@@ -15,7 +15,7 @@ data class Student(
     val parentEmail: String?,
     val prn: String,
     val refreshToken: String?,
-    val studentImgPublicId: Int?,
+    val studentImgPublicId: String?,
     val studentImgUrl: String?,
     val schemeId: Int,
     val Scheme: Scheme?,

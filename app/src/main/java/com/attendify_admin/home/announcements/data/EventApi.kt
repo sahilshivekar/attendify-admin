@@ -1,7 +1,7 @@
 package com.attendify_admin.home.announcements.data
 
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
-import com.attendify_admin.common.data.remote.response_dto.Event
+import com.attendify_admin.common.data.dto.response.Event
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response

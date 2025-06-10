@@ -1,4 +1,4 @@
-package com.attendify_admin.common.data.remote.response_dto
+package com.attendify_admin.common.data.dto.response
 
 data class Scheme(
     val id: Int,

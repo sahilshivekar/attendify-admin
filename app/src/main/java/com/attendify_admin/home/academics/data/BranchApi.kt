@@ -1,7 +1,7 @@
 package com.attendify_admin.home.academics.data
 
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
-import com.attendify_admin.common.data.remote.response_dto.Branch
+import com.attendify_admin.common.data.dto.response.Branch
 import com.attendify_admin.home.academics.data.dto.request.AddBranchRequest
 import com.attendify_admin.home.academics.data.dto.request.UpdateBranchRequest
 import retrofit2.Response

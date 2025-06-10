@@ -1,10 +1,10 @@
 package com.attendify_admin.home.users.presentation.student_details
 
 import android.net.Uri
-import com.attendify_admin.common.data.remote.response_dto.Semester
-import com.attendify_admin.common.data.remote.response_dto.Student
-import com.attendify_admin.common.data.remote.response_dto.StudentBatch
-import com.attendify_admin.common.data.remote.response_dto.StudentDivision
+import com.attendify_admin.common.data.dto.response.Semester
+import com.attendify_admin.common.data.dto.response.Student
+import com.attendify_admin.common.data.dto.response.StudentBatch
+import com.attendify_admin.common.data.dto.response.StudentDivision
 import java.io.File
 
 data class StudentDetailsState(

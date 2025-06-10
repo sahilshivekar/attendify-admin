@@ -1,8 +1,8 @@
 package com.attendify_admin.home.shedule.domain.repository
 
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
-import com.attendify_admin.common.data.remote.response_dto.CancelledClass
-import com.attendify_admin.common.data.remote.response_dto.Class
+import com.attendify_admin.common.data.dto.response.CancelledClass
+import com.attendify_admin.common.data.dto.response.Class
 import com.attendify_admin.home.shedule.data.dto.request.AddClassRequest
 import com.attendify_admin.home.shedule.data.dto.request.AddExtraClassRequest
 import com.attendify_admin.home.shedule.data.dto.request.CancelClassRequest

@@ -2,7 +2,7 @@ package com.attendify_admin.home.academics.domain.repository
 
 
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
-import com.attendify_admin.common.data.remote.response_dto.Division
+import com.attendify_admin.common.data.dto.response.Division
 import com.attendify_admin.home.academics.data.dto.request.AddDivisionRequest
 import com.attendify_admin.home.academics.data.dto.request.UpdateDivisionRequest
 import retrofit2.Response

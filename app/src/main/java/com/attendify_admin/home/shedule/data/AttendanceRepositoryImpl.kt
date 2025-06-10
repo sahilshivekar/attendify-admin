@@ -2,11 +2,11 @@ package com.attendify_admin.home.shedule.data
 
 
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
-import com.attendify_admin.common.data.remote.response_dto.Attendance
-import com.attendify_admin.common.data.remote.response_dto.AttendanceAllStudents
-import com.attendify_admin.common.data.remote.response_dto.AttendanceStudent
-import com.attendify_admin.common.data.remote.response_dto.AttendanceStudentAggregatedAndDetailedAttendance
-import com.attendify_admin.common.data.remote.response_dto.NoParentEmailStudents
+import com.attendify_admin.common.data.dto.response.Attendance
+import com.attendify_admin.common.data.dto.response.AttendanceAllStudents
+import com.attendify_admin.common.data.dto.response.AttendanceStudent
+import com.attendify_admin.common.data.dto.response.AttendanceStudentAggregatedAndDetailedAttendance
+import com.attendify_admin.common.data.dto.response.NoParentEmailStudents
 import com.attendify_admin.home.shedule.data.dto.request.AddStudentsAttendanceRequest
 import com.attendify_admin.home.shedule.data.dto.request.CreateAttendanceRequest
 import com.attendify_admin.home.shedule.data.dto.request.MarkAttendanceRequest

@@ -2,7 +2,7 @@ package com.attendify_admin.home.users.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.attendify_admin.common.data.remote.response_dto.Student
+import com.attendify_admin.common.data.dto.response.Student
 
 class GetStudentsPagingSource(
     private val studentApi: StudentApi,

@@ -1,7 +1,7 @@
 package com.attendify_admin.home.users.domain.use_case
 
 import androidx.paging.PagingData
-import com.attendify_admin.common.data.remote.response_dto.Student
+import com.attendify_admin.common.data.dto.response.Student
 import com.attendify_admin.home.users.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

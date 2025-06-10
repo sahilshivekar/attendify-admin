@@ -8,7 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.attendify_admin.common.data.remote.Resource
-import com.attendify_admin.common.data.remote.response_dto.Student
+import com.attendify_admin.common.data.dto.response.Student
 import com.attendify_admin.common.utils.FileUtil
 import com.attendify_admin.common.validation.Validators
 import com.attendify_admin.home.academics.domain.use_case.GetBranchesUseCase
@@ -310,10 +310,10 @@ class AddStudentViewModel @Inject constructor(
                 phoneNumber = state.value.phoneNumber,
                 gender = state.value.gender,
                 dob = state.value.dob?.toString(),
-                schemeId = state.value.selectedScheme?.id.toString(),
+                schemeId = state.value.selectedScheme!!.id,
                 admissionYear = state.value.admissionYear,
                 admissionType = state.value.admissionType,
-                branchId = state.value.selectedBranch?.id.toString(),
+                branchId = state.value.selectedBranch!!.id,
                 studentImageFile = state.value.studentImageFile,
             ).onEach {
                 when (it) {

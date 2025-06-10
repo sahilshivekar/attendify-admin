@@ -1,9 +1,9 @@
 package com.attendify_admin.home.users.presentation.search_student
 
 import androidx.paging.PagingData
-import com.attendify_admin.common.data.remote.response_dto.Branch
-import com.attendify_admin.common.data.remote.response_dto.Scheme
-import com.attendify_admin.common.data.remote.response_dto.Student
+import com.attendify_admin.common.data.dto.response.Branch
+import com.attendify_admin.common.data.dto.response.Scheme
+import com.attendify_admin.common.data.dto.response.Student
 import com.attendify_admin.common.utils.TimeUtil
 import kotlinx.coroutines.flow.Flow
 

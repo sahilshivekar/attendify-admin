@@ -1,8 +1,8 @@
 package com.attendify_admin.home.users.presentation.add_student
 
 import android.net.Uri
-import com.attendify_admin.common.data.remote.response_dto.Branch
-import com.attendify_admin.common.data.remote.response_dto.Scheme
+import com.attendify_admin.common.data.dto.response.Branch
+import com.attendify_admin.common.data.dto.response.Scheme
 import com.attendify_admin.common.utils.PhoneNumberUtil
 import com.attendify_admin.common.utils.TimeUtil
 import java.io.File

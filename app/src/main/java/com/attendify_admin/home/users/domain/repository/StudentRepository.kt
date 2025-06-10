@@ -2,12 +2,12 @@ package com.attendify_admin.home.users.domain.repository
 
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
-import com.attendify_admin.common.data.remote.response_dto.Dropout
-import com.attendify_admin.common.data.remote.response_dto.Student
-import com.attendify_admin.common.data.remote.response_dto.StudentBatch
-import com.attendify_admin.common.data.remote.response_dto.StudentDivision
-import com.attendify_admin.common.data.remote.response_dto.StudentFcmToken
-import com.attendify_admin.common.data.remote.response_dto.StudentSemester
+import com.attendify_admin.common.data.dto.response.Dropout
+import com.attendify_admin.common.data.dto.response.Student
+import com.attendify_admin.common.data.dto.response.StudentBatch
+import com.attendify_admin.common.data.dto.response.StudentDivision
+import com.attendify_admin.common.data.dto.response.StudentFcmToken
+import com.attendify_admin.common.data.dto.response.StudentSemester
 import com.attendify_admin.home.users.data.dto.request.AddDropoutRequest
 import com.attendify_admin.home.users.data.dto.request.AddStudentFcmTokenRequest
 import com.attendify_admin.home.users.data.dto.request.AddStudentToBatchRequest

@@ -1,6 +1,6 @@
 package com.attendify_admin.home.users.presentation.search_student
 
-import com.attendify_admin.common.data.remote.response_dto.Branch
+import com.attendify_admin.common.data.dto.response.Branch
 
 sealed class SearchStudentEvent {
     data class SearchQueryChanged(val searchQuery: String) : SearchStudentEvent()
