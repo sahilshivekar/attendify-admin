@@ -15,18 +15,18 @@ import retrofit2.http.Query
 
 interface SchemeApi {
 
-    @GET("api/v1/scheme/get-schemes")
+    @GET("api/v1/scheme/admin/get-schemes")
     suspend fun getSchemes(@Query("searchQuery") searchQuery: String?): Response<AttendifyApiResponse<List<Scheme?>>>
 
-    @POST("api/v1/scheme/add")
+    @POST("api/v1/scheme/admin/add")
     suspend fun addScheme(@Body requestBody: AddSchemeRequest): Response<AttendifyApiResponse<Scheme?>>
 
-    @PUT("api/v1/scheme/update")
+    @PUT("api/v1/scheme/admin/update")
     suspend fun updateScheme(@Body requestBody: UpdateSchemeRequest): Response<AttendifyApiResponse<Scheme?>>
 
-    @DELETE("api/v1/scheme/remove")
+    @DELETE("api/v1/scheme/admin/remove")
     suspend fun removeScheme(@Query("id") schemeId: String): Response<AttendifyApiResponse<String?>>
 
-    @GET("api/v1/scheme/get-scheme-by-id")
+    @GET("api/v1/scheme/admin/get-scheme-by-id")
     suspend fun getSchemeById(@Query("schemeId") schemeId: String): Response<AttendifyApiResponse<Scheme?>>
 }

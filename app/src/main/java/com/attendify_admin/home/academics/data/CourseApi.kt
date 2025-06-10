@@ -17,7 +17,7 @@ import retrofit2.http.Query
 
 interface CourseApi {
 
-    @GET("api/v1/course/get-courses")
+    @GET("api/v1/course/admin/get-courses")
     suspend fun getCourses(
         @Query("searchQuery") searchQuery: String?,
         @Query("branchId") branchId: String?,
@@ -27,21 +27,21 @@ interface CourseApi {
         @Query("limit") limit: Int
     ): Response<AttendifyApiResponse<List<Course?>>>
 
-    @POST("api/v1/course/add")
+    @POST("api/v1/course/admin/add")
     suspend fun addCourse(@Body requestBody: AddCourseRequest): Response<AttendifyApiResponse<Course?>>
 
-    @PUT("api/v1/course/update")
+    @PUT("api/v1/course/admin/update")
     suspend fun updateCourse(@Body requestBody: UpdateCourseRequest): Response<AttendifyApiResponse<Course?>>
 
-    @DELETE("api/v1/course/remove")
+    @DELETE("api/v1/course/admin/remove")
     suspend fun removeCourse(@Query("id") courseId: String): Response<AttendifyApiResponse<String?>>
 
-    @POST("api/v1/course/add-to-branch-with-semester-number")
+    @POST("api/v1/course/admin/add-to-branch-with-semester-number")
     suspend fun addCourseToBranchWithSemesterNumber(@Body requestBody: AddCourseToBranchWithSemesterNumberRequest): Response<AttendifyApiResponse<Course?>>
 
-    @DELETE("api/v1/course/remove-from-branch-with-semester-number")
+    @DELETE("api/v1/course/admin/remove-from-branch-with-semester-number")
     suspend fun removeCourseFromBranchWithSemesterNumber(@Query("branchCourseSemesterId") branchCourseSemesterId: String): Response<AttendifyApiResponse<String?>>
 
-    @GET("api/v1/course/get-course-by-id")
+    @GET("api/v1/course/admin/get-course-by-id")
     suspend fun getCourseById(@Query("courseId") courseId: String): Response<AttendifyApiResponse<Course?>>
 }

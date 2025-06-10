@@ -16,10 +16,10 @@ import retrofit2.http.Query
 
 interface RoomApi {
 
-    @POST("api/v1/room/add-room")
+    @POST("api/v1/room/admin/add-room")
     suspend fun addRoom(@Body requestBody: AddRoomRequest): Response<AttendifyApiResponse<Room?>>
 
-    @GET("api/v1/room/get-rooms")
+    @GET("api/v1/room/admin/get-rooms")
     suspend fun getRooms(
         @Query("searchQuery") searchQuery: String?,
         @Query("sortBy") sortBy: String,
@@ -28,12 +28,12 @@ interface RoomApi {
         @Query("limit") limit: Int
     ): Response<AttendifyApiResponse<List<Room?>>>
 
-    @GET("api/v1/room/get-room-by-id")
+    @GET("api/v1/room/admin/get-room-by-id")
     suspend fun getRoomById(@Query("roomId") roomId: String): Response<AttendifyApiResponse<Room?>>
 
-    @PUT("api/v1/room/update-room")
+    @PUT("api/v1/room/admin/update-room")
     suspend fun updateRoom(@Body requestBody: UpdateRoomRequest): Response<AttendifyApiResponse<Room?>>
 
-    @DELETE("api/v1/room/remove-room")
+    @DELETE("api/v1/room/admin/remove-room")
     suspend fun removeRoom(@Query("roomId") roomId: String): Response<AttendifyApiResponse<String?>>
 }

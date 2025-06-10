@@ -21,19 +21,19 @@ import retrofit2.http.Query
 
 interface AttendanceApi {
 
-    @POST("api/v1/attendance/create-attendance")
+    @POST("api/v1/attendance/admin/create-attendance")
     suspend fun createAttendance(@Body requestBody: CreateAttendanceRequest): Response<AttendifyApiResponse<Attendance?>>
 
-    @POST("api/v1/attendance/add-students-to-attendance")
+    @POST("api/v1/attendance/admin/add-students-to-attendance")
     suspend fun addStudentsAttendance(@Body requestBody: AddStudentsAttendanceRequest): Response<AttendifyApiResponse<List<AttendanceStudent?>>>
 
-    @PUT("api/v1/attendance/update-student-attendance")
+    @PUT("api/v1/attendance/admin/update-student-attendance")
     suspend fun updateStudentAttendance(@Body requestBody: UpdateStudentAttendanceRequest): Response<AttendifyApiResponse<AttendanceStudent?>>
 
-    @DELETE("api/v1/attendance/remove-attendance")
+    @DELETE("api/v1/attendance/admin/remove-attendance")
     suspend fun removeAttendance(@Query("attendanceId") attendanceId: String): Response<AttendifyApiResponse<String?>>
 
-    @GET("api/v1/attendance/get-attendance")
+    @GET("api/v1/attendance/admin/get-attendance")
     suspend fun getAttendance(
         @Query("date") date: String?,
         @Query("attendanceId") attendanceId: String?,
@@ -44,7 +44,7 @@ interface AttendanceApi {
         @Query("divisionId") divisionId: String?,
     ): Response<AttendifyApiResponse<List<AttendanceStudent?>>>
 
-    @GET("api/v1/attendance/get-attendance-of-student")
+    @GET("api/v1/attendance/admin/get-attendance-of-student")
     suspend fun getAttendanceOfStudent(
         @Query("studentId") studentId: String,
         @Query("courseId") courseId: String,
@@ -55,7 +55,7 @@ interface AttendanceApi {
         @Query("endDate") endDate: String
     ): Response<AttendifyApiResponse<AttendanceStudentAggregatedAndDetailedAttendance>>
 
-    @GET("api/v1/attendance/get-attendance-of-all")
+    @GET("api/v1/attendance/admin/get-attendance-of-all")
     suspend fun getAttendanceOfAllForSemesterDivisionBatchCourse(
         @Query("courseId") courseId: String,
         @Query("semesterId") semesterId: String,
@@ -65,17 +65,17 @@ interface AttendanceApi {
         @Query("endDate") endDate: String
     ): Response<AttendifyApiResponse<AttendanceAllStudents>>
 
-    @POST("api/v1/attendance/mark-student-attendance")
+    @POST("api/v1/attendance/admin/mark-student-attendance")
     suspend fun markStudentAttendanceByBLEsessionUUID(
         @Body requestBody: MarkAttendanceRequest
     ): Response<AttendifyApiResponse<String?>>
 
-    @POST("api/v1/attendance/send-attendance-report")
+    @POST("api/v1/attendance/admin/send-attendance-report")
     suspend fun sendAttendanceReport(
         @Body requestBody: SendAttendanceReportRequest
     ): Response<AttendifyApiResponse<List<NoParentEmailStudents>?>>
 
-    @GET("api/v1/attendance/get-active-attendance-sheet")
+    @GET("api/v1/attendance/admin/get-active-attendance-sheet")
     suspend fun getActiveAttendanceSheet(
         @Query("studentId") studentId: String,
         @Query("divisionId") divisionId: String

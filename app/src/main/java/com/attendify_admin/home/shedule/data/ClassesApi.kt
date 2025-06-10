@@ -17,10 +17,10 @@ import retrofit2.http.Query
 
 interface ClassApi {
 
-    @POST("api/v1/class/add-class")
+    @POST("api/v1/class/admin/admin/add-class")
     suspend fun addClass(@Body requestBody: AddClassRequest): Response<AttendifyApiResponse<Class>>
 
-    @GET("api/v1/class/get-classes")
+    @GET("api/v1/class/admin/get-classes")
     suspend fun getClasses(
         @Query("searchQuery") searchQuery: String?,
         @Query("timetableId") timetableId: Int?,
@@ -40,26 +40,26 @@ interface ClassApi {
         @Query("limit") limit: Int,
     ): Response<AttendifyApiResponse<List<Class>>>
 
-    @GET("api/v1/class/get-class-by-id")
+    @GET("api/v1/class/admin/get-class-by-id")
     suspend fun getClassById(@Query("classId") classId: Int): Response<AttendifyApiResponse<Class>>
 
-    @PUT("api/v1/class/extend-active-till-date-of-class")
+    @PUT("api/v1/class/admin/extend-active-till-date-of-class")
     suspend fun extendActiveTillDateOfClass(@Body requestBody: ExtendActiveTillDateRequest): Response<AttendifyApiResponse<Class>>
 
-    @DELETE("api/v1/class/remove-class")
+    @DELETE("api/v1/class/admin/remove-class")
     suspend fun removeClass(@Query("classId") classId: Int): Response<AttendifyApiResponse<Unit>>
 
-    @POST("api/v1/class/cancel-class")
+    @POST("api/v1/class/admin/cancel-class")
     suspend fun cancelClass(
         @Body requestBody: CancelClassRequest,
     ): Response<AttendifyApiResponse<Unit>>
 
-    @POST("api/v1/class/add-extra-class")
+    @POST("api/v1/class/admin/add-extra-class")
     suspend fun addExtraClass(
         @Body requestBody: AddExtraClassRequest,
     ): Response<AttendifyApiResponse<Class>>
 
-    @GET("api/v1/class/get-cancelled-classes")
+    @GET("api/v1/class/admin/get-cancelled-classes")
     suspend fun getCancelledClasses(
         @Query("divisionId") divisionId: Int,
         @Query("batchId") batchId: Int,

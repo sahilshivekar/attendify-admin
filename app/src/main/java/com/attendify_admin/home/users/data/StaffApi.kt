@@ -23,18 +23,18 @@ import retrofit2.http.Query
 
 interface StaffApi {
 
-    @GET("api/v1/staff/get-staff")
+    @GET("api/v1/staff/admin/get-staff")
     suspend fun getStaff(
         @Query("searchQuery") searchQuery: String?,
         @Query("courseId") courseId: Int?,
         @Query("page") page: Int
     ): Response<AttendifyApiResponse<StaffListWithTotal>>
 
-    @GET("api/v1/staff/get-staff-by-id")
+    @GET("api/v1/staff/admin/get-staff-by-id")
     suspend fun getStaffById(@Query("staffId") staffId: Int): Response<AttendifyApiResponse<Staff>>
 
     @Multipart
-    @POST("api/v1/staff/add")
+    @POST("api/v1/staff/admin/add")
     suspend fun addStaff(
         @Part("firstName") firstName: RequestBody,
         @Part("middleName") middleName: RequestBody?,
@@ -48,31 +48,31 @@ interface StaffApi {
         @Part staffImageFile: MultipartBody.Part?
     ): Response<AttendifyApiResponse<Staff>>
 
-    @PUT("api/v1/staff/update-details")
+    @PUT("api/v1/staff/admin/update-details")
     suspend fun updateStaffDetails(@Body requestBody: UpdateStaffDetailsRequest): Response<AttendifyApiResponse<Staff>>
 
-    @PUT("api/v1/staff/update-password")
+    @PUT("api/v1/staff/admin/update-password")
     suspend fun updateStaffPassword(@Body requestBody: UpdateStaffPasswordRequest): Response<AttendifyApiResponse<Staff>>
 
     @Multipart
-    @PUT("api/v1/staff/update-image")
+    @PUT("api/v1/staff/admin/update-image")
     suspend fun updateStaffImage(
         @Part("id") id: RequestBody,
         @Part("staffImageFile") staffImageFile: MultipartBody.Part
     ): Response<AttendifyApiResponse<Staff>>
 
-    @DELETE("api/v1/staff/remove")
+    @DELETE("api/v1/staff/admin/remove")
     suspend fun removeStaff(@Body requestBody: RemoveStaffRequest): Response<AttendifyApiResponse<Unit>>
 
-    @DELETE("api/v1/staff/remove-image")
+    @DELETE("api/v1/staff/admin/remove-image")
     suspend fun removeImage(@Body requestBody: RemoveImageRequest): Response<AttendifyApiResponse<Staff>>
 
-    @GET("api/v1/staff/get-teaching-subjects")
+    @GET("api/v1/staff/admin/get-teaching-subjects")
     suspend fun getTeachingSubjects(@Query("staffId") staffId: Int): Response<AttendifyApiResponse<List<TeacherTeaches>>>
 
-    @POST("api/v1/staff/add-teaching-subject")
+    @POST("api/v1/staff/admin/add-teaching-subject")
     suspend fun addTeachingSubject(@Body requestBody: AddTeachingSubjectRequest): Response<AttendifyApiResponse<TeacherTeaches>>
 
-    @DELETE("api/v1/staff/remove-teaching-subject")
+    @DELETE("api/v1/staff/admin/remove-teaching-subject")
     suspend fun removeTeachingSubject(@Query("teacherSubjectId") teacherSubjectId: Int): Response<AttendifyApiResponse<Unit>>
 }

@@ -11,21 +11,21 @@ import retrofit2.http.POST
 
 interface AuthApi {
 
-    @POST("api/v1/admin/login")
+    @POST("api/v1/admin/admin/login")
     suspend fun login(@Body requestBody: LoginRequest): Response<AttendifyApiResponse<LoginData?>>
 
-    @POST("api/v1/admin/forgot-password")
+    @POST("api/v1/admin/admin/forgot-password")
     suspend fun forgotPassword(@Body requestBody: ForgotPasswordRequest): Response<AttendifyApiResponse<VerificationCodeData?>> // forgot password and email verification have same response on success
 
-    @POST("api/v1/admin/logout")
+    @POST("api/v1/admin/admin/logout")
     suspend fun logout(): Response<AttendifyApiResponse<String?>>
 
     // login required to attach the access token
-    @POST("api/v1/admin/get-access-token")
+    @POST("api/v1/admin/admin/get-access-token")
     suspend fun getAccessToken(@Body requestBody: GetAccessTokenRequest): Response<AttendifyApiResponse<GetAccessRefreshTokenData?>>
 
     // if request made while admin is logged in no need to add email in request body
-    @POST("api/v1/admin/verify-code")
+    @POST("api/v1/admin/admin/verify-code")
     suspend fun verifyCode(@Body requestBody: VerifyCodeRequest): Response<AttendifyApiResponse<GetAccessRefreshTokenData?>>
 
 }

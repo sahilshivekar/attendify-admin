@@ -12,25 +12,25 @@ import retrofit2.http.PUT
 import retrofit2.http.Query
 
 interface AdminMgtApi {
-    @POST("api/v1/admin/verify-password")
+    @POST("api/v1/admin/admin/verify-password")
     suspend fun verifyPassword(@Body requestBody: VerifyPasswordRequestBody): Response<AttendifyApiResponse<Unit?>> // No data in success response
 
-    @PUT("api/v1/admin/update-password")
+    @PUT("api/v1/admin/admin/update-password")
     suspend fun updateAdminPassword(@Body requestBody: UpdatePasswordRequestBody): Response<AttendifyApiResponse<Unit?>> // No data in success response
 
-    @GET("api/v1/admin/email-verification")
+    @GET("api/v1/admin/admin/email-verification")
     suspend fun sendVerificationCodeToEmail(): Response<AttendifyApiResponse<VerificationCodeData?>> // forgot password and email verification have same response on success
 
-    @POST("api/v1/admin/add")
+    @POST("api/v1/admin/admin/add")
     suspend fun addAdmin(@Body requestBody: AdminRequestBody): Response<AttendifyApiResponse<AdminData?>>
 
-    @PUT("api/v1/admin/update-details")
+    @PUT("api/v1/admin/admin/update-details")
     suspend fun updateAdminDetails(@Body requestBody: UpdateAdminDetailsRequestBody): Response<AttendifyApiResponse<AdminData?>>
 
-    @DELETE("api/v1/admin/remove-admin")
+    @DELETE("api/v1/admin/admin/remove-admin")
     suspend fun removeAdmin(): Response<AttendifyApiResponse<String?>> // String message in response
 
-    @GET("api/v1/admin/get-admins")
+    @GET("api/v1/admin/admin/get-admins")
     suspend fun getAdmins(
         @Query("searchQuery") searchQuery: String?,
         @Query("sortBy") sortBy: String?,
@@ -39,7 +39,7 @@ interface AdminMgtApi {
         @Query("limit") limit: Int?
     ): Response<AttendifyApiResponse<List<AdminData>?>>
 
-    @GET("api/v1/admin/me")
+    @GET("api/v1/admin/admin/me")
     suspend fun getAdminDetails(): Response<AttendifyApiResponse<AdminData?>>
 }
 

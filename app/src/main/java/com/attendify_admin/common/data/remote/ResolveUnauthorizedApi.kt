@@ -8,7 +8,7 @@ import retrofit2.http.POST
 
 interface ResolveUnauthorizedApi {
 
-    @POST("api/v1/admin/get-access-token")
+    @POST("api/v1/admin/admin/get-access-token")
     suspend fun getAccessToken(@Body requestBody: GetAccessTokenRequest): Response<AttendifyApiResponse<GetAccessRefreshTokenData?>>
 
 }

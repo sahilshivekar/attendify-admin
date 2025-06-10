@@ -15,7 +15,7 @@ import retrofit2.http.Query
 
 interface NoticeApi {
 
-    @GET("api/v1/notice/get-notices")
+    @GET("api/v1/notice/admin/get-notices")
     suspend fun getNotices(
         @Query("searchQuery") searchQuery: String?,
         @Query("audiences") audiences: String?,
@@ -26,11 +26,11 @@ interface NoticeApi {
         @Query("limit") limit: Int
     ): Response<AttendifyApiResponse<List<Notice>>>
 
-    @GET("api/v1/notice/get-notice-by-id")
+    @GET("api/v1/notice/admin/get-notice-by-id")
     suspend fun getNoticeById(@Query("noticeId") noticeId: Int): Response<AttendifyApiResponse<Notice>>
 
     @Multipart
-    @POST("api/v1/notice/add-notice")
+    @POST("api/v1/notice/admin/add-notice")
     suspend fun addNotice(
         @Part("title") title: RequestBody,
         @Part("description") description: RequestBody?,
@@ -41,7 +41,7 @@ interface NoticeApi {
     ): Response<AttendifyApiResponse<Notice>>
 
     @Multipart
-    @PUT("api/v1/notice/update-notice")
+    @PUT("api/v1/notice/admin/update-notice")
     suspend fun updateNotice(
         @Part("noticeId") noticeId: RequestBody,
         @Part("title") title: RequestBody?,
@@ -52,6 +52,6 @@ interface NoticeApi {
         @Part imageFile: MultipartBody.Part?
     ): Response<AttendifyApiResponse<Notice>>
 
-    @DELETE("api/v1/notice/delete-notice")
+    @DELETE("api/v1/notice/admin/delete-notice")
     suspend fun deleteNotice(@Query("noticeId") noticeId: Int): Response<AttendifyApiResponse<Unit>>
 }

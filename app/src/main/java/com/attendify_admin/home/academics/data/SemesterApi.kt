@@ -14,7 +14,7 @@ import retrofit2.http.Query
 
 interface SemesterApi {
 
-    @GET("api/v1/semester/get-semesters")
+    @GET("api/v1/semester/admin/get-semesters")
     suspend fun getSemesters(
         @Query("semesterNumber") semesterNumber: Int?,
         @Query("academicStartYear") academicStartYear: Int?,
@@ -25,18 +25,18 @@ interface SemesterApi {
         @Query("limit") limit: Int
     ): Response<AttendifyApiResponse<List<Semester?>>>
 
-    @POST("api/v1/semester/add")
+    @POST("api/v1/semester/admin/add")
     suspend fun addSemester(@Body requestBody: AddSemesterRequest): Response<AttendifyApiResponse<Semester?>>
 
-    @PUT("api/v1/semester/update")
+    @PUT("api/v1/semester/admin/update")
     suspend fun updateSemester(@Body requestBody: UpdateSemesterRequest): Response<AttendifyApiResponse<Semester?>>
 
-    @DELETE("api/v1/semester/remove")
+    @DELETE("api/v1/semester/admin/remove")
     suspend fun removeSemester(@Query("id") semesterId: String): Response<AttendifyApiResponse<String?>>
 
-    @GET("api/v1/semester/get-courses-of-semester")
+    @GET("api/v1/semester/admin/get-courses-of-semester")
     suspend fun getCoursesOfSemester(@Query("semesterId") semesterId: String): Response<AttendifyApiResponse<List<Semester?>>>
 
-    @GET("api/v1/semester/get-semester-by-id")
+    @GET("api/v1/semester/admin/get-semester-by-id")
     suspend fun getSemesterById(@Query("semesterId") semesterId: String): Response<AttendifyApiResponse<Semester?>>
 }

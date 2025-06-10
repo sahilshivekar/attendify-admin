@@ -37,7 +37,7 @@ import retrofit2.http.Query
 
 interface StudentApi {
 
-    @GET("api/v1/student/get-students")
+    @GET("api/v1/student/admin/get-students")
     suspend fun getStudents(
         @Query("searchQuery") searchQuery: String?,
         @Query("branchIds") branchIds: List<Int>?,
@@ -60,7 +60,7 @@ interface StudentApi {
     ): Response<AttendifyApiResponse<StudentListWithTotal>>
 
     @Multipart
-    @POST("api/v1/student/add")
+    @POST("api/v1/student/admin/add")
     suspend fun addStudent(
         @Part("prn") prn: RequestBody,
         @Part("firstName") firstName: RequestBody,
@@ -77,80 +77,80 @@ interface StudentApi {
         @Part studentImageFile: MultipartBody.Part?,
     ): Response<AttendifyApiResponse<Student>>
 
-    @PUT("api/v1/student/update-details")
+    @PUT("api/v1/student/admin/update-details")
     suspend fun updateStudentDetails(@Body requestBody: UpdateStudentDetailsRequest): Response<AttendifyApiResponse<Student>>
 
-    @PUT("api/v1/student/update-password")
+    @PUT("api/v1/student/admin/update-password")
     suspend fun updateStudentPassword(@Body requestBody: UpdateStudentPasswordRequest): Response<AttendifyApiResponse<Student>>
 
     @Multipart
-    @PUT("api/v1/student/update-image")
+    @PUT("api/v1/student/admin/update-image")
     suspend fun updateStudentImage(
         @Part("id") studentId: RequestBody,
         @Part studentImageFile: MultipartBody.Part,
     ): Response<AttendifyApiResponse<Student>>
 
-    @DELETE("api/v1/student/remove-image")
+    @DELETE("api/v1/student/admin/remove-image")
     suspend fun removeStudentImage(@Body requestBody: RemoveStudentImageRequest): Response<AttendifyApiResponse<Student>>
 
-    @DELETE("api/v1/student/remove")
+    @DELETE("api/v1/student/admin/remove")
     suspend fun removeStudent(@Body requestBody: RemoveStudentRequest): Response<AttendifyApiResponse<Unit>>
 
-    @GET("api/v1/student/get-student-details-by-id")
+    @GET("api/v1/student/admin/get-student-details-by-id")
     suspend fun getStudentDetailsById(@Query("studentId") studentId: Int): Response<AttendifyApiResponse<Student>>
 
-    @POST("api/v1/student/add-to-semester")
+    @POST("api/v1/student/admin/add-to-semester")
     suspend fun addStudentToSemester(@Body requestBody: AddStudentToSemesterRequest): Response<AttendifyApiResponse<StudentSemester>>
 
-    @DELETE("api/v1/student/remove-from-semester")
+    @DELETE("api/v1/student/admin/remove-from-semester")
     suspend fun removeStudentFromSemester(@Body requestBody: RemoveStudentFromSemesterRequest): Response<AttendifyApiResponse<Unit>>
 
-    @POST("api/v1/student/add-to-division")
+    @POST("api/v1/student/admin/add-to-division")
     suspend fun addStudentToDivision(@Body requestBody: AddStudentToDivisionRequest): Response<AttendifyApiResponse<StudentDivision>>
 
-    @PUT("api/v1/student/change-division")
+    @PUT("api/v1/student/admin/change-division")
     suspend fun changeStudentDivision(@Body requestBody: ChangeStudentDivisionRequest): Response<AttendifyApiResponse<StudentDivision>>
 
-    @POST("api/v1/student/add-to-batch")
+    @POST("api/v1/student/admin/add-to-batch")
     suspend fun addStudentToBatch(@Body requestBody: AddStudentToBatchRequest): Response<AttendifyApiResponse<StudentBatch>>
 
-    @PUT("api/v1/student/change-batch")
+    @PUT("api/v1/student/admin/change-batch")
     suspend fun changeStudentBatch(@Body requestBody: ChangeStudentBatchRequest): Response<AttendifyApiResponse<StudentBatch>>
 
-    @GET("api/v1/student/get-student-semesters-by-id")
+    @GET("api/v1/student/admin/get-student-semesters-by-id")
     suspend fun getStudentSemestersById(@Query("studentId") studentId: Int): Response<AttendifyApiResponse<List<StudentSemester>>>
 
-    @GET("api/v1/student/get-student-divisions-by-id")
+    @GET("api/v1/student/admin/get-student-divisions-by-id")
     suspend fun getStudentDivisionsById(
         @Query("studentId") studentId: Int,
         @Query("semesterNumber") semesterNumber: Int?,
     ): Response<AttendifyApiResponse<List<StudentDivision>>>
 
-    @GET("api/v1/student/get-student-batches-by-id")
+    @GET("api/v1/student/admin/get-student-batches-by-id")
     suspend fun getStudentBatchesById(
         @Query("studentId") studentId: Int,
         @Query("semesterNumber") semesterNumber: Int?,
     ): Response<AttendifyApiResponse<List<StudentBatch>>>
 
-    @POST("api/v1/student/add-student-to-dropout")
+    @POST("api/v1/dropout/admin/add-student-to-dropout")
     suspend fun addStudentToDropout(@Body requestBody: AddDropoutRequest): Response<AttendifyApiResponse<Dropout?>>
 
-    @DELETE("api/v1/student/remove-student-from-dropout")
+    @DELETE("api/v1/dropout/admin/remove-student-from-dropout")
     suspend fun removeStudentFromDropout(@Body requestBody: RemoveDropoutRequest): Response<AttendifyApiResponse<Unit>>
 
-    @GET("api/v1/student/get-dropout-by-id")
+    @GET("api/v1/dropout/admin/get-dropout-by-id")
     suspend fun getDropoutById(@Query("dropoutId") dropoutId: String): Response<AttendifyApiResponse<Dropout?>>
 
-    @GET("api/v1/student/get-dropout-details-of-student")
+    @GET("api/v1/dropout/admin/get-dropout-details-of-student")
     suspend fun getDropoutDetailsOfStudent(@Query("studentId") studentId: String): Response<AttendifyApiResponse<List<Dropout>?>>
 
-    @POST("api/v1/student/add-student-fcm-token")
+    @POST("api/v1/student-fcm-token/admin/add-student-fcm-token")
     suspend fun addStudentFcmToken(@Body requestBody: AddStudentFcmTokenRequest): Response<AttendifyApiResponse<StudentFcmToken?>>
 
-    @PUT("api/v1/student/update-student-fcm-token")
+    @PUT("api/v1/student-fcm-token/admin/update-student-fcm-token")
     suspend fun updateStudentFcmToken(@Body requestBody: UpdateStudentFcmTokenRequest): Response<AttendifyApiResponse<StudentFcmToken?>>
 
-    @DELETE("api/v1/student/remove-student-fcm-token")
+    @DELETE("api/v1/student-fcm-token/admin/remove-student-fcm-token")
     suspend fun removeStudentFcmToken(@Body requestBody: RemoveStudentFcmTokenRequest): Response<AttendifyApiResponse<Unit>>
 }
 
