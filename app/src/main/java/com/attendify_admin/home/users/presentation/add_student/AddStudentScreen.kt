@@ -479,69 +479,7 @@ fun AddStudentScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            ExposedDropdownMenuBox(
-                modifier = Modifier
-                    .weight(.5f)
-                    .padding(end = 4.dp),
-                expanded = state.isAcademicStatusDropDownOpen,
-                onExpandedChange = {
-                    onEvent(
-                        AddStudentEvent.AcademicStatusDropDownVisibilityChanged(
-                            it
-                        )
-                    )
-                }
-            ) {
 
-                AttendifyTextField(
-                    value = state.academicStatus,
-                    onValueChange = { onEvent(AddStudentEvent.AcademicStatusChanged(it)) },
-                    label = "Academic Status",
-                    modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryEditable),
-                    readOnly = true,
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = state.isAcademicStatusDropDownOpen,
-                            modifier = Modifier.menuAnchor(MenuAnchorType.SecondaryEditable),
-                        )
-                    },
-                    maxLines = 1,
-                    enabled = !state.isSubmitting && !state.isSubmitted,
-                    supportingText = state.isAcademicStatusError,
-                    isError = state.isAcademicStatusError != null
-                )
-                ExposedDropdownMenu(
-                    expanded = state.isAcademicStatusDropDownOpen,
-                    onDismissRequest = {
-                        onEvent(
-                            AddStudentEvent.AcademicStatusDropDownVisibilityChanged(
-                                false
-                            )
-                        )
-                        localFocusManager.clearFocus()
-                    },
-                    modifier = Modifier.heightIn(max = 160.dp),
-                    shape = MaterialTheme.shapes.medium,
-                    containerColor = MaterialTheme.colorScheme.surface
-                ) {
-                    state.academicStatusOptions.forEach {
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = it)
-                            },
-                            onClick = {
-                                onEvent(AddStudentEvent.AcademicStatusChanged(it))
-                                onEvent(
-                                    AddStudentEvent.AcademicStatusDropDownVisibilityChanged(
-                                        false
-                                    )
-                                )
-                                localFocusManager.clearFocus()
-                            }
-                        )
-                    }
-                }
-            }
 
             // here add code for image taking
 

@@ -62,7 +62,6 @@ interface StudentRepository {
 //        password: String,
 //        confirmPassword: String,
         schemeId: String,
-        academicStatus: String,
         admissionYear: String,
         admissionType: String,
         branchId: String,

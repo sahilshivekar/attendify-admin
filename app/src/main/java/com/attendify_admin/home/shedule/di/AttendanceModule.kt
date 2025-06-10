@@ -5,11 +5,13 @@ import com.attendify_admin.home.shedule.data.AttendanceRepositoryImpl
 import com.attendify_admin.home.shedule.domain.repository.AttendanceRepository
 import com.attendify_admin.home.shedule.domain.use_case.AddStudentsAttendanceUseCase
 import com.attendify_admin.home.shedule.domain.use_case.CreateAttendanceUseCase
-import com.attendify_admin.home.shedule.domain.use_case.GetAttendanceOfCourseOnDateUseCase
-import com.attendify_admin.home.shedule.domain.use_case.GetAttendanceOfCourseThroughoutSemesterUseCase
-import com.attendify_admin.home.shedule.domain.use_case.GetAttendanceOfStudentForSpecificCourseInSemesterUseCase
+import com.attendify_admin.home.shedule.domain.use_case.GetActiveAttendanceSheetUseCase
+import com.attendify_admin.home.shedule.domain.use_case.GetAttendanceOfAllForSemesterDivisionBatchCourseUseCase
+import com.attendify_admin.home.shedule.domain.use_case.GetAttendanceOfStudentUseCase
 import com.attendify_admin.home.shedule.domain.use_case.GetAttendanceUseCase
+import com.attendify_admin.home.shedule.domain.use_case.MarkStudentAttendanceByBLEsessionUUIDUseCase
 import com.attendify_admin.home.shedule.domain.use_case.RemoveAttendanceUseCase
+import com.attendify_admin.home.shedule.domain.use_case.SendAttendanceReportUseCase
 import com.attendify_admin.home.shedule.domain.use_case.UpdateStudentAttendanceUseCase
 import dagger.Module
 import dagger.Provides
@@ -56,18 +58,29 @@ class AttendanceModule {
         return GetAttendanceUseCase(repository)
     }
 
+
     @Provides
-    fun providesGetAttendanceOfStudentForSpecificCourseInSemesterUseCase(repository: AttendanceRepository): GetAttendanceOfStudentForSpecificCourseInSemesterUseCase {
-        return GetAttendanceOfStudentForSpecificCourseInSemesterUseCase(repository)
+    fun providesGetAttendanceOfStudentUseCase(repository: AttendanceRepository): GetAttendanceOfStudentUseCase {
+        return GetAttendanceOfStudentUseCase(repository)
     }
 
     @Provides
-    fun providesGetAttendanceOfCourseOnDateUseCase(repository: AttendanceRepository): GetAttendanceOfCourseOnDateUseCase {
-        return GetAttendanceOfCourseOnDateUseCase(repository)
+    fun providesGetAttendanceOfAllForSemesterDivisionBatchCourseUseCase(repository: AttendanceRepository): GetAttendanceOfAllForSemesterDivisionBatchCourseUseCase {
+        return GetAttendanceOfAllForSemesterDivisionBatchCourseUseCase(repository)
     }
 
     @Provides
-    fun providesGetAttendanceOfCourseThroughoutSemesterUseCase(repository: AttendanceRepository): GetAttendanceOfCourseThroughoutSemesterUseCase {
-        return GetAttendanceOfCourseThroughoutSemesterUseCase(repository)
+    fun providesMarkStudentAttendanceByBLEsessionUUIDUseCase(repository: AttendanceRepository): MarkStudentAttendanceByBLEsessionUUIDUseCase {
+        return MarkStudentAttendanceByBLEsessionUUIDUseCase(repository)
+    }
+
+    @Provides
+    fun providesSendAttendanceReportUseCase(repository: AttendanceRepository): SendAttendanceReportUseCase {
+        return SendAttendanceReportUseCase(repository)
+    }
+
+    @Provides
+    fun providesGetActiveAttendanceSheetUseCase(repository: AttendanceRepository): GetActiveAttendanceSheetUseCase {
+        return GetActiveAttendanceSheetUseCase(repository)
     }
 }

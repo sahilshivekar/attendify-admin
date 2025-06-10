@@ -4,7 +4,10 @@ import com.attendify_admin.home.shedule.data.ClassApi
 import com.attendify_admin.home.shedule.data.ClassRepositoryImpl
 import com.attendify_admin.home.shedule.domain.repository.ClassRepository
 import com.attendify_admin.home.shedule.domain.use_case.AddClassUseCase
+import com.attendify_admin.home.shedule.domain.use_case.AddExtraClassUseCase
+import com.attendify_admin.home.shedule.domain.use_case.CancelClassUseCase
 import com.attendify_admin.home.shedule.domain.use_case.ExtendActiveTillDateOfClassUseCase
+import com.attendify_admin.home.shedule.domain.use_case.GetCancelledClassesUseCase
 import com.attendify_admin.home.shedule.domain.use_case.GetClassByIdUseCase
 import com.attendify_admin.home.shedule.domain.use_case.GetClassesUseCase
 import com.attendify_admin.home.shedule.domain.use_case.RemoveClassUseCase
@@ -51,5 +54,20 @@ class ClassModule {
     @Provides
     fun providesRemoveClassUseCase(repository: ClassRepository): RemoveClassUseCase {
         return RemoveClassUseCase(repository)
+    }
+
+    @Provides
+    fun providesCancelClassUseCase(repository: ClassRepository): CancelClassUseCase {
+        return CancelClassUseCase(repository)
+    }
+
+    @Provides
+    fun providesAddExtraClassUseCase(repository: ClassRepository): AddExtraClassUseCase {
+        return AddExtraClassUseCase(repository)
+    }
+
+    @Provides
+    fun providesGetCancelledClassesUseCase(repository: ClassRepository): GetCancelledClassesUseCase {
+        return GetCancelledClassesUseCase(repository)
     }
 }

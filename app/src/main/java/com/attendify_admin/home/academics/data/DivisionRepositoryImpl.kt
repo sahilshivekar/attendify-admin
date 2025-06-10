@@ -1,11 +1,11 @@
 package com.attendify_admin.home.academics.data
 
 
+import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import com.attendify_admin.common.data.remote.response_dto.Division
 import com.attendify_admin.home.academics.data.dto.request.AddDivisionRequest
 import com.attendify_admin.home.academics.data.dto.request.UpdateDivisionRequest
 import com.attendify_admin.home.academics.domain.repository.DivisionRepository
-import com.attendify_admin.common.data.remote.AttendifyApiResponse
-import com.attendify_admin.common.data.remote.response_dto.Division
 import retrofit2.Response
 import javax.inject.Inject
 

@@ -7,12 +7,12 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.attendify_admin.home.academics.domain.use_case.GetBranchesUseCase
-import com.attendify_admin.home.academics.domain.use_case.GetSchemesUseCase
 import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.response_dto.Student
 import com.attendify_admin.common.utils.FileUtil
 import com.attendify_admin.common.validation.Validators
+import com.attendify_admin.home.academics.domain.use_case.GetBranchesUseCase
+import com.attendify_admin.home.academics.domain.use_case.GetSchemesUseCase
 import com.attendify_admin.home.users.domain.use_case.AddStudentUseCase
 import com.attendify_admin.home.users.domain.use_case.GetStudentDetailsByIdUseCase
 import com.attendify_admin.home.users.domain.use_case.RemoveStudentImageUseCase
@@ -137,7 +137,7 @@ class AddStudentViewModel @Inject constructor(
                         gender = student?.gender.toString(),
                         dob = dob,
                         admissionType = student?.admissionType.toString(),
-                        academicStatus = student?.academicStatus.toString(),
+//                        academicStatus = student?.academicStatus.toString(),
                         admissionYear = student?.admissionYear.toString(),
                         selectedBranch = student?.Branch,
                         selectedScheme = student?.Scheme,
@@ -211,13 +211,6 @@ class AddStudentViewModel @Inject constructor(
                     state.value.copy(selectedScheme = event.newScheme, isSchemeError = null)
             }
 
-            is AddStudentEvent.AcademicStatusChanged -> {
-                state.value = state.value.copy(
-                    academicStatus = event.newAcademicStatus,
-                    isAcademicStatusError = null
-                )
-            }
-
             is AddStudentEvent.StudentImageChanged -> {
                 state.value = state.value.copy(studentImageFile = event.newStudentImage)
             }
@@ -263,10 +256,6 @@ class AddStudentViewModel @Inject constructor(
 
             is AddStudentEvent.SchemeDropDownVisibilityChanged -> {
                 state.value = state.value.copy(isSchemeDropDownOpen = event.newVisibility)
-            }
-
-            is AddStudentEvent.AcademicStatusDropDownVisibilityChanged -> {
-                state.value = state.value.copy(isAcademicStatusDropDownOpen = event.newVisibility)
             }
 
             is AddStudentEvent.StudentImageUriUpdated -> {
@@ -322,7 +311,6 @@ class AddStudentViewModel @Inject constructor(
                 gender = state.value.gender,
                 dob = state.value.dob?.toString(),
                 schemeId = state.value.selectedScheme?.id.toString(),
-                academicStatus = state.value.academicStatus,
                 admissionYear = state.value.admissionYear,
                 admissionType = state.value.admissionType,
                 branchId = state.value.selectedBranch?.id.toString(),
@@ -406,12 +394,6 @@ class AddStudentViewModel @Inject constructor(
 
             state.value.selectedScheme == null -> {
                 state.value = state.value.copy(isSchemeError = "Scheme cannot be empty")
-                false
-            }
-
-            state.value.academicStatus.isBlank() -> {
-                state.value =
-                    state.value.copy(isAcademicStatusError = "Academic academicStatus cannot be empty")
                 false
             }
 

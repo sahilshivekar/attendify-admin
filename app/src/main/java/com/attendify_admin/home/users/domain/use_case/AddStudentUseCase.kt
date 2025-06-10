@@ -1,7 +1,7 @@
 package com.attendify_admin.home.users.domain.use_case
 
-import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.response_dto.Student
 import com.attendify_admin.common.domain.RemoteUtils
 import com.attendify_admin.home.users.domain.repository.StudentRepository
@@ -20,7 +20,6 @@ class AddStudentUseCase @Inject constructor(private val studentRepository: Stude
         gender: String,
         dob: String?,
         schemeId: String,
-        academicStatus: String,
         admissionYear: String,
         admissionType: String,
         branchId: String,
@@ -37,7 +36,6 @@ class AddStudentUseCase @Inject constructor(private val studentRepository: Stude
                 gender,
                 dob,
                 schemeId,
-                academicStatus,
                 admissionYear,
                 admissionType,
                 branchId,

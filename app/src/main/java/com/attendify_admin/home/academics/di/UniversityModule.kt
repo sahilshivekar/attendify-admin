@@ -4,8 +4,8 @@ import com.attendify_admin.home.academics.data.UniversityApi
 import com.attendify_admin.home.academics.data.UniversityRepositoryImpl
 import com.attendify_admin.home.academics.domain.repository.UniversityRepository
 import com.attendify_admin.home.academics.domain.use_case.AddUniversityUseCase
-import com.attendify_admin.home.academics.domain.use_case.GetUniversityByIdUseCase
 import com.attendify_admin.home.academics.domain.use_case.GetUniversitiesUseCase
+import com.attendify_admin.home.academics.domain.use_case.GetUniversityByIdUseCase
 import com.attendify_admin.home.academics.domain.use_case.RemoveUniversityUseCase
 import com.attendify_admin.home.academics.domain.use_case.UpdateUniversityUseCase
 import dagger.Module

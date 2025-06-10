@@ -3,6 +3,7 @@ package com.attendify_admin.home.users.di
 import com.attendify_admin.home.users.data.StudentApi
 import com.attendify_admin.home.users.data.StudentRepositoryImpl
 import com.attendify_admin.home.users.domain.repository.StudentRepository
+import com.attendify_admin.home.users.domain.use_case.AddStudentFcmTokenUseCase
 import com.attendify_admin.home.users.domain.use_case.AddStudentToBatchUseCase
 import com.attendify_admin.home.users.domain.use_case.AddStudentToDivisionUseCase
 import com.attendify_admin.home.users.domain.use_case.AddStudentToSemesterUseCase
@@ -14,10 +15,12 @@ import com.attendify_admin.home.users.domain.use_case.GetStudentDetailsByIdUseCa
 import com.attendify_admin.home.users.domain.use_case.GetStudentDivisionsByIdUseCase
 import com.attendify_admin.home.users.domain.use_case.GetStudentSemestersByIdUseCase
 import com.attendify_admin.home.users.domain.use_case.GetStudentsUseCase
+import com.attendify_admin.home.users.domain.use_case.RemoveStudentFcmTokenUseCase
 import com.attendify_admin.home.users.domain.use_case.RemoveStudentFromSemesterUseCase
 import com.attendify_admin.home.users.domain.use_case.RemoveStudentImageUseCase
 import com.attendify_admin.home.users.domain.use_case.RemoveStudentUseCase
 import com.attendify_admin.home.users.domain.use_case.UpdateStudentDetailsUseCase
+import com.attendify_admin.home.users.domain.use_case.UpdateStudentFcmTokenUseCase
 import com.attendify_admin.home.users.domain.use_case.UpdateStudentImageUseCase
 import com.attendify_admin.home.users.domain.use_case.UpdateStudentPasswordUseCase
 import dagger.Module
@@ -123,5 +126,21 @@ class StudentModule {
     @Provides
     fun providesGetStudentBatchesByIdUseCase(repository: StudentRepository): GetStudentBatchesByIdUseCase {
         return GetStudentBatchesByIdUseCase(repository)
+    }
+
+
+    @Provides
+    fun providesAddStudentFcmTokenUseCase(repository: StudentRepository): AddStudentFcmTokenUseCase {
+        return AddStudentFcmTokenUseCase(repository)
+    }
+
+    @Provides
+    fun providesUpdateStudentFcmTokenUseCase(repository: StudentRepository): UpdateStudentFcmTokenUseCase {
+        return UpdateStudentFcmTokenUseCase(repository)
+    }
+
+    @Provides
+    fun providesRemoveStudentFcmTokenUseCase(repository: StudentRepository): RemoveStudentFcmTokenUseCase {
+        return RemoveStudentFcmTokenUseCase(repository)
     }
 }

@@ -2,7 +2,10 @@ package com.attendify_admin.home.shedule.data
 
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.response_dto.CancelledClass
+import com.attendify_admin.common.data.remote.response_dto.Class
 import com.attendify_admin.home.shedule.data.dto.request.AddClassRequest
+import com.attendify_admin.home.shedule.data.dto.request.AddExtraClassRequest
+import com.attendify_admin.home.shedule.data.dto.request.CancelClassRequest
 import com.attendify_admin.home.shedule.data.dto.request.ExtendActiveTillDateRequest
 import retrofit2.Response
 import retrofit2.http.Body
@@ -11,9 +14,6 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Query
-import com.attendify_admin.common.data.remote.response_dto.Class
-import com.attendify_admin.home.shedule.data.dto.request.AddExtraClassRequest
-import com.attendify_admin.home.shedule.data.dto.request.CancelClassRequest
 
 interface ClassApi {
 

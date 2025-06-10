@@ -71,7 +71,6 @@ interface StudentApi {
         @Part("gender") gender: RequestBody,
         @Part("dob") dob: RequestBody?,
         @Part("schemeId") schemeId: RequestBody,
-        @Part("academicStatus") academicStatus: RequestBody,
         @Part("admissionYear") admissionYear: RequestBody,
         @Part("admissionType") admissionType: RequestBody,
         @Part("branchId") branchId: RequestBody,
