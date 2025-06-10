@@ -109,10 +109,10 @@ class StudentRepositoryImpl(
         val phoneNumberBody = phoneNumber.toRequestBody("text/plain".toMediaTypeOrNull())
         val genderBody = gender.toRequestBody("text/plain".toMediaTypeOrNull())
         val dobBody = dob?.toRequestBody("text/plain".toMediaTypeOrNull())
-        val schemeIdBody = schemeId.toRequestBody("text/plain".toMediaTypeOrNull())
+        val schemeIdBody = schemeId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val admissionYearBody = admissionYear.toRequestBody("text/plain".toMediaTypeOrNull())
         val admissionTypeBody = admissionType.toRequestBody("text/plain".toMediaTypeOrNull())
-        val branchIdBody = branchId.toRequestBody("text/plain".toMediaTypeOrNull())
+        val branchIdBody = branchId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val studentImagePart = if (studentImageFile != null) {
             val requestFile = studentImageFile.asRequestBody("image/*".toMediaTypeOrNull())
             MultipartBody.Part.createFormData(
@@ -155,7 +155,7 @@ class StudentRepositoryImpl(
         studentId: Int,
         studentImageFile: File,
     ): Response<AttendifyApiResponse<Student>> {
-        val studentIdBody = studentId.toRequestBody("text/plain".toMediaTypeOrNull())
+        val studentIdBody = studentId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val requestFile = studentImageFile.asRequestBody("image/*".toMediaTypeOrNull())
         val studentImagePart = MultipartBody.Part.createFormData(
             name = "studentImageFile",
