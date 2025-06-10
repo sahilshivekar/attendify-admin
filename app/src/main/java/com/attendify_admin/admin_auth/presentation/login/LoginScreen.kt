@@ -64,7 +64,7 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier = Modifier.size(70.dp),
+            modifier = Modifier.size(80.dp),
             painter = painterResource(id = R.drawable.attendify_logo_circle_svg),
             contentDescription = null,
         )
