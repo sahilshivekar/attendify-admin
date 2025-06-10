@@ -18,6 +18,7 @@ data class Class(
     val Room: Room?,
     val timetableId: Int,
     val Timetable: Timetable?,
+    val isExtraClass: Boolean,
     val createdAt: String,
     val updatedAt: String
 )
