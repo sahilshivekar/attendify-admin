@@ -2,19 +2,26 @@ package com.attendify_admin.home.users.domain.repository
 
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import com.attendify_admin.common.data.remote.response_dto.Dropout
 import com.attendify_admin.common.data.remote.response_dto.Student
 import com.attendify_admin.common.data.remote.response_dto.StudentBatch
 import com.attendify_admin.common.data.remote.response_dto.StudentDivision
+import com.attendify_admin.common.data.remote.response_dto.StudentFcmToken
 import com.attendify_admin.common.data.remote.response_dto.StudentSemester
+import com.attendify_admin.home.users.data.dto.request.AddDropoutRequest
+import com.attendify_admin.home.users.data.dto.request.AddStudentFcmTokenRequest
 import com.attendify_admin.home.users.data.dto.request.AddStudentToBatchRequest
 import com.attendify_admin.home.users.data.dto.request.AddStudentToDivisionRequest
 import com.attendify_admin.home.users.data.dto.request.AddStudentToSemesterRequest
 import com.attendify_admin.home.users.data.dto.request.ChangeStudentBatchRequest
 import com.attendify_admin.home.users.data.dto.request.ChangeStudentDivisionRequest
+import com.attendify_admin.home.users.data.dto.request.RemoveDropoutRequest
+import com.attendify_admin.home.users.data.dto.request.RemoveStudentFcmTokenRequest
 import com.attendify_admin.home.users.data.dto.request.RemoveStudentFromSemesterRequest
 import com.attendify_admin.home.users.data.dto.request.RemoveStudentImageRequest
 import com.attendify_admin.home.users.data.dto.request.RemoveStudentRequest
 import com.attendify_admin.home.users.data.dto.request.UpdateStudentDetailsRequest
+import com.attendify_admin.home.users.data.dto.request.UpdateStudentFcmTokenRequest
 import com.attendify_admin.home.users.data.dto.request.UpdateStudentPasswordRequest
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
@@ -109,5 +116,19 @@ interface StudentRepository {
 
     // Get student batches by ID
     suspend fun getStudentBatchesById(studentId: Int, semesterNumber: Int?): Response<AttendifyApiResponse<List<StudentBatch>>>
+
+    suspend fun addStudentToDropout(requestBody: AddDropoutRequest): Response<AttendifyApiResponse<Dropout?>>
+
+    suspend fun removeStudentFromDropout(requestBody: RemoveDropoutRequest): Response<AttendifyApiResponse<Unit>>
+
+    suspend fun getDropoutById(dropoutId: String): Response<AttendifyApiResponse<Dropout?>>
+
+    suspend fun getDropoutDetailsOfStudent(studentId: String): Response<AttendifyApiResponse<List<Dropout>?>>
+
+    suspend fun addStudentFcmToken(requestBody: AddStudentFcmTokenRequest): Response<AttendifyApiResponse<StudentFcmToken?>>
+
+    suspend fun updateStudentFcmToken(requestBody: UpdateStudentFcmTokenRequest): Response<AttendifyApiResponse<StudentFcmToken?>>
+
+    suspend fun removeStudentFcmToken(requestBody: RemoveStudentFcmTokenRequest): Response<AttendifyApiResponse<Unit>>
 }
 

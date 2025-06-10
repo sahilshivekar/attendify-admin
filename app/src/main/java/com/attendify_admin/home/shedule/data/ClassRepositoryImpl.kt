@@ -1,11 +1,14 @@
 package com.attendify_admin.home.shedule.data
 
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import com.attendify_admin.common.data.remote.response_dto.CancelledClass
+import com.attendify_admin.common.data.remote.response_dto.Class
 import com.attendify_admin.home.shedule.data.dto.request.AddClassRequest
+import com.attendify_admin.home.shedule.data.dto.request.AddExtraClassRequest
+import com.attendify_admin.home.shedule.data.dto.request.CancelClassRequest
+import com.attendify_admin.home.shedule.data.dto.request.ExtendActiveTillDateRequest
 import com.attendify_admin.home.shedule.domain.repository.ClassRepository
 import retrofit2.Response
-import com.attendify_admin.common.data.remote.response_dto.Class
-import com.attendify_admin.home.shedule.data.dto.request.ExtendActiveTillDateRequest
 
 class ClassRepositoryImpl(
     private val classApi: ClassApi
@@ -63,5 +66,31 @@ class ClassRepositoryImpl(
 
     override suspend fun removeClass(classId: Int): Response<AttendifyApiResponse<Unit>> {
         return classApi.removeClass(classId)
+    }
+
+    override suspend fun cancelClass(requestBody: CancelClassRequest): Response<AttendifyApiResponse<Unit>> {
+        return classApi.cancelClass(requestBody)
+    }
+
+    // New: Implement addExtraClass
+    override suspend fun addExtraClass(requestBody: AddExtraClassRequest): Response<AttendifyApiResponse<Class>> {
+        return classApi.addExtraClass(requestBody)
+    }
+
+    // New: Implement getCancelledClasses
+    override suspend fun getCancelledClasses(
+        divisionId: Int,
+        batchId: Int,
+        date: String,
+        page: Int,
+        limit: Int
+    ): Response<AttendifyApiResponse<CancelledClass>> {
+        return classApi.getCancelledClasses(
+            divisionId,
+            batchId,
+            date,
+            page,
+            limit
+        )
     }
 }

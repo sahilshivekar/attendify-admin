@@ -2,10 +2,14 @@ package com.attendify_admin.home.shedule.data
 
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.response_dto.Attendance
+import com.attendify_admin.common.data.remote.response_dto.AttendanceAllStudents
 import com.attendify_admin.common.data.remote.response_dto.AttendanceStudent
-import com.attendify_admin.common.data.remote.response_dto.AttendanceStudentCount
+import com.attendify_admin.common.data.remote.response_dto.AttendanceStudentAggregatedAndDetailedAttendance
+import com.attendify_admin.common.data.remote.response_dto.NoParentEmailStudents
 import com.attendify_admin.home.shedule.data.dto.request.AddStudentsAttendanceRequest
 import com.attendify_admin.home.shedule.data.dto.request.CreateAttendanceRequest
+import com.attendify_admin.home.shedule.data.dto.request.MarkAttendanceRequest
+import com.attendify_admin.home.shedule.data.dto.request.SendAttendanceReportRequest
 import com.attendify_admin.home.shedule.data.dto.request.UpdateStudentAttendanceRequest
 import retrofit2.Response
 import retrofit2.http.Body
@@ -37,26 +41,44 @@ interface AttendanceApi {
         @Query("studentId") studentId: String?,
         @Query("courseId") courseId: String?,
         @Query("semesterId") semesterId: String?,
-        @Query("divisionId") divisionId: String?
+        @Query("divisionId") divisionId: String?,
     ): Response<AttendifyApiResponse<List<AttendanceStudent?>>>
 
-    @GET("api/v1/attendance/get-attendance-of-student-for-specific-semester")
-    suspend fun getAttendanceOfStudentForSpecificCourseInSemester(
+    @GET("api/v1/attendance/get-attendance-of-student")
+    suspend fun getAttendanceOfStudent(
         @Query("studentId") studentId: String,
         @Query("courseId") courseId: String,
-        @Query("semesterId") semesterId: String
-    ): Response<AttendifyApiResponse<List<AttendanceStudentCount?>>>
+        @Query("semesterId") semesterId: String,
+        @Query("divisionId") divisionId: String,
+        @Query("batchId") batchId: String,
+        @Query("startDate") startDate: String,
+        @Query("endDate") endDate: String
+    ): Response<AttendifyApiResponse<AttendanceStudentAggregatedAndDetailedAttendance>>
 
-    @GET("api/v1/attendance/get-attendance-date-course")
-    suspend fun getAttendanceOfCourseOnDate(
-        @Query("date") date: String,
+    @GET("api/v1/attendance/get-attendance-of-all")
+    suspend fun getAttendanceOfAllForSemesterDivisionBatchCourse(
         @Query("courseId") courseId: String,
-        @Query("divisionId") divisionId: String
-    ): Response<AttendifyApiResponse<List<AttendanceStudentCount?>>>
+        @Query("semesterId") semesterId: String,
+        @Query("divisionId") divisionId: String,
+        @Query("batchId") batchId: String,
+        @Query("startDate") startDate: String,
+        @Query("endDate") endDate: String
+    ): Response<AttendifyApiResponse<AttendanceAllStudents>>
 
-    @GET("api/v1/attendance/get-attendance-course-division")
-    suspend fun getAttendanceOfCourseThroughoutSemester(
-        @Query("courseId") courseId: String,
+    @POST("api/v1/attendance/mark-student-attendance")
+    suspend fun markStudentAttendanceByBLEsessionUUID(
+        @Body requestBody: MarkAttendanceRequest
+    ): Response<AttendifyApiResponse<String?>>
+
+    @POST("api/v1/attendance/send-attendance-report")
+    suspend fun sendAttendanceReport(
+        @Body requestBody: SendAttendanceReportRequest
+    ): Response<AttendifyApiResponse<List<NoParentEmailStudents>?>>
+
+    @GET("api/v1/attendance/get-active-attendance-sheet")
+    suspend fun getActiveAttendanceSheet(
+        @Query("studentId") studentId: String,
         @Query("divisionId") divisionId: String
-    ): Response<AttendifyApiResponse<List<AttendanceStudentCount?>>>
+    ): Response<AttendifyApiResponse<List<Attendance>?>>
+
 }

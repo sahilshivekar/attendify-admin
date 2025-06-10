@@ -1,6 +1,7 @@
 package com.attendify_admin.home.shedule.data
 
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import com.attendify_admin.common.data.remote.response_dto.CancelledClass
 import com.attendify_admin.home.shedule.data.dto.request.AddClassRequest
 import com.attendify_admin.home.shedule.data.dto.request.ExtendActiveTillDateRequest
 import retrofit2.Response
@@ -11,6 +12,8 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Query
 import com.attendify_admin.common.data.remote.response_dto.Class
+import com.attendify_admin.home.shedule.data.dto.request.AddExtraClassRequest
+import com.attendify_admin.home.shedule.data.dto.request.CancelClassRequest
 
 interface ClassApi {
 
@@ -34,7 +37,7 @@ interface ClassApi {
         @Query("courseId") courseId: Int?,
         @Query("semesterId") semesterId: Int?,
         @Query("page") page: Int,
-        @Query("limit") limit: Int
+        @Query("limit") limit: Int,
     ): Response<AttendifyApiResponse<List<Class>>>
 
     @GET("api/v1/class/get-class-by-id")
@@ -45,4 +48,23 @@ interface ClassApi {
 
     @DELETE("api/v1/class/remove-class")
     suspend fun removeClass(@Query("classId") classId: Int): Response<AttendifyApiResponse<Unit>>
+
+    @POST("api/v1/class/cancel-class")
+    suspend fun cancelClass(
+        @Body requestBody: CancelClassRequest,
+    ): Response<AttendifyApiResponse<Unit>>
+
+    @POST("api/v1/class/add-extra-class")
+    suspend fun addExtraClass(
+        @Body requestBody: AddExtraClassRequest,
+    ): Response<AttendifyApiResponse<Class>>
+
+    @GET("api/v1/class/get-cancelled-classes")
+    suspend fun getCancelledClasses(
+        @Query("divisionId") divisionId: Int,
+        @Query("batchId") batchId: Int,
+        @Query("date") date: String,
+        @Query("page") page: Int,
+        @Query("limit") limit: Int,
+    ): Response<AttendifyApiResponse<CancelledClass>>
 }

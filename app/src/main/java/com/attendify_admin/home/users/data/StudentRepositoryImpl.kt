@@ -4,19 +4,26 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import com.attendify_admin.common.data.remote.response_dto.Dropout
 import com.attendify_admin.common.data.remote.response_dto.Student
 import com.attendify_admin.common.data.remote.response_dto.StudentBatch
 import com.attendify_admin.common.data.remote.response_dto.StudentDivision
+import com.attendify_admin.common.data.remote.response_dto.StudentFcmToken
 import com.attendify_admin.common.data.remote.response_dto.StudentSemester
+import com.attendify_admin.home.users.data.dto.request.AddDropoutRequest
+import com.attendify_admin.home.users.data.dto.request.AddStudentFcmTokenRequest
 import com.attendify_admin.home.users.data.dto.request.AddStudentToBatchRequest
 import com.attendify_admin.home.users.data.dto.request.AddStudentToDivisionRequest
 import com.attendify_admin.home.users.data.dto.request.AddStudentToSemesterRequest
 import com.attendify_admin.home.users.data.dto.request.ChangeStudentBatchRequest
 import com.attendify_admin.home.users.data.dto.request.ChangeStudentDivisionRequest
+import com.attendify_admin.home.users.data.dto.request.RemoveDropoutRequest
+import com.attendify_admin.home.users.data.dto.request.RemoveStudentFcmTokenRequest
 import com.attendify_admin.home.users.data.dto.request.RemoveStudentFromSemesterRequest
 import com.attendify_admin.home.users.data.dto.request.RemoveStudentImageRequest
 import com.attendify_admin.home.users.data.dto.request.RemoveStudentRequest
 import com.attendify_admin.home.users.data.dto.request.UpdateStudentDetailsRequest
+import com.attendify_admin.home.users.data.dto.request.UpdateStudentFcmTokenRequest
 import com.attendify_admin.home.users.data.dto.request.UpdateStudentPasswordRequest
 import com.attendify_admin.home.users.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +35,7 @@ import retrofit2.Response
 import java.io.File
 
 class StudentRepositoryImpl(
-    private val studentApi: StudentApi
+    private val studentApi: StudentApi,
 ) : StudentRepository {
 
     override fun getStudents(
@@ -47,7 +54,7 @@ class StudentRepositoryImpl(
         currentDivision: Boolean?,
         currentSemester: Boolean?,
         divisionCode: String?,
-        batchCode: String?
+        batchCode: String?,
     ): Flow<PagingData<Student>> {
 
         return Pager(
@@ -93,7 +100,7 @@ class StudentRepositoryImpl(
         admissionYear: String,
         admissionType: String,
         branchId: String,
-        studentImageFile: File?
+        studentImageFile: File?,
     ): Response<AttendifyApiResponse<Student>> {
         val prnBody = prn.toRequestBody("text/plain".toMediaTypeOrNull())
         val firstNameBody = firstName.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -149,7 +156,7 @@ class StudentRepositoryImpl(
 
     override suspend fun updateStudentImage(
         studentId: String,
-        studentImageFile: File
+        studentImageFile: File,
     ): Response<AttendifyApiResponse<Student>> {
         val studentIdBody = studentId.toRequestBody("text/plain".toMediaTypeOrNull())
         val requestFile = studentImageFile.asRequestBody("image/*".toMediaTypeOrNull())
@@ -206,15 +213,44 @@ class StudentRepositoryImpl(
 
     override suspend fun getStudentDivisionsById(
         studentId: Int,
-        semesterNumber: Int?
+        semesterNumber: Int?,
     ): Response<AttendifyApiResponse<List<StudentDivision>>> {
         return studentApi.getStudentDivisionsById(studentId, semesterNumber)
     }
 
     override suspend fun getStudentBatchesById(
         studentId: Int,
-        semesterNumber: Int?
+        semesterNumber: Int?,
     ): Response<AttendifyApiResponse<List<StudentBatch>>> {
         return studentApi.getStudentBatchesById(studentId, semesterNumber)
     }
+
+    override suspend fun addStudentToDropout(requestBody: AddDropoutRequest): Response<AttendifyApiResponse<Dropout?>> {
+        return studentApi.addStudentToDropout(requestBody)
+    }
+
+    override suspend fun removeStudentFromDropout(requestBody: RemoveDropoutRequest): Response<AttendifyApiResponse<Unit>> {
+        return studentApi.removeStudentFromDropout(requestBody)
+    }
+
+    override suspend fun getDropoutById(dropoutId: String): Response<AttendifyApiResponse<Dropout?>> {
+        return studentApi.getDropoutById(dropoutId)
+    }
+
+    override suspend fun getDropoutDetailsOfStudent(studentId: String): Response<AttendifyApiResponse<List<Dropout>?>> {
+        return studentApi.getDropoutDetailsOfStudent(studentId)
+    }
+
+    override suspend fun addStudentFcmToken(requestBody: AddStudentFcmTokenRequest): Response<AttendifyApiResponse<StudentFcmToken?>> {
+        return studentApi.addStudentFcmToken(requestBody)
+    }
+
+    override suspend fun updateStudentFcmToken(requestBody: UpdateStudentFcmTokenRequest): Response<AttendifyApiResponse<StudentFcmToken?>> {
+        return studentApi.updateStudentFcmToken(requestBody)
+    }
+
+    override suspend fun removeStudentFcmToken(requestBody: RemoveStudentFcmTokenRequest): Response<AttendifyApiResponse<Unit>> {
+        return studentApi.removeStudentFcmToken(requestBody)
+    }
+
 }

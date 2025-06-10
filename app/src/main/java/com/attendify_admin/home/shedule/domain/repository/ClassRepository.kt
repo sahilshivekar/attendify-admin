@@ -1,8 +1,11 @@
 package com.attendify_admin.home.shedule.domain.repository
 
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import com.attendify_admin.common.data.remote.response_dto.CancelledClass
 import com.attendify_admin.common.data.remote.response_dto.Class
 import com.attendify_admin.home.shedule.data.dto.request.AddClassRequest
+import com.attendify_admin.home.shedule.data.dto.request.AddExtraClassRequest
+import com.attendify_admin.home.shedule.data.dto.request.CancelClassRequest
 import com.attendify_admin.home.shedule.data.dto.request.ExtendActiveTillDateRequest
 import retrofit2.Response
 
@@ -40,4 +43,16 @@ interface ClassRepository {
 
     // Remove a class
     suspend fun removeClass(classId: Int): Response<AttendifyApiResponse<Unit>>
+
+    suspend fun cancelClass(requestBody: CancelClassRequest): Response<AttendifyApiResponse<Unit>>
+
+    suspend fun addExtraClass(requestBody: AddExtraClassRequest): Response<AttendifyApiResponse<Class>>
+
+    suspend fun getCancelledClasses(
+        divisionId: Int,
+        batchId: Int,
+        date: String, // Keeping as Int based on API, but consider if it should be String (e.g., "YYYY-MM-DD")
+        page: Int,
+        limit: Int
+    ): Response<AttendifyApiResponse<CancelledClass>>
 }

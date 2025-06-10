@@ -11,7 +11,11 @@ data class Attendance(
 )
 
 // get Attendance Of All For Specific Course In Semester, Division, Batch
-data class AttendanceSummaryDto(
+data class AttendanceAllStudents(
+    val attendanceSummary: AttendanceSummary,
+    val attendanceRecord: List<AttendanceRecord>
+)
+data class AttendanceSummary(
     val courseId: Int,
     val attendanceSummary: List<AttendanceRecord>
 )
@@ -24,6 +28,10 @@ data class AttendanceRecord(
 
 
 // get Attendance Of Student For Specific Course In Semester
+data class AttendanceStudentAggregatedAndDetailedAttendance(
+    val aggregatedAttendanceDto: AggregatedAttendanceDto,
+    val detailedAttendanceRecordDto: List<DetailedAttendanceRecordDto>
+)
 data class AggregatedAttendanceDto(
     val courseId: Int,
     val courseName: String,

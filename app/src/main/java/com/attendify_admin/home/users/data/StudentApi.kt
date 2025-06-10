@@ -1,20 +1,27 @@
 package com.attendify_admin.home.users.data
 
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import com.attendify_admin.common.data.remote.response_dto.Dropout
 import com.attendify_admin.common.data.remote.response_dto.Student
 import com.attendify_admin.common.data.remote.response_dto.StudentBatch
 import com.attendify_admin.common.data.remote.response_dto.StudentDivision
+import com.attendify_admin.common.data.remote.response_dto.StudentFcmToken
 import com.attendify_admin.common.data.remote.response_dto.StudentListWithTotal
 import com.attendify_admin.common.data.remote.response_dto.StudentSemester
+import com.attendify_admin.home.users.data.dto.request.AddDropoutRequest
+import com.attendify_admin.home.users.data.dto.request.AddStudentFcmTokenRequest
 import com.attendify_admin.home.users.data.dto.request.AddStudentToBatchRequest
 import com.attendify_admin.home.users.data.dto.request.AddStudentToDivisionRequest
 import com.attendify_admin.home.users.data.dto.request.AddStudentToSemesterRequest
 import com.attendify_admin.home.users.data.dto.request.ChangeStudentBatchRequest
 import com.attendify_admin.home.users.data.dto.request.ChangeStudentDivisionRequest
+import com.attendify_admin.home.users.data.dto.request.RemoveDropoutRequest
+import com.attendify_admin.home.users.data.dto.request.RemoveStudentFcmTokenRequest
 import com.attendify_admin.home.users.data.dto.request.RemoveStudentFromSemesterRequest
 import com.attendify_admin.home.users.data.dto.request.RemoveStudentImageRequest
 import com.attendify_admin.home.users.data.dto.request.RemoveStudentRequest
 import com.attendify_admin.home.users.data.dto.request.UpdateStudentDetailsRequest
+import com.attendify_admin.home.users.data.dto.request.UpdateStudentFcmTokenRequest
 import com.attendify_admin.home.users.data.dto.request.UpdateStudentPasswordRequest
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -68,7 +75,7 @@ interface StudentApi {
         @Part("admissionYear") admissionYear: RequestBody,
         @Part("admissionType") admissionType: RequestBody,
         @Part("branchId") branchId: RequestBody,
-        @Part studentImageFile: MultipartBody.Part?
+        @Part studentImageFile: MultipartBody.Part?,
     ): Response<AttendifyApiResponse<Student>>
 
     @PUT("api/v1/student/update-details")
@@ -81,7 +88,7 @@ interface StudentApi {
     @PUT("api/v1/student/update-image")
     suspend fun updateStudentImage(
         @Part("id") studentId: RequestBody,
-        @Part studentImageFile: MultipartBody.Part
+        @Part studentImageFile: MultipartBody.Part,
     ): Response<AttendifyApiResponse<Student>>
 
     @DELETE("api/v1/student/remove-image")
@@ -117,12 +124,34 @@ interface StudentApi {
     @GET("api/v1/student/get-student-divisions-by-id")
     suspend fun getStudentDivisionsById(
         @Query("studentId") studentId: Int,
-        @Query("semesterNumber") semesterNumber: Int?
+        @Query("semesterNumber") semesterNumber: Int?,
     ): Response<AttendifyApiResponse<List<StudentDivision>>>
 
     @GET("api/v1/student/get-student-batches-by-id")
     suspend fun getStudentBatchesById(
         @Query("studentId") studentId: Int,
-        @Query("semesterNumber") semesterNumber: Int?
+        @Query("semesterNumber") semesterNumber: Int?,
     ): Response<AttendifyApiResponse<List<StudentBatch>>>
+
+    @POST("api/v1/student/add-student-to-dropout")
+    suspend fun addStudentToDropout(@Body requestBody: AddDropoutRequest): Response<AttendifyApiResponse<Dropout?>>
+
+    @DELETE("api/v1/student/remove-student-from-dropout")
+    suspend fun removeStudentFromDropout(@Body requestBody: RemoveDropoutRequest): Response<AttendifyApiResponse<Unit>>
+
+    @GET("api/v1/student/get-dropout-by-id")
+    suspend fun getDropoutById(@Query("dropoutId") dropoutId: String): Response<AttendifyApiResponse<Dropout?>>
+
+    @GET("api/v1/student/get-dropout-details-of-student")
+    suspend fun getDropoutDetailsOfStudent(@Query("studentId") studentId: String): Response<AttendifyApiResponse<List<Dropout>?>>
+
+    @POST("api/v1/student/add-student-fcm-token")
+    suspend fun addStudentFcmToken(@Body requestBody: AddStudentFcmTokenRequest): Response<AttendifyApiResponse<StudentFcmToken?>>
+
+    @PUT("api/v1/student/update-student-fcm-token")
+    suspend fun updateStudentFcmToken(@Body requestBody: UpdateStudentFcmTokenRequest): Response<AttendifyApiResponse<StudentFcmToken?>>
+
+    @DELETE("api/v1/student/remove-student-fcm-token")
+    suspend fun removeStudentFcmToken(@Body requestBody: RemoveStudentFcmTokenRequest): Response<AttendifyApiResponse<Unit>>
 }
+

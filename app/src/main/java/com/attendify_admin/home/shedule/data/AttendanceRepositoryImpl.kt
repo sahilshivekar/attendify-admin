@@ -3,22 +3,22 @@ package com.attendify_admin.home.shedule.data
 
 import com.attendify_admin.common.data.remote.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.response_dto.Attendance
+import com.attendify_admin.common.data.remote.response_dto.AttendanceAllStudents
 import com.attendify_admin.common.data.remote.response_dto.AttendanceStudent
-import com.attendify_admin.common.data.remote.response_dto.AttendanceStudentCount
+import com.attendify_admin.common.data.remote.response_dto.AttendanceStudentAggregatedAndDetailedAttendance
+import com.attendify_admin.common.data.remote.response_dto.NoParentEmailStudents
 import com.attendify_admin.home.shedule.data.dto.request.AddStudentsAttendanceRequest
 import com.attendify_admin.home.shedule.data.dto.request.CreateAttendanceRequest
-import com.attendify_admin.home.shedule.data.dto.request.GetAttendanceOfCourseOnDateRequest
-import com.attendify_admin.home.shedule.data.dto.request.GetAttendanceOfCourseThroughoutSemesterRequest
-import com.attendify_admin.home.shedule.data.dto.request.GetAttendanceOfStudentForSpecificCourseInSemesterRequest
-import com.attendify_admin.home.shedule.data.dto.request.GetAttendanceRequest
+import com.attendify_admin.home.shedule.data.dto.request.MarkAttendanceRequest
 import com.attendify_admin.home.shedule.data.dto.request.RemoveAttendanceRequest
+import com.attendify_admin.home.shedule.data.dto.request.SendAttendanceReportRequest
 import com.attendify_admin.home.shedule.data.dto.request.UpdateStudentAttendanceRequest
 import com.attendify_admin.home.shedule.domain.repository.AttendanceRepository
 import retrofit2.Response
 import javax.inject.Inject
 
 class AttendanceRepositoryImpl @Inject constructor(
-    private val attendanceApi: AttendanceApi
+    private val attendanceApi: AttendanceApi,
 ) : AttendanceRepository {
 
     override suspend fun createAttendance(requestBody: CreateAttendanceRequest): Response<AttendifyApiResponse<Attendance?>> =
@@ -33,34 +33,95 @@ class AttendanceRepositoryImpl @Inject constructor(
     override suspend fun removeAttendance(requestBody: RemoveAttendanceRequest): Response<AttendifyApiResponse<String?>> =
         attendanceApi.removeAttendance(requestBody.attendanceId)
 
-    override suspend fun getAttendance(requestBody: GetAttendanceRequest): Response<AttendifyApiResponse<List<AttendanceStudent?>>> =
+    override suspend fun getAttendance(
+        date: String?,
+        attendanceId: String?,
+        classId: String?,
+        studentId: String?,
+        courseId: String?,
+        semesterId: String?,
+        divisionId: String?,
+    ): Response<AttendifyApiResponse<List<AttendanceStudent?>>> =
         attendanceApi.getAttendance(
-            requestBody.date,
-            requestBody.attendanceId,
-            requestBody.classId,
-            requestBody.studentId,
-            requestBody.courseId,
-            requestBody.semesterId,
-            requestBody.divisionId
+            date,
+            attendanceId,
+            classId,
+            studentId,
+            courseId,
+            semesterId,
+            divisionId
         )
 
-    override suspend fun getAttendanceOfStudentForSpecificCourseInSemester(requestBody: GetAttendanceOfStudentForSpecificCourseInSemesterRequest): Response<AttendifyApiResponse<List<AttendanceStudentCount?>>> =
-        attendanceApi.getAttendanceOfStudentForSpecificCourseInSemester(
-            requestBody.studentId,
-            requestBody.courseId,
-            requestBody.semesterId
+    override suspend fun getAttendanceOfStudent(
+        studentId: String,
+        courseId: String,
+        semesterId: String,
+        divisionId: String,
+        batchId: String,
+        startDate: String,
+        endDate: String,
+    ): Response<AttendifyApiResponse<AttendanceStudentAggregatedAndDetailedAttendance>> =
+        attendanceApi.getAttendanceOfStudent(
+            studentId,
+            courseId,
+            semesterId,
+            divisionId,
+            batchId,
+            startDate,
+            endDate
         )
 
-    override suspend fun getAttendanceOfCourseOnDate(requestBody: GetAttendanceOfCourseOnDateRequest): Response<AttendifyApiResponse<List<AttendanceStudentCount?>>> =
-        attendanceApi.getAttendanceOfCourseOnDate(
-            requestBody.date,
-            requestBody.courseId,
-            requestBody.divisionId
+    override suspend fun getAttendanceOfAllForSemesterDivisionBatchCourse(
+        courseId: String,
+        semesterId: String,
+        divisionId: String,
+        batchId: String,
+        startDate: String,
+        endDate: String,
+    ): Response<AttendifyApiResponse<AttendanceAllStudents>> =
+        attendanceApi.getAttendanceOfAllForSemesterDivisionBatchCourse(
+            courseId,
+            semesterId,
+            divisionId,
+            batchId,
+            startDate,
+            endDate
         )
 
-    override suspend fun getAttendanceOfCourseThroughoutSemester(requestBody: GetAttendanceOfCourseThroughoutSemesterRequest): Response<AttendifyApiResponse<List<AttendanceStudentCount?>>> =
-        attendanceApi.getAttendanceOfCourseThroughoutSemester(
-            requestBody.courseId,
-            requestBody.divisionId
+    override suspend fun markStudentAttendanceByBLEsessionUUID(
+        bleSessionUUID: String,
+        studentId: Int,
+    ): Response<AttendifyApiResponse<String?>> =
+        attendanceApi.markStudentAttendanceByBLEsessionUUID(
+            MarkAttendanceRequest(
+                bleSessionUUID,
+                studentId
+            )
+        )
+
+    override suspend fun sendAttendanceReport(
+        startDate: String,
+        endDate: String,
+        studentIds: List<String>,
+        courseIds: List<String>,
+        semesterId: String,
+    ): Response<AttendifyApiResponse<List<NoParentEmailStudents>?>> =
+        attendanceApi.sendAttendanceReport(
+            SendAttendanceReportRequest(
+                startDate,
+                endDate,
+                studentIds,
+                courseIds,
+                semesterId
+            )
+        )
+
+    override suspend fun getActiveAttendanceSheet(
+        studentId: String,
+        divisionId: String,
+    ): Response<AttendifyApiResponse<List<Attendance>?>> =
+        attendanceApi.getActiveAttendanceSheet(
+            studentId,
+            divisionId
         )
 }
