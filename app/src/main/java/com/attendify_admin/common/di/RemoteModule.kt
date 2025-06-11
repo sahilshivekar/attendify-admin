@@ -45,7 +45,7 @@ class RemoteModule {
             .build()
     }
 
-    @Provides
+    @Provides // no need to make it singleton as this won't be required frequently
     fun provideResolveUnauthorized(): ResolveUnauthorizedApi {
         val retrofit = Retrofit
             .Builder()
