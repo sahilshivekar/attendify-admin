@@ -14,7 +14,7 @@ import com.attendify_admin.common.presentation.components.bottom_bar.AttendifyBo
 import com.attendify_admin.common.presentation.components.top_bar.AttendifyTopAppBar
 import com.attendify_admin.common.presentation.components.top_bar.TopAppBarState
 import com.attendify_admin.home.navigation.HomeNavHost
-import com.attendify_admin.navigation.AppDestination
+import com.attendify_admin.root_navigation.AppDestination
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.attendify_admin.admin_auth.domain.use_case.ReadAccessTokenUseCase
-import com.attendify_admin.navigation.AppDestination
+import com.attendify_admin.feature_admin_auth.domain.use_case.ReadAccessTokenUseCase
+import com.attendify_admin.root_navigation.AppDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

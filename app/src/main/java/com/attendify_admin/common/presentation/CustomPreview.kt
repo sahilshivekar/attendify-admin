@@ -4,8 +4,8 @@ package com.attendify_admin.common.presentation
 import android.content.res.Configuration
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import com.attendify_admin.ui.theme.AttendifyAdminTheme
 
 /**
@@ -31,8 +31,7 @@ annotation class ComponentPreviewDarkMode()
  * This preview annotation class is used to show screen previews in light mode.
  */
 @Preview(
-    showSystemUi = true,
-    device = Devices.PIXEL_7_PRO
+    showSystemUi = true
 )
 annotation class ScreenPreview()
 
@@ -42,10 +41,27 @@ annotation class ScreenPreview()
  */
 @Preview(
     showSystemUi = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    device = Devices.PIXEL_7_PRO
+    uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 annotation class ScreenPreviewDarkMode()
+
+
+/**
+ * This preview annotation class is used to show multiple screen size previews in light mode.
+ */
+@Preview
+@PreviewScreenSizes
+annotation class AllScreenPreview()
+
+
+/**
+ * This preview annotation class is used to show multiple screen size previews in dark mode.
+ */
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@PreviewScreenSizes
+annotation class AllScreenPreviewDarkMode()
 
 
 /**

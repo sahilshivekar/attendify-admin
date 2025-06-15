@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.attendify_admin.R
-import com.attendify_admin.common.data.dto.response.Branch
+import com.attendify_admin.common.data.remote.dto.response.BranchDto
 import com.attendify_admin.common.presentation.ComponentPreview
 import com.attendify_admin.common.presentation.PreviewWrapper
 
@@ -86,7 +86,7 @@ fun <T> AttendifyFilterOption(
 fun AttendifyFilterOptionPreview() {
     PreviewWrapper {
         AttendifyFilterOption(
-            option = Branch(
+            option = BranchDto(
                 id = 1,
                 abbreviation = "Comp. Engg.",
                 name = "Computer Engineering",

@@ -1,12 +1,12 @@
 package com.attendify_admin.common.data.remote
 
 import android.util.Log
-import com.attendify_admin.admin_auth.data.remote.GetAccessTokenRequest
-import com.attendify_admin.admin_auth.domain.use_case.ReadAccessTokenUseCase
-import com.attendify_admin.admin_auth.domain.use_case.ReadRefreshTokenUseCase
-import com.attendify_admin.admin_auth.domain.use_case.RemoveAuthTokensUseCase
-import com.attendify_admin.admin_auth.domain.use_case.SaveAccessTokenUseCase
-import com.attendify_admin.admin_auth.domain.use_case.SaveRefreshTokenUseCase
+import com.attendify_admin.feature_admin_auth.data.remote.dto.request.GetAccessTokenRequest
+import com.attendify_admin.feature_admin_auth.domain.use_case.ReadAccessTokenUseCase
+import com.attendify_admin.feature_admin_auth.domain.use_case.ReadRefreshTokenUseCase
+import com.attendify_admin.feature_admin_auth.domain.use_case.RemoveAuthTokensUseCase
+import com.attendify_admin.feature_admin_auth.domain.use_case.SaveAccessTokenUseCase
+import com.attendify_admin.feature_admin_auth.domain.use_case.SaveRefreshTokenUseCase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor

@@ -13,9 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.attendify_admin.common.Constants
 
 
 @Composable
@@ -49,16 +49,16 @@ fun AttendifyBottomNavigationBar(
                             painter = painterResource(item.selectedIcon),
                             contentDescription = item.label,
                             modifier = Modifier
-                                .height(Constants.ICON_SIZE)
-                                .width(Constants.ICON_SIZE)
+                                .height(28.dp)
+                                .width(28.dp)
                         )
                     } else {
                         Icon(
                             painter = painterResource(item.unselectedIcon),
                             contentDescription = item.label,
                             modifier = Modifier
-                                .height(Constants.ICON_SIZE)
-                                .width(Constants.ICON_SIZE)
+                                .height(28.dp)
+                                .width(28.dp)
                         )
                     }
                 },

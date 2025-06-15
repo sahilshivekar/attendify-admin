@@ -29,10 +29,6 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                 updateTitle("Schedule")
             }
 
-            HomeDestination.Announcements.route -> {
-                updateTitle("Announcements")
-            }
-
             HomeDestination.Academics.route -> {
                 updateTitle("Academics")
             }

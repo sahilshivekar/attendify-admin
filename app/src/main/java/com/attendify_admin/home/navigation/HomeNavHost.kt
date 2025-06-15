@@ -9,10 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.attendify_admin.home.academics.navigation.AcademicsNavHost
-import com.attendify_admin.home.announcements.navigation.AnnouncementsNavHost
-import com.attendify_admin.home.shedule.navigation.ScheduleNavHost
-import com.attendify_admin.home.users.navigation.UsersNavHost
+import com.attendify_admin.home.feature_academics.navigation.AcademicsNavHost
+import com.attendify_admin.home.feature_schedule.navigation.ScheduleNavHost
+import com.attendify_admin.home.feature_users.navigation.UsersNavHost
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -59,24 +58,6 @@ fun HomeNavHost(
             }
         ) {
             ScheduleNavHost()
-        }
-
-        composable(
-            route = HomeDestination.Announcements.route,
-            enterTransition = {
-                EnterTransition.None
-            },
-            exitTransition = {
-                ExitTransition.None
-            },
-            popEnterTransition = {
-                EnterTransition.None
-            },
-            popExitTransition = {
-                ExitTransition.None
-            }
-        ) {
-            AnnouncementsNavHost()
         }
 
         composable(

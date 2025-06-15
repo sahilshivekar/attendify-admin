@@ -1,10 +1,5 @@
 package com.attendify_admin.common.presentation.components.top_bar
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -29,67 +24,61 @@ fun AttendifyTopAppBar(
     topAppBarState: TopAppBarState,
     onBackIconButtonClick: (() -> Unit)? = null,
     onProfileIconButtonClick: (() -> Unit)? = null,
-    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
 ) {
-    AnimatedVisibility(
-        visible = topAppBarState.isTopAppBarVisible,
-        enter = fadeIn() + expandVertically(),
-        exit = fadeOut() + shrinkVertically()
-    ) {
-
-        TopAppBar(
-            title = {
-                topAppBarState.title?.let {
-                    Text(
-                        text = it,
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Medium
-                        )
+    TopAppBar(
+        title = {
+            topAppBarState.title?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+            }
+        },
+        windowInsets = windowInsets,
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        navigationIcon = {
+            if (topAppBarState.isBackIconButtonVisible) {
+                IconButton(
+                    onClick = onBackIconButtonClick ?: {}
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                        contentDescription = "Back Button"
                     )
                 }
-            },
-            windowInsets = windowInsets,
-            modifier = modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            navigationIcon = {
-                if (topAppBarState.isBackIconButtonVisible) {
-                    IconButton(
-                        onClick = onBackIconButtonClick ?: {}
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            contentDescription = "Back Button"
-                        )
-                    }
+            }
+        },
+        actions = {
+            if (topAppBarState.isProfileIconButtonVisible) {
+                IconButton(
+                    onClick = onProfileIconButtonClick ?: {}
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.AccountCircle,
+                        contentDescription = "Account Details"
+                    )
                 }
-            },
-            actions = {
-                if (topAppBarState.isProfileIconButtonVisible) {
-                    IconButton(
-                        onClick = onProfileIconButtonClick ?: {}
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.AccountCircle,
-                            contentDescription = "Account Details"
-                        )
-                    }
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors().copy(
-                containerColor = MaterialTheme.colorScheme.surface,
-                scrolledContainerColor = MaterialTheme.colorScheme.surface,
-                navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-                titleContentColor = MaterialTheme.colorScheme.onSurface,
-                actionIconContentColor = MaterialTheme.colorScheme.onSurface,
-            ),
-            scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
-                canScroll = {
-                    false
-                }
-            ),
-        )
-    }
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors().copy(
+            containerColor = MaterialTheme.colorScheme.surface,
+            scrolledContainerColor = MaterialTheme.colorScheme.surface,
+            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
+            actionIconContentColor = MaterialTheme.colorScheme.onSurface,
+        ),
+        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
+            canScroll = {
+                false
+            }
+        ),
+    )
+
 }
 
 

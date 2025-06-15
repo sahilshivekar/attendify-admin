@@ -25,12 +25,6 @@ val bottomNavBarItems = listOf(
         route = HomeDestination.Schedule.route
     ),
     BottomNavBarItem(
-        unselectedIcon = R.drawable.notification_icon,
-        selectedIcon = R.drawable.notification_icon_filled,
-        label = "Announcement",
-        route = HomeDestination.Announcements.route
-    ),
-    BottomNavBarItem(
         unselectedIcon = R.drawable.academics_icon,
         selectedIcon = R.drawable.academics_icon_filled,
         label = "Academics",

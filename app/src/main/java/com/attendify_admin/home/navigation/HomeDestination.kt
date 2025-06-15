@@ -7,7 +7,5 @@ sealed class HomeDestination(
 
     data object Academics : HomeDestination(route = "academics")
 
-    data object Announcements : HomeDestination(route = "announcements")
-
     data object Schedule : HomeDestination(route = "schedule")
 }
