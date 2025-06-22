@@ -5,8 +5,6 @@ import com.attendify_admin.common.data.remote.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.StaffDto
 import com.attendify_admin.common.data.remote.dto.response.TeacherTeachesDto
 import com.attendify_admin.home.feature_users.data.dto.request.AddTeachingSubjectRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveImageRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStaffRequest
 import com.attendify_admin.home.feature_users.data.dto.request.UpdateStaffDetailsRequest
 import com.attendify_admin.home.feature_users.data.dto.request.UpdateStaffPasswordRequest
 import kotlinx.coroutines.flow.Flow
@@ -53,10 +51,10 @@ interface StaffRepository {
     ): Response<AttendifyApiResponse<StaffDto>>
 
     // Remove staff
-    suspend fun removeStaff(requestBody: RemoveStaffRequest): Response<AttendifyApiResponse<Unit>>
+    suspend fun removeStaff(staffId: Int): Response<AttendifyApiResponse<Unit>>
 
     // Remove staff image
-    suspend fun removeImage(requestBody: RemoveImageRequest): Response<AttendifyApiResponse<StaffDto>>
+    suspend fun removeImage(staffId: Int): Response<AttendifyApiResponse<StaffDto>>
 
     // Get teaching subjects
     suspend fun getTeachingSubjects(staffId: Int): Response<AttendifyApiResponse<List<TeacherTeachesDto>?>>

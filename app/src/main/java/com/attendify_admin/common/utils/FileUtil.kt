@@ -53,6 +53,7 @@ object FileUtil {
 
             return tempFile
         } catch (e: Exception) {
+            inputStream.close()
             e.printStackTrace()
             return null
         }

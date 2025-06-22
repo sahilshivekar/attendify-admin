@@ -1,6 +1,6 @@
 package com.attendify_admin.common.di
 
-import com.attendify_admin.common.Constants.BASE_URL
+import com.attendify_admin.common.data.Constants.BASE_URL
 import com.attendify_admin.common.data.remote.AuthInterceptor
 import com.attendify_admin.common.data.remote.ResolveUnauthorizedApi
 import dagger.Module

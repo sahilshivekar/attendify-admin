@@ -1,18 +1,18 @@
 package com.attendify_admin.feature_admin_auth.navigation
 
-import android.util.Log
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import androidx.navigation.navArgument
 import com.attendify_admin.feature_admin_auth.presentation.forgot_password.ForgotPasswordScreen
 import com.attendify_admin.feature_admin_auth.presentation.forgot_password.ForgotPasswordViewModel
 import com.attendify_admin.feature_admin_auth.presentation.login.LoginScreen
@@ -73,7 +73,7 @@ fun NavGraphBuilder.adminAuthNavGraph(
         composable(
             route = AuthDestination.ForgotPasswordScreen.route,
             enterTransition = {
-                fadeIn() + slideInHorizontally{ it / 2 }
+                fadeIn() + slideInHorizontally { it / 2 }
             },
             exitTransition = {
                 fadeOut() + slideOutHorizontally { -it / 2 }
@@ -95,11 +95,7 @@ fun NavGraphBuilder.adminAuthNavGraph(
                 onEvent = viewModel::onEvent,
                 navigateToVerifyCodeScreen = {
                     rootNavController.navigate(
-                        AuthDestination.VerifyCodeScreen.route
-                            .replace(
-                                "{email}",
-                                state.email
-                            )
+                        AuthDestination.VerifyCodeScreen.route + "?email=${state.email}"
                     )
                 },
                 onBackIconButtonClick = {
@@ -112,9 +108,14 @@ fun NavGraphBuilder.adminAuthNavGraph(
 
 
         composable(
-            route = AuthDestination.VerifyCodeScreen.route,
+            route = AuthDestination.VerifyCodeScreen.route + "?email={email}",
+            arguments = listOf(
+                navArgument("email") {
+                    type = NavType.StringType
+                }
+            ),
             enterTransition = {
-                fadeIn() + slideInHorizontally{ it / 2 }
+                fadeIn() + slideInHorizontally { it / 2 }
             },
             exitTransition = {
                 fadeOut() + slideOutHorizontally { -it / 2 }
@@ -130,14 +131,6 @@ fun NavGraphBuilder.adminAuthNavGraph(
 
             val viewModel = hiltViewModel<VerifyCodeViewModel>()
             val state = viewModel.state.collectAsStateWithLifecycle().value
-            val email = backStackEntry.arguments?.getString("email")
-
-            LaunchedEffect(email) {
-                email?.let {
-                    Log.d("verifyCode", "adminAuthNavGraph: $it")
-                    viewModel.setEmail(it)
-                }
-            }
 
             VerifyCodeScreen(
                 state = state,

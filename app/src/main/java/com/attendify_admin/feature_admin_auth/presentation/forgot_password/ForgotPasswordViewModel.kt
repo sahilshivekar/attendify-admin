@@ -3,9 +3,12 @@ package com.attendify_admin.feature_admin_auth.presentation.forgot_password
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.attendify_admin.common.data.remote.Resource
-import com.attendify_admin.common.domain.RemoteUtils
+import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarController
+import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarEvent
+import com.attendify_admin.common.validation.ValidateEmail
 import com.attendify_admin.feature_admin_auth.domain.use_case.ForgotPasswordUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -15,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ForgotPasswordViewModel @Inject constructor(
-    private val forgotPasswordUseCase: ForgotPasswordUseCase
+    private val forgotPasswordUseCase: ForgotPasswordUseCase,
+    private val validateEmail: ValidateEmail,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ForgotPasswordState())
@@ -29,64 +33,54 @@ class ForgotPasswordViewModel @Inject constructor(
             }
 
             is ForgotPasswordEvent.SendCodeClicked -> {
-                if (_state.value.email.isBlank()) {
-                    _state.update { it.copy(
-                        emailError = "Email can't be blank"
-                    ) }
-                    return
-                }
                 sendCode(_state.value.email)
             }
 
-            is ForgotPasswordEvent.DismissAlertDialog -> {
-                _state.update { it.copy(isOtherError = null) }
-            }
+
         }
     }
 
     private fun sendCode(email: String) {
+        val emailValidationResult = validateEmail(_state.value.email)
+        _state.update { it.copy(emailError = emailValidationResult.errorMessage) }
+        if (!emailValidationResult.successful) {
+            return
+        }
         forgotPasswordUseCase(email).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
-                    _state.update { it.copy(
-                        isLoading = true,
-                        emailError = null
-                    ) }
+                    _state.update {
+                        it.copy(
+                            isLoading = true,
+                            emailError = null
+                        )
+                    }
                 }
 
                 is Resource.Error -> {
-
-                    when (result.message) {
-                        RemoteUtils.NETWORK_IO_ERROR_MESSAGE -> {
-                            _state.update { it.copy(
-                                isOtherError = RemoteUtils.NETWORK_IO_ERROR_MESSAGE,
-                                isLoading = false
-                            ) }
-                        }
-
-                        RemoteUtils.UNKNOWN_NETWORK_ERROR_MESSAGE -> {
-                            _state.update { it.copy(
-                                isOtherError = RemoteUtils.UNKNOWN_NETWORK_ERROR_MESSAGE,
-                                isLoading = false
-                            ) }
-                        }
-
-                        else -> {
-                            result.message?.let { msg ->
-                                _state.update { it.copy(
-                                    isLoading = false,
-                                    emailError = msg
-                                ) }
-                            }
-                        }
+                    result.message?.let { resultMessage ->
+                        _state.update { it.copy(isLoading = false) }
+                        SnackbarController.sendEvent(SnackbarEvent(message = resultMessage))
                     }
                 }
 
                 is Resource.Success -> {
-                    _state.update { it.copy(
-                        isLoading = false,
-                        isEmailSent = true
-                    ) }
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            isEmailSent = true
+                        )
+                    }
+                    SnackbarController.sendEvent(SnackbarEvent("Email sent on ${_state.value.email}."))
+
+
+                    // if user clicks go back then it will navigate again to verify code again if isEmailSent is true
+                    delay(1000L)
+                    _state.update {
+                        it.copy(
+                            isEmailSent = false
+                        )
+                    }
                 }
 
             }

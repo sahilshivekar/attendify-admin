@@ -13,7 +13,6 @@ data class AddAdminState(
 
     val isAdding: Boolean = false,
     val isAdded: Boolean = false,
-    val alertMessage: String? = null,
 
     val isPasswordVisible: Boolean = false
 )

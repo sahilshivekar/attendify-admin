@@ -7,7 +7,5 @@ sealed class UpdatePasswordEvent {
 
     data object UpdatePasswordClicked : UpdatePasswordEvent()
 
-    data object DismissAlertDialog : UpdatePasswordEvent()
-
     data class PasswordVisibilityChanged(val isVisible: Boolean): UpdatePasswordEvent()
 }

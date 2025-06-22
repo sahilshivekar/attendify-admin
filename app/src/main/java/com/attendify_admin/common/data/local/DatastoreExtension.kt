@@ -3,7 +3,7 @@ package com.attendify_admin.common.data.local
 import android.content.Context
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.attendify_admin.common.Constants
+import com.attendify_admin.common.data.Constants
 
 val Context.dataStore by preferencesDataStore(name = Constants.AUTH_TOKEN_DATASTORE)
 

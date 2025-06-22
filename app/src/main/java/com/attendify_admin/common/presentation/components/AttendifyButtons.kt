@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.attendify_admin.R
 import com.attendify_admin.common.presentation.ComponentPreview
 import com.attendify_admin.common.presentation.PreviewWrapper
+import com.attendify_admin.common.presentation.UiConstants
 
 @Composable
 fun AttendifyButton(
@@ -54,7 +55,7 @@ fun AttendifyButton(
     Button(
         onClick = onClick,
         modifier = modifier
-            .widthIn(max = 500.dp)
+            .widthIn(max = UiConstants.MAX_WIDTH)
             .fillMaxWidth(),
         enabled = enabled,
         shape = shape,

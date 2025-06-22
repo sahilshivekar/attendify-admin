@@ -8,8 +8,6 @@ data class UpdatePasswordState(
     val confirmPassword: String = "",
 
     val passwordError: String? = null,
-    val confirmPasswordError: String? = null,
-    val isPasswordVisible: Boolean = false,
 
-    val alertMessage: String? = null
+    val isPasswordVisible: Boolean = false,
 )

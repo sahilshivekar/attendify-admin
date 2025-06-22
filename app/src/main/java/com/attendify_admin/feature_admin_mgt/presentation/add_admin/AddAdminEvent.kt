@@ -5,7 +5,6 @@ sealed class AddAdminEvent {
     data class UsernameChanged(val username: String) : AddAdminEvent()
     data class PasswordChanged(val password: String) : AddAdminEvent()
     data class ConfirmPasswordChanged(val confirmPassword: String) : AddAdminEvent()
-    data object AddAdminClicked : AddAdminEvent()
-    data object DismissAlertDialog : AddAdminEvent()
     data object PasswordVisibilityChanged : AddAdminEvent()
+    data object AddAdminClicked : AddAdminEvent()
 }

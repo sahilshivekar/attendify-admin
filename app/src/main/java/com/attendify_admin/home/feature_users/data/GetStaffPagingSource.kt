@@ -36,7 +36,6 @@ class GetStaffPagingSource(
             )
             staffTotalCount += newResponse.body()?.data?.staff?.size ?: 0
 
-
             LoadResult.Page(
                 data = newResponse.body()?.data?.staff ?: emptyList(),
                 prevKey = if (page == 1) null else page - 1,

@@ -15,11 +15,6 @@ import com.attendify_admin.home.feature_users.data.dto.request.AddStudentToDivis
 import com.attendify_admin.home.feature_users.data.dto.request.AddStudentToSemesterRequest
 import com.attendify_admin.home.feature_users.data.dto.request.ChangeStudentBatchRequest
 import com.attendify_admin.home.feature_users.data.dto.request.ChangeStudentDivisionRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveDropoutRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStudentFcmTokenRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStudentFromSemesterRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStudentImageRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStudentRequest
 import com.attendify_admin.home.feature_users.data.dto.request.UpdateStudentDetailsRequest
 import com.attendify_admin.home.feature_users.data.dto.request.UpdateStudentFcmTokenRequest
 import com.attendify_admin.home.feature_users.data.dto.request.UpdateStudentPasswordRequest
@@ -59,13 +54,12 @@ interface StudentRepository {
         phoneNumber: String,
         gender: String,
         dob: String?,
-//        password: String,
-//        confirmPassword: String,
         schemeId: Int,
         admissionYear: String,
         admissionType: String,
         branchId: Int,
-        studentImageFile: File?
+        studentImageFile: File?,
+        parentEmail: String?
     ): Response<AttendifyApiResponse<StudentDto>>
 
     // Update student details
@@ -81,10 +75,10 @@ interface StudentRepository {
     ): Response<AttendifyApiResponse<StudentDto>>
 
     // Remove student image
-    suspend fun removeStudentImage(requestBody: RemoveStudentImageRequest): Response<AttendifyApiResponse<StudentDto>>
+    suspend fun removeStudentImage(studentId: Int): Response<AttendifyApiResponse<StudentDto>>
 
     // Remove a student
-    suspend fun removeStudent(requestBody: RemoveStudentRequest): Response<AttendifyApiResponse<Unit>>
+    suspend fun removeStudent(studentId: Int): Response<AttendifyApiResponse<Unit>>
 
     // Get student details by ID
     suspend fun getStudentDetailsById(studentId: Int): Response<AttendifyApiResponse<StudentDto>>
@@ -93,7 +87,7 @@ interface StudentRepository {
     suspend fun addStudentToSemester(requestBody: AddStudentToSemesterRequest): Response<AttendifyApiResponse<StudentSemesterDto>>
 
     // Remove student from semester
-    suspend fun removeStudentFromSemester(requestBody: RemoveStudentFromSemesterRequest): Response<AttendifyApiResponse<Unit>>
+    suspend fun removeStudentFromSemester(studentSemesterId: Int): Response<AttendifyApiResponse<Unit>>
 
     // Add student to division
     suspend fun addStudentToDivision(requestBody: AddStudentToDivisionRequest): Response<AttendifyApiResponse<StudentDivisionDto>>
@@ -118,7 +112,11 @@ interface StudentRepository {
 
     suspend fun addStudentToDropout(requestBody: AddDropoutRequest): Response<AttendifyApiResponse<DropoutDto?>>
 
-    suspend fun removeStudentFromDropout(requestBody: RemoveDropoutRequest): Response<AttendifyApiResponse<Unit>>
+    suspend fun removeStudentFromDropout(
+        studentId: Int,
+        academicStartYear: Int,
+        academicEndYear: Int,
+    ): Response<AttendifyApiResponse<Unit>>
 
     suspend fun getDropoutById(dropoutId: Int): Response<AttendifyApiResponse<DropoutDto?>>
 
@@ -128,6 +126,6 @@ interface StudentRepository {
 
     suspend fun updateStudentFcmToken(requestBody: UpdateStudentFcmTokenRequest): Response<AttendifyApiResponse<StudentFCMTokenDto?>>
 
-    suspend fun removeStudentFcmToken(requestBody: RemoveStudentFcmTokenRequest): Response<AttendifyApiResponse<Unit>>
+    suspend fun removeStudentFcmToken(studentId: Int): Response<AttendifyApiResponse<Unit>>
 }
 

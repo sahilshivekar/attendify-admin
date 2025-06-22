@@ -1,5 +1,6 @@
 package com.attendify_admin.home.feature_users.domain.use_case
 
+import android.util.Log
 import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.dto.response.toStaff
 import com.attendify_admin.common.domain.RemoteUtils
@@ -12,11 +13,11 @@ import java.io.IOException
 import javax.inject.Inject
 
 class UpdateStaffImageUseCase @Inject constructor(
-    private val staffRepository: StaffRepository
+    private val staffRepository: StaffRepository,
 ) {
     operator fun invoke(
         staffId: Int,
-        staffImageFile: File
+        staffImageFile: File,
     ): Flow<Resource<Staff?>> = flow {
         emit(Resource.Loading())
 
@@ -24,6 +25,7 @@ class UpdateStaffImageUseCase @Inject constructor(
             staffRepository.updateStaffImage(staffId, staffImageFile)
         }
 
+        Log.d("update staff", response.toString())
         response.onSuccess { response ->
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()?.data?.toStaff()))

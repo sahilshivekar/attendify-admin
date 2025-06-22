@@ -3,7 +3,9 @@ package com.attendify_admin.feature_admin_mgt.presentation.admin_details
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.attendify_admin.common.data.remote.Resource
-import com.attendify_admin.common.domain.RemoteUtils
+import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarAction
+import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarController
+import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarEvent
 import com.attendify_admin.common.validation.Validators
 import com.attendify_admin.feature_admin_auth.domain.use_case.LogoutUseCase
 import com.attendify_admin.feature_admin_auth.domain.use_case.RemoveAuthTokensUseCase
@@ -15,8 +17,10 @@ import com.attendify_admin.feature_admin_mgt.domain.use_case.UpdateAdminDetailsU
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,12 +31,11 @@ class AdminDetailsViewModel @Inject constructor(
     private val removeAdminUseCase: RemoveAdminUseCase,
     private val sendVerificationCodeToEmailUseCase: SendVerificationCodeToEmailUseCase,
     private val updateAdminDetailsUseCase: UpdateAdminDetailsUseCase,
-    private val logoutUseCase: LogoutUseCase
+    private val logoutUseCase: LogoutUseCase,
 ) : ViewModel() {
 
-    var state = MutableStateFlow(AdminDetailsState())
-        private set
-
+    private val _state = MutableStateFlow(AdminDetailsState())
+    val state = _state.asStateFlow()
 
     init {
         getAdminDetails()
@@ -41,22 +44,27 @@ class AdminDetailsViewModel @Inject constructor(
     fun onEvent(event: AdminDetailsEvent) {
         when (event) {
             AdminDetailsEvent.CancelEditingDetailsClicked -> {
-                state.value = state.value.copy(
-                    isEditingDetails = false,
-                    isUsernameEmailEnabled = false,
-                    editableEmail = state.value.orgEmail,
-                    editableUsername = state.value.orgUsername,
-                    emailError = null,
-                    usernameError = null
-                )
+                _state.update {
+                    it.copy(
+                        isEditingDetails = false,
+                        isUsernameEmailEnabled = false,
+                        editableEmail = _state.value.orgEmail,
+                        editableUsername = _state.value.orgUsername,
+                        emailError = null,
+                        usernameError = null
+                    )
+                }
             }
 
 
             AdminDetailsEvent.EditDetailsClicked -> {
-                state.value = state.value.copy(
-                    isEditingDetails = true,
-                    isUsernameEmailEnabled = true
-                )
+                _state.update {
+                    it.copy(
+                        isEditingDetails = true,
+                        isUsernameEmailEnabled = true
+                    )
+                }
+
             }
 
             AdminDetailsEvent.LogoutClicked -> {
@@ -64,19 +72,27 @@ class AdminDetailsViewModel @Inject constructor(
             }
 
             AdminDetailsEvent.DismissRemoveAccountClicked -> {
-                state.value = state.value.copy(
-                    showRemoveAccountConfirmationDialog = false
-                )
+                _state.update {
+                    it.copy(
+                        showRemoveAccountConfirmationDialog = false
+                    )
+                }
             }
 
             AdminDetailsEvent.RemoveAdminClicked -> {
-                state.value = state.value.copy(
-                    showRemoveAccountConfirmationDialog = true
-                )
-            }
-
-            AdminDetailsEvent.RemoveAdminConfirmed -> {
-                removeAdmin()
+                viewModelScope.launch {
+                    SnackbarController.sendEvent(
+                        SnackbarEvent(
+                            message = "Are you sure you want to remove your account?",
+                            action = SnackbarAction(
+                                name = "Remove",
+                                action = {
+                                    removeAdmin()
+                                },
+                            )
+                        )
+                    )
+                }
             }
 
             AdminDetailsEvent.UpdateDetailsClicked -> {
@@ -88,120 +104,110 @@ class AdminDetailsViewModel @Inject constructor(
             }
 
             is AdminDetailsEvent.EmailChanged -> {
-                state.value = state.value.copy(
-                    editableEmail = event.email
-                )
+                _state.update {
+                    it.copy(
+                        editableEmail = event.email
+                    )
+                }
             }
 
             is AdminDetailsEvent.UsernameChanged -> {
-                state.value = state.value.copy(
-                    editableUsername = event.username
-                )
+                _state.update {
+                    it.copy(
+                        editableUsername = event.username
+                    )
+                }
             }
 
-            AdminDetailsEvent.DismissAlertDialog -> {
-                state.value = state.value.copy(
-                    alertMessage = null
-                )
-            }
 
             is AdminDetailsEvent.PasswordVisibilityChanged -> {
-                state.value = state.value.copy(isPasswordVisible = event.isVisible)
+                _state.update {
+                    it.copy(isPasswordVisible = event.isVisible)
+                }
             }
         }
-    }
 
+    }
 
     private fun updateAdminDetails() {
 
 
-
-        val emailValidationError = Validators.validateEmail(email = state.value.editableEmail)
+        val emailValidationError =
+            Validators.validateEmail(email = _state.value.editableEmail)
         val usernameValidationError =
-            Validators.validateUsername(username = state.value.editableUsername)
+            Validators.validateUsername(username = _state.value.editableUsername)
 
-        state.value = state.value.copy(
-            emailError = emailValidationError,
-            usernameError = usernameValidationError
-        )
+        _state.update {
+            it.copy(
+                emailError = emailValidationError,
+                usernameError = usernameValidationError
+            )
+        }
 
         if (emailValidationError != null || usernameValidationError != null) return
 
         // checking if any changes are made or not
-        if (state.value.editableEmail == state.value.orgEmail &&
-            state.value.editableUsername == state.value.orgUsername
+        if (_state.value.editableEmail == _state.value.orgEmail &&
+            _state.value.editableUsername == _state.value.orgUsername
         ) {
-            state.value = state.value.copy(
-                alertMessage = "No changes made to the email and username",
-            )
+            viewModelScope.launch {
+                SnackbarController.sendEvent(SnackbarEvent("No changes made to the email and username."))
+            }
             return
         }
 
         updateAdminDetailsUseCase(
             UpdateAdminDetailsRequestBody(
-                email = state.value.editableEmail,
-                username = state.value.editableUsername
+                email = _state.value.editableEmail,
+                username = _state.value.editableUsername
             )
         ).onEach { result ->
             when (result) {
                 is Resource.Error -> {
-                    state.value = state.value.copy(
-                        isUpdatingDetails = false,
-                        isEditingDetails = true,
-                        isUsernameEmailEnabled = true
-                    )
+                    _state.update {
+                        it.copy(
+                            isUpdatingDetails = false,
+                            isEditingDetails = true,
+                            isUsernameEmailEnabled = true
+                        )
+                    }
                     result.message?.let { resultMessage ->
-                        if (RemoteUtils.isKnownError(resultMessage)) {
-                            state.value = state.value.copy(alertMessage = resultMessage)
-                        } else if (resultMessage.contains("email", ignoreCase = true)) {
-                            state.value = state.value.copy(
-                                emailError = resultMessage,
-                                usernameError = null
-                            )
-                        } else if (resultMessage.contains(
-                                "username",
-                                ignoreCase = true
-                            )
-                        ) {
-                            state.value = state.value.copy(
-                                usernameError = resultMessage,
-                                emailError = null
-                            )
-                        } else {
-                            state.value = state.value.copy(
-                                alertMessage = resultMessage,
-                                emailError = null,
-                                usernameError = null
-                            )
-                        }
+                        SnackbarController.sendEvent(SnackbarEvent(message = resultMessage))
                     }
                 }
 
                 is Resource.Loading -> {
-                    state.value = state.value.copy(
-                        isUpdatingDetails = true,
-                        emailError = null,
-                        usernameError = null,
-                        isEditingDetails = true,
-                        isUsernameEmailEnabled = false
-                    )
+                    _state.update {
+                        it.copy(
+                            isUpdatingDetails = true,
+                            emailError = null,
+                            usernameError = null,
+                            isEditingDetails = true,
+                            isUsernameEmailEnabled = false
+                        )
+                    }
                 }
 
                 is Resource.Success -> {
-                    if (state.value.orgEmail != result.data?.email) {
-                        state.value = state.value.copy(isVerified = false)
+                    SnackbarController.sendEvent(SnackbarEvent(message = "Details updated successfully."))
+
+                    if (_state.value.orgEmail != result.data?.email) {
+                        _state.update {
+                            it.copy(isVerified = false)
+                        }
                     }
-                    state.value = state.value.copy(
-                        isUpdatingDetails = false,
-                        isEditingDetails = false,
-                        orgEmail = result.data?.email
-                            ?: "", // will never be "" bcz data is sent
-                        orgUsername = result.data?.username ?: "",
-                        alertMessage = null,
-                        emailError = null,
-                        usernameError = null,
-                        isUsernameEmailEnabled = false
-                    )
+                    _state.update {
+                        it.copy(
+                            isUpdatingDetails = false,
+                            isEditingDetails = false,
+                            orgEmail = result.data?.email
+                                ?: "", // will never be "" bcz data is sent
+                            orgUsername = result.data?.username ?: "",
+                            emailError = null,
+                            usernameError = null,
+                            isUsernameEmailEnabled = false
+                        )
+                    }
                 }
             }
         }.launchIn(viewModelScope)
@@ -211,28 +217,42 @@ class AdminDetailsViewModel @Inject constructor(
         sendVerificationCodeToEmailUseCase().onEach { result ->
             when (result) {
                 is Resource.Error -> {
-                    state.value = state.value.copy(
-                        alertMessage = result.message
-                    )
+                    _state.update {
+                        it.copy(
+                            isSendingVerificationCode = false
+                        )
+                    }
+                    result.message?.let { resultMessage ->
+                        SnackbarController.sendEvent(SnackbarEvent(message = resultMessage))
+                    }
+
                 }
 
                 is Resource.Loading -> {
-                    state.value = state.value.copy(
-                        isSendingVerificationCode = true
-                    )
+                    _state.update {
+                        it.copy(
+                            isSendingVerificationCode = true
+                        )
+                    }
                 }
 
                 is Resource.Success -> {
-                    state.value = state.value.copy(
-                        isVerificationCodeSent = true,
-                        isSendingVerificationCode = false
-                    )
+                    SnackbarController.sendEvent(SnackbarEvent(message = "Verification code sent successfully."))
+
+                    _state.update {
+                        it.copy(
+                            isVerificationCodeSent = true,
+                            isSendingVerificationCode = false
+                        )
+                    }
 
                     // bcz if the user click back button from verify code he must not be again automatically navigating to the verify code screen again
                     delay(1000L)
-                    state.value = state.value.copy(
-                        isVerificationCodeSent = false,
-                    )
+                    _state.update {
+                        it.copy(
+                            isVerificationCodeSent = false,
+                        )
+                    }
                 }
             }
         }.launchIn(viewModelScope)
@@ -240,27 +260,32 @@ class AdminDetailsViewModel @Inject constructor(
 
     private fun removeAdmin() {
         viewModelScope.launch {
-
             removeAdminUseCase().onEach { result ->
                 when (result) {
                     is Resource.Error -> {
-                        state.value = state.value.copy(
-                            alertMessage = result.message
-                        )
+                        result.message?.let { resultMessage ->
+                            SnackbarController.sendEvent(SnackbarEvent(message = resultMessage))
+                        }
                     }
 
                     is Resource.Loading -> {
-                        state.value = state.value.copy(
-                            isLoggingOut = true
-                        )
+                        _state.update {
+                            it.copy(
+                                isLoggingOut = true
+                            )
+                        }
                     }
 
                     is Resource.Success -> {
                         removeAuthTokensUseCase()
-                        state.value = state.value.copy(
-                            isLoggingOut = false,
-                            isLoggedOut = true
-                        )
+                        _state.update {
+                            it.copy(
+                                isLoggingOut = false,
+                                isLoggedOut = true
+                            )
+                        }
+                        SnackbarController.sendEvent(SnackbarEvent(message = "Account removed successfully."))
+
                     }
                 }
             }.launchIn(viewModelScope)
@@ -272,27 +297,31 @@ class AdminDetailsViewModel @Inject constructor(
         getAdminDetailsUseCase().onEach { result ->
             when (result) {
                 is Resource.Error -> {
-                    state.value = state.value.copy(
-                        alertMessage = result.message,
-                    )
+                    result.message?.let { resultMessage ->
+                        SnackbarController.sendEvent(SnackbarEvent(message = resultMessage))
+                    }
                 }
 
                 is Resource.Loading -> {
-                    state.value = state.value.copy(
-                        isInitialDataLoading = true
-                    )
+                    _state.update {
+                        it.copy(
+                            isInitialDataLoading = true
+                        )
+                    }
                 }
 
                 is Resource.Success -> {
-                    state.value = state.value.copy(
-                        isInitialDataLoading = false,
-                        orgEmail = result.data?.email ?: "",
-                        orgUsername = result.data?.username ?: "",
-                        editableEmail = result.data?.email ?: "",
-                        editableUsername = result.data?.username ?: "",
-//                        password = result.data?.password ?: "", // not of use
-                        isVerified = result.data?.isVerified,
-                    )
+                    _state.update {
+                        it.copy(
+                            isInitialDataLoading = false,
+                            orgEmail = result.data?.email ?: "",
+                            orgUsername = result.data?.username ?: "",
+                            editableEmail = result.data?.email ?: "",
+                            editableUsername = result.data?.username ?: "",
+                            isVerified = result.data?.isVerified,
+                        )
+                    }
+
                 }
             }
         }.launchIn(viewModelScope)
@@ -302,23 +331,29 @@ class AdminDetailsViewModel @Inject constructor(
         logoutUseCase().onEach { result ->
             when (result) {
                 is Resource.Error -> {
-                    state.value = state.value.copy(
-                        alertMessage = result.message
-                    )
+                    result.message?.let { resultMessage ->
+                        SnackbarController.sendEvent(SnackbarEvent(message = resultMessage))
+                    }
                 }
 
                 is Resource.Loading -> {
-                    state.value = state.value.copy(
-                        isLoggingOut = true
-                    )
+                    _state.update {
+                        it.copy(
+                            isLoggingOut = true
+                        )
+                    }
                 }
 
                 is Resource.Success -> {
-                    state.value = state.value.copy(
-                        isLoggingOut = false,
-                        isLoggedOut = true
-                    )
+                    _state.update {
+                        it.copy(
+                            isLoggingOut = false,
+                            isLoggedOut = true
+                        )
+                    }
                     removeAuthTokensUseCase()
+                    SnackbarController.sendEvent(SnackbarEvent(message = "Logged out successfully."))
+
                 }
             }
         }.launchIn(viewModelScope)

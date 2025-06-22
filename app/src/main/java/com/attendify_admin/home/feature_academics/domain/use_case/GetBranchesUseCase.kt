@@ -6,6 +6,8 @@ import com.attendify_admin.common.data.remote.dto.response.toBranch
 import com.attendify_admin.common.domain.RemoteUtils
 import com.attendify_admin.common.domain.model.Branch
 import com.attendify_admin.home.feature_academics.domain.repository.BranchRepository
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
@@ -14,7 +16,7 @@ import javax.inject.Inject
 class GetBranchesUseCase @Inject constructor(
     private val branchRepository: BranchRepository,
 ) {
-    operator fun invoke(searchQuery: String?): Flow<Resource<List<Branch>?>> = flow {
+    operator fun invoke(searchQuery: String?): Flow<Resource<PersistentList<Branch>?>> = flow {
 
         emit(Resource.Loading())
 
@@ -24,7 +26,7 @@ class GetBranchesUseCase @Inject constructor(
 
         response.onSuccess { response ->
             if (response.isSuccessful) {
-                emit(Resource.Success(response.body()?.data?.map { it.toBranch() }))
+                emit(Resource.Success(response.body()?.data?.map { it.toBranch() }?.toPersistentList()))
             } else {
                 val errorMessage = RemoteUtils.getErrorMessage(response)
                 emit(Resource.Error(message = errorMessage))

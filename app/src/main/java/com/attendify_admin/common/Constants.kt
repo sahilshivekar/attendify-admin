@@ -1,7 +1,0 @@
-package com.attendify_admin.common
-
-object Constants {
-    //    const val BASE_URL =  "http://192.168.43.234:4444/" // redmi 8 hotspot
-    const val BASE_URL = "http://192.168.1.109:4444/" // home wifi
-    const val AUTH_TOKEN_DATASTORE = "auth_token_datastore"
-}

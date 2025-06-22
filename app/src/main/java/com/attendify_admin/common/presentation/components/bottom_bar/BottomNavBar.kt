@@ -32,6 +32,7 @@ fun AttendifyBottomNavigationBar(
         contentColor = MaterialTheme.colorScheme.onSurface
     ) {
         bottomNavBarItems.forEach { item ->
+
             NavigationBarItem(
                 selected = currentDestinationRoute == item.route,
                 onClick = {

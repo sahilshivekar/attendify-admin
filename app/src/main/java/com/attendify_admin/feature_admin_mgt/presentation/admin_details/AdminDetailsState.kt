@@ -17,7 +17,6 @@ data class AdminDetailsState (
 
     val password: String = "",
     val isPasswordVisible: Boolean = false,
-    val alertMessage: String? = null,
 
     val isInitialDataLoading: Boolean = true,
 
@@ -32,3 +31,4 @@ data class AdminDetailsState (
 
     val showRemoveAccountConfirmationDialog: Boolean = false,
 )
+

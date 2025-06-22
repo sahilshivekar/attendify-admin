@@ -17,11 +17,6 @@ import com.attendify_admin.home.feature_users.data.dto.request.AddStudentToDivis
 import com.attendify_admin.home.feature_users.data.dto.request.AddStudentToSemesterRequest
 import com.attendify_admin.home.feature_users.data.dto.request.ChangeStudentBatchRequest
 import com.attendify_admin.home.feature_users.data.dto.request.ChangeStudentDivisionRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveDropoutRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStudentFcmTokenRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStudentFromSemesterRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStudentImageRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStudentRequest
 import com.attendify_admin.home.feature_users.data.dto.request.UpdateStudentDetailsRequest
 import com.attendify_admin.home.feature_users.data.dto.request.UpdateStudentFcmTokenRequest
 import com.attendify_admin.home.feature_users.data.dto.request.UpdateStudentPasswordRequest
@@ -100,6 +95,7 @@ class StudentRepositoryImpl(
         admissionType: String,
         branchId: Int,
         studentImageFile: File?,
+        parentEmail: String?,
     ): Response<AttendifyApiResponse<StudentDto>> {
         val prnBody = prn.toRequestBody("text/plain".toMediaTypeOrNull())
         val firstNameBody = firstName.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -113,6 +109,7 @@ class StudentRepositoryImpl(
         val admissionYearBody = admissionYear.toRequestBody("text/plain".toMediaTypeOrNull())
         val admissionTypeBody = admissionType.toRequestBody("text/plain".toMediaTypeOrNull())
         val branchIdBody = branchId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        val parentEmailBody = parentEmail.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val studentImagePart = if (studentImageFile != null) {
             val requestFile = studentImageFile.asRequestBody("image/*".toMediaTypeOrNull())
             MultipartBody.Part.createFormData(
@@ -133,13 +130,12 @@ class StudentRepositoryImpl(
             phoneNumberBody,
             genderBody,
             dobBody,
-//            passwordBody,
-//            confirmPasswordBody,
             schemeIdBody,
             admissionYearBody,
             admissionTypeBody,
             branchIdBody,
-            studentImagePart
+            studentImagePart,
+            parentEmailBody
         )
     }
 
@@ -168,12 +164,12 @@ class StudentRepositoryImpl(
         )
     }
 
-    override suspend fun removeStudentImage(requestBody: RemoveStudentImageRequest): Response<AttendifyApiResponse<StudentDto>> {
-        return studentApi.removeStudentImage(requestBody)
+    override suspend fun removeStudentImage(studentId: Int): Response<AttendifyApiResponse<StudentDto>> {
+        return studentApi.removeStudentImage(studentId)
     }
 
-    override suspend fun removeStudent(requestBody: RemoveStudentRequest): Response<AttendifyApiResponse<Unit>> {
-        return studentApi.removeStudent(requestBody)
+    override suspend fun removeStudent(studentId: Int): Response<AttendifyApiResponse<Unit>> {
+        return studentApi.removeStudent(studentId)
     }
 
     override suspend fun getStudentDetailsById(studentId: Int): Response<AttendifyApiResponse<StudentDto>> {
@@ -184,8 +180,8 @@ class StudentRepositoryImpl(
         return studentApi.addStudentToSemester(requestBody)
     }
 
-    override suspend fun removeStudentFromSemester(requestBody: RemoveStudentFromSemesterRequest): Response<AttendifyApiResponse<Unit>> {
-        return studentApi.removeStudentFromSemester(requestBody)
+    override suspend fun removeStudentFromSemester(studentSemesterId: Int): Response<AttendifyApiResponse<Unit>> {
+        return studentApi.removeStudentFromSemester(studentSemesterId)
     }
 
     override suspend fun addStudentToDivision(requestBody: AddStudentToDivisionRequest): Response<AttendifyApiResponse<StudentDivisionDto>> {
@@ -226,8 +222,16 @@ class StudentRepositoryImpl(
         return studentApi.addStudentToDropout(requestBody)
     }
 
-    override suspend fun removeStudentFromDropout(requestBody: RemoveDropoutRequest): Response<AttendifyApiResponse<Unit>> {
-        return studentApi.removeStudentFromDropout(requestBody)
+    override suspend fun removeStudentFromDropout(
+        studentId: Int,
+        academicStartYear: Int,
+        academicEndYear: Int,
+    ): Response<AttendifyApiResponse<Unit>> {
+        return studentApi.removeStudentFromDropout(
+            studentId,
+            academicStartYear,
+            academicEndYear
+        )
     }
 
     override suspend fun getDropoutById(dropoutId: Int): Response<AttendifyApiResponse<DropoutDto?>> {
@@ -246,8 +250,8 @@ class StudentRepositoryImpl(
         return studentApi.updateStudentFcmToken(requestBody)
     }
 
-    override suspend fun removeStudentFcmToken(requestBody: RemoveStudentFcmTokenRequest): Response<AttendifyApiResponse<Unit>> {
-        return studentApi.removeStudentFcmToken(requestBody)
+    override suspend fun removeStudentFcmToken(studentId: Int): Response<AttendifyApiResponse<Unit>> {
+        return studentApi.removeStudentFcmToken(studentId)
     }
 
 }

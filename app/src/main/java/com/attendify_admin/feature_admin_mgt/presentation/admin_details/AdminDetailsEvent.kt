@@ -7,8 +7,6 @@ sealed class AdminDetailsEvent {
 
     data object CancelEditingDetailsClicked : AdminDetailsEvent()
 
-    data object RemoveAdminConfirmed : AdminDetailsEvent()
-
     data object LogoutClicked : AdminDetailsEvent()
 
     data object VerifyEmailClicked : AdminDetailsEvent()
@@ -16,8 +14,6 @@ sealed class AdminDetailsEvent {
     data class EmailChanged(val email: String) : AdminDetailsEvent()
 
     data class UsernameChanged(val username: String) : AdminDetailsEvent()
-
-    data object DismissAlertDialog : AdminDetailsEvent()
 
     data class PasswordVisibilityChanged(val isVisible: Boolean) : AdminDetailsEvent()
 

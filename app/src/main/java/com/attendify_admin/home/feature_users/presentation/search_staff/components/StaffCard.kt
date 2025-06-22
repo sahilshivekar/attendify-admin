@@ -1,5 +1,6 @@
 package com.attendify_admin.home.feature_users.presentation.search_staff.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.attendify_admin.R
+import com.attendify_admin.common.presentation.UiConstants
 import com.attendify_admin.common.presentation.components.AttendifyTextDivider
 
 @Composable
@@ -41,12 +43,13 @@ fun StaffCard(
     highestQualification: String? = null,
     onClick: () -> Unit
 ) {
+    Log.d("staff", name)
 
     Card(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .widthIn(max = 300.dp)
+            .widthIn(max = UiConstants.MAX_WIDTH)
             .clip(MaterialTheme.shapes.small),
         colors = CardDefaults.cardColors(
 //          containerColor = MaterialTheme.colorScheme.surface.copy(alpha = .5f),
@@ -88,7 +91,7 @@ fun StaffCard(
                     .clip(CircleShape)
                     .height(if (imageLoaded) 42.dp else 50.dp)
                     .width(if (imageLoaded) 42.dp else 50.dp),
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.Crop,
                 colorFilter = if (imageLoaded) null else ColorFilter.tint(
                     MaterialTheme.colorScheme.onSurface.copy(
                         alpha = .5f

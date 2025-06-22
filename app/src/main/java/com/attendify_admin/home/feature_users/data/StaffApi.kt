@@ -5,8 +5,6 @@ import com.attendify_admin.common.data.remote.dto.response.StaffDto
 import com.attendify_admin.common.data.remote.dto.response.StaffListWithTotalDto
 import com.attendify_admin.common.data.remote.dto.response.TeacherTeachesDto
 import com.attendify_admin.home.feature_users.data.dto.request.AddTeachingSubjectRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveImageRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStaffRequest
 import com.attendify_admin.home.feature_users.data.dto.request.UpdateStaffDetailsRequest
 import com.attendify_admin.home.feature_users.data.dto.request.UpdateStaffPasswordRequest
 import okhttp3.MultipartBody
@@ -27,7 +25,7 @@ interface StaffApi {
     suspend fun getStaff(
         @Query("searchQuery") searchQuery: String?,
         @Query("courseId") courseId: Int?,
-        @Query("page") page: Int
+        @Query("page") page: Int,
     ): Response<AttendifyApiResponse<StaffListWithTotalDto>>
 
     @GET("api/v1/staff/admin/get-staff-by-id")
@@ -58,14 +56,14 @@ interface StaffApi {
     @PUT("api/v1/staff/admin/update-image")
     suspend fun updateStaffImage(
         @Part("id") id: RequestBody,
-        @Part("staffImageFile") staffImageFile: MultipartBody.Part
+        @Part staffImageFile: MultipartBody.Part
     ): Response<AttendifyApiResponse<StaffDto>>
 
     @DELETE("api/v1/staff/admin/remove")
-    suspend fun removeStaff(@Body requestBody: RemoveStaffRequest): Response<AttendifyApiResponse<Unit>>
+    suspend fun removeStaff(@Query("id") staffId: Int): Response<AttendifyApiResponse<Unit>>
 
     @DELETE("api/v1/staff/admin/remove-image")
-    suspend fun removeImage(@Body requestBody: RemoveImageRequest): Response<AttendifyApiResponse<StaffDto>>
+    suspend fun removeImage(@Query("id") staffId: Int): Response<AttendifyApiResponse<StaffDto>>
 
     @GET("api/v1/staff/admin/get-teaching-subjects")
     suspend fun getTeachingSubjects(@Query("staffId") staffId: Int): Response<AttendifyApiResponse<List<TeacherTeachesDto>?>>

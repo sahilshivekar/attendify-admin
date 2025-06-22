@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.attendify_admin.common.presentation.PreviewWrapper
 import com.attendify_admin.common.presentation.ScreenPreview
+import com.attendify_admin.common.presentation.UiConstants
 
 @ExperimentalMaterial3Api
 @Composable
@@ -49,7 +50,7 @@ fun AttendifyAlertDialog(
         ) {
             Column(
                 modifier = Modifier
-                    .widthIn(min = 300.dp, max = 400.dp)
+                    .widthIn(min = 300.dp, max = UiConstants.MAX_WIDTH)
                     .clip(shape = MaterialTheme.shapes.medium)
                     .wrapContentHeight()
                     .background(color = MaterialTheme.colorScheme.surface),

@@ -13,9 +13,9 @@ data class StaffDto(
     val middleName: String?,
     val password: String,
     val phoneNumber: String,
-    val refreshToken: Any,
+    val refreshToken: String?,
     val role: String,
-    val staffImagePublicId: Int?,
+    val staffImagePublicId: String?,
     val staffImageUrl: String?,
     val createdAt: String,
     val updatedAt: String

@@ -1,17 +1,19 @@
 package com.attendify_admin.feature_admin_auth.presentation.login
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.attendify_admin.common.data.remote.Resource
-import com.attendify_admin.common.domain.RemoteUtils
+import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarController
+import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarEvent
 import com.attendify_admin.feature_admin_auth.domain.use_case.LoginUseCase
 import com.attendify_admin.feature_admin_auth.domain.use_case.SaveAccessTokenUseCase
 import com.attendify_admin.feature_admin_auth.domain.use_case.SaveRefreshTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,115 +21,97 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val saveAccessTokenUseCase: SaveAccessTokenUseCase,
-    private val saveRefreshTokenUseCase: SaveRefreshTokenUseCase
-) : ViewModel() {
-    var state = MutableStateFlow(LoginState())
-        private set
+    private val saveRefreshTokenUseCase: SaveRefreshTokenUseCase,
+
+    ) : ViewModel() {
+    private val _state = MutableStateFlow(LoginState())
+    val state = _state.asStateFlow()
 
     fun onEvent(event: LoginEvent) {
         when (event) {
             is LoginEvent.EmailOrUsernameChanged -> {
-                state.value = state.value.copy(emailOrUsername = event.email)
+                _state.update { it.copy(emailOrUsername = event.email) }
             }
 
             is LoginEvent.PasswordChanged -> {
-                state.value = state.value.copy(password = event.password)
+                _state.update { it.copy(password = event.password) }
             }
 
             is LoginEvent.PasswordVisibilityChanged -> {
-                state.value = state.value.copy(isPasswordVisible = event.isVisible)
+                _state.update { it.copy(isPasswordVisible = event.isVisible) }
             }
 
             is LoginEvent.LoginClicked -> {
-                login()
-            }
-
-            is LoginEvent.DismissAlertDialog -> {
-                state.value = state.value.copy(isOtherError = null)
+                login(
+                    emailOrUsername = _state.value.emailOrUsername,
+                    password = _state.value.password
+                )
             }
         }
     }
 
-    private fun login() {
-
-        if (state.value.emailOrUsername.isBlank()) {
-            state.value = state.value.copy(
-                emailOrUsernameError = "Enter email or username",
-                passwordError = null
-            )
-            return
-        }
-
-        if (state.value.password.isBlank()) {
-            state.value = state.value.copy(
-                passwordError = "Password cannot be empty",
+    private fun login(emailOrUsername: String, password: String) {
+        _state.update {
+            it.copy(
                 emailOrUsernameError = null,
+                passwordError = null,
             )
+        }
+
+        if (emailOrUsername.isBlank()) {
+            _state.update {
+                it.copy(
+                    emailOrUsernameError = "Enter email or username",
+                )
+            }
             return
         }
 
-        loginUseCase(state.value.emailOrUsername, state.value.password).onEach { result ->
+        if (password.isBlank()) {
+            _state.update {
+                it.copy(
+                    passwordError = "Password cannot be empty",
+                )
+            }
+            return
+        }
+
+        loginUseCase(emailOrUsername, password).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
-                    state.value = state.value.copy(
-                        isEmailOrUsernameEnabled = false,
-                        isPasswordEnabled = false,
-                        isLoading = true,
-                        isLoginButtonEnabled = false,
-                        isForgottenPasswordEnabled = false,
-                        emailOrUsernameError = null,
-                        passwordError = null,
-                        isPasswordVisible = false
-                    )
+                    _state.update {
+                        it.copy(
+                            isLoading = true,
+                            isPasswordVisible = false
+                        )
+                    }
                 }
 
                 is Resource.Success -> {
-                    state.value = state.value.copy(
-                        isLoading = false,
-                        isLoginButtonEnabled = false,
-                        isLoginSuccessful = true,
-                        isForgottenPasswordEnabled = false,
-                        emailOrUsernameError = null,
-                        passwordError = null,
-                    )
                     viewModelScope.launch {
                         result.data?.let {
                             saveAccessTokenUseCase(it.accessToken)
                             saveRefreshTokenUseCase(it.refreshToken)
                         }
                     }
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            isLoginSuccessful = true
+                        )
+                    }
+                    SnackbarController.sendEvent(SnackbarEvent("Logged in successfully."))
 
-                    Log.d("LoginScreenModel", "login Success")
                 }
 
                 is Resource.Error -> {
-                    state.value = state.value.copy(
-                        isLoading = false,
-                        isEmailOrUsernameEnabled = true,
-                        isPasswordEnabled = true,
-                        isLoginButtonEnabled = true,
-                        isForgottenPasswordEnabled = true
-                    )
-
-                    if (
-                        result.message?.contains("email", ignoreCase = true) == true ||
-                        result.message?.contains("username", ignoreCase = true) == true ||
-                        result.message?.contains("credentials", ignoreCase = true) == true
-                    ) {
-                        state.value = state.value.copy(
-                            emailOrUsernameError = result.message,
-                            passwordError = null
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
                         )
-                    } else if (result.message?.contains("password", ignoreCase = true) == true) {
-                        state.value = state.value.copy(
-                            passwordError = result.message,
-                            emailOrUsernameError = null,
-                            isPasswordVisible = true
-                        )
-                    } else if(result.message == RemoteUtils.NETWORK_IO_ERROR_MESSAGE){
-                        state.value = state.value.copy(isOtherError = RemoteUtils.NETWORK_IO_ERROR_MESSAGE)
-                    } else {
-                        state.value = state.value.copy(isOtherError = RemoteUtils.UNKNOWN_NETWORK_ERROR_MESSAGE)
+                    }
+                    result.message?.let { resultMessage ->
+                        SnackbarController.sendEvent(SnackbarEvent(message = resultMessage))
                     }
                 }
             }

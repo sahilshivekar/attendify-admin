@@ -6,10 +6,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -17,19 +22,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.attendify_admin.R
 import com.attendify_admin.common.presentation.PreviewWrapper
-import com.attendify_admin.common.presentation.ScreenPreview
-import com.attendify_admin.common.presentation.components.AttendifyAlertDialog
+import com.attendify_admin.common.presentation.UiConstants
 import com.attendify_admin.common.presentation.components.AttendifyButton
 import com.attendify_admin.common.presentation.components.AttendifyTextButton
 import com.attendify_admin.common.presentation.components.AttendifyTextField
@@ -50,22 +60,17 @@ fun LoginScreen(
         }
     }
 
-    state.isOtherError?.let {
-        AttendifyAlertDialog(
-            dialogText = it,
-            onDismiss = { onEvent(LoginEvent.DismissAlertDialog) },
-        )
-    }
-
-
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .widthIn(max = UiConstants.MAX_WIDTH)
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = CenterHorizontally
     ) {
+        val passwordFocusRequester = remember { FocusRequester() }
         val attendifyLogoPainter =
             rememberAsyncImagePainter(model = R.drawable.attendify_logo_circle_svg)
         val passwordVisibleIconPainter = rememberAsyncImagePainter(
@@ -74,19 +79,39 @@ fun LoginScreen(
                 false -> R.drawable.baseline_visibility_off_24
             }
         )
+
         Image(
-            modifier = Modifier.size(80.dp),
+            modifier = Modifier.padding(top = 36.dp).size(80.dp),
             painter = attendifyLogoPainter,
             contentDescription = null,
         )
-        Spacer(Modifier.height(12.dp))
         Text(
-            text = "Admin Logins",
-            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Medium)
+            text = "Attendify",
+            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Medium),
         )
+        Spacer(Modifier.height(60.dp))
+        Column(
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier.widthIn(max = UiConstants.MAX_WIDTH)
+        ) {
 
-        
-        Spacer(Modifier.height(80.dp))
+            Text(
+                text = "Welcome back!",
+                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Medium),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Start)
+            )
+            Text(
+                text = "Log in to continue",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Start)
+            )
+        }
+
+        Spacer(Modifier.height(10.dp))
         AttendifyTextField(
             value = state.emailOrUsername,
             onValueChange = {
@@ -95,10 +120,15 @@ fun LoginScreen(
             label = "Email or Username",
             enabled = !state.isLoading,
             isError = state.emailOrUsernameError != null,
-            supportingText = state.emailOrUsernameError
+            supportingText = state.emailOrUsernameError,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next
+            ),
+            keyboardActions = KeyboardActions(onNext = { passwordFocusRequester.requestFocus() }),
         )
 
-        Spacer(Modifier.height(8.dp))
+//        Spacer(Modifier.height(8.dp))
         AttendifyTextField(
             value = state.password,
             onValueChange = {
@@ -106,10 +136,18 @@ fun LoginScreen(
             },
             label = "Password",
             visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(onDone = { onEvent(LoginEvent.LoginClicked) }),
             enabled = !state.isLoading,
             isError = state.passwordError != null,
             supportingText = state.passwordError,
+            modifier = Modifier
+                .focusRequester(passwordFocusRequester)
+                .widthIn(max = UiConstants.MAX_WIDTH)
+                .fillMaxWidth(),
             trailingIcon = {
                 val isPasswordVisible = state.isPasswordVisible
 
@@ -127,10 +165,10 @@ fun LoginScreen(
                 }
             },
         )
-        Spacer(Modifier.height(8.dp))
+//        Spacer(Modifier.height(8.dp))
         AttendifyButton(
             onClick = { onEvent(LoginEvent.LoginClicked) },
-            enabled = state.isLoginButtonEnabled,
+            enabled = !state.isLoading,
             isLoading = state.isLoading,
             text = "Log in"
         )
@@ -138,18 +176,17 @@ fun LoginScreen(
 
         Spacer(Modifier.height(16.dp))
         AttendifyTextButton(
-            onClick = { navigateToForgotPasswordScreen() },
-            enabled = state.isForgottenPasswordEnabled
+            onClick = navigateToForgotPasswordScreen,
+            enabled = !state.isLoading
         ) {
             Text("Forgotten Password?")
         }
-        // to give space from bottom so that the text-fields come at center of screen
-        Spacer(Modifier.height(130.dp))
+
     }
 }
 
 
-@ScreenPreview
+@Preview
 @Composable
 fun LoginScreenPreview() {
     PreviewWrapper {

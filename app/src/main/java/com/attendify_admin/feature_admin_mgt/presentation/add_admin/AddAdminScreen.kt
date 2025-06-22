@@ -7,7 +7,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,16 +19,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.attendify_admin.R
-import com.attendify_admin.common.presentation.components.AttendifyAlertDialog
+import com.attendify_admin.common.presentation.PreviewWrapper
+import com.attendify_admin.common.presentation.UiConstants
 import com.attendify_admin.common.presentation.components.AttendifyButton
 import com.attendify_admin.common.presentation.components.AttendifyTextField
 import com.attendify_admin.common.presentation.components.top_bar.AttendifyTopAppBar
@@ -37,20 +48,16 @@ fun AddAdminScreen(
     modifier: Modifier = Modifier,
     state: AddAdminState,
     onEvent: (AddAdminEvent) -> Unit,
-    navigateToAdminDetailsScreen: () -> Unit,
-    onBackIconButtonClick: () -> Unit
+    navigateUp: () -> Unit,
 ) {
 
-    state.alertMessage?.let {
-        AttendifyAlertDialog(
-            dialogText = it,
-            onDismiss = { onEvent(AddAdminEvent.DismissAlertDialog) }
-        )
-    }
+    LaunchedEffect(state.isAdded) {
+        if (state.isAdded) navigateUp()
 
-    if (state.isAdded) {
-        navigateToAdminDetailsScreen()
     }
+    val passwordFocusRequester = remember { FocusRequester() }
+    val confirmPasswordFocusRequester = remember { FocusRequester() }
+    val emailFocusRequester = remember { FocusRequester() }
 
     Scaffold(
         topBar = {
@@ -61,40 +68,52 @@ fun AddAdminScreen(
                     isBackIconButtonVisible = true,
                     isProfileIconButtonVisible = false
                 ),
-                onBackIconButtonClick = onBackIconButtonClick
+                onBackIconButtonClick = navigateUp
             )
         }
     ) { paddingValues ->
         Column(
             modifier = modifier
+                .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.widthIn(max = UiConstants.MAX_WIDTH)
             ) {
 
                 Text(
-                    text = "Add necessary details to add another admin",
-                    modifier = Modifier.fillMaxWidth(),
+                    text = "Fill in necessary details to add another admin",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .widthIn(max = UiConstants.MAX_WIDTH)
+                        .align(Alignment.Start),
                     style = MaterialTheme.typography.bodyLarge
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 AttendifyTextField(
                     value = state.username,
                     onValueChange = { onEvent(AddAdminEvent.UsernameChanged(it)) },
                     isError = state.usernameError != null,
                     supportingText = state.usernameError,
                     label = "Username",
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            emailFocusRequester.requestFocus()
+                        }
+                    ),
                     enabled = !state.isAdding
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
                 AttendifyTextField(
                     value = state.email,
                     onValueChange = { onEvent(AddAdminEvent.EmailChanged(it)) },
@@ -102,12 +121,27 @@ fun AddAdminScreen(
                     supportingText = state.emailError,
                     label = "Email",
                     enabled = !state.isAdding,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            passwordFocusRequester.requestFocus()
+                        }
+                    ),
+                    modifier = Modifier
+                        .widthIn(max = UiConstants.MAX_WIDTH)
+                        .fillMaxWidth()
+                        .focusRequester(emailFocusRequester)
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
                 AttendifyTextField(
                     value = state.password,
+                    modifier = Modifier
+                        .widthIn(max = UiConstants.MAX_WIDTH)
+                        .fillMaxWidth()
+                        .focusRequester(passwordFocusRequester),
                     onValueChange = { updatedPassword ->
                         onEvent(AddAdminEvent.PasswordChanged(updatedPassword))
                     },
@@ -132,12 +166,23 @@ fun AddAdminScreen(
                             )
                         }
                     },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            confirmPasswordFocusRequester.requestFocus()
+                        }
+                    )
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
                 AttendifyTextField(
                     value = state.confirmPassword,
+                    modifier = Modifier
+                        .widthIn(max = UiConstants.MAX_WIDTH)
+                        .fillMaxWidth()
+                        .focusRequester(confirmPasswordFocusRequester),
                     onValueChange = { confirmPassword ->
                         onEvent(AddAdminEvent.ConfirmPasswordChanged(confirmPassword))
                     },
@@ -146,7 +191,13 @@ fun AddAdminScreen(
                     supportingText = state.confirmPasswordError,
                     enabled = !state.isAdding && !state.isAdded,
                     visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { onEvent(AddAdminEvent.AddAdminClicked) }
+                    )
                 )
             }
             AttendifyButton(
@@ -156,5 +207,18 @@ fun AddAdminScreen(
                 text = "Add admin"
             )
         }
+    }
+}
+
+
+@Preview(showSystemUi = true)
+@Composable
+fun AddAdminScreenPreview() {
+    PreviewWrapper {
+        AddAdminScreen(
+            state = AddAdminState(),
+            onEvent = {},
+            navigateUp = {}
+        )
     }
 }

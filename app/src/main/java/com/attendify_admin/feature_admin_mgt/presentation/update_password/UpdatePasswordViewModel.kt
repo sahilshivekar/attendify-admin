@@ -3,101 +3,113 @@ package com.attendify_admin.feature_admin_mgt.presentation.update_password
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.attendify_admin.common.data.remote.Resource
-import com.attendify_admin.common.validation.Validators
+import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarController
+import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarEvent
+import com.attendify_admin.common.validation.ValidatePassword
 import com.attendify_admin.feature_admin_mgt.domain.use_case.UpdateAdminPasswordUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
 class UpdatePasswordViewModel @Inject constructor(
-    private val updateAdminPasswordUseCase: UpdateAdminPasswordUseCase
+    private val updateAdminPasswordUseCase: UpdateAdminPasswordUseCase,
+    private val validatePassword: ValidatePassword,
 ) : ViewModel() {
 
-    var state = MutableStateFlow(UpdatePasswordState())
-        private set
+    private val _state = MutableStateFlow(UpdatePasswordState())
+    val state = _state.asStateFlow()
 
     fun onEvent(event: UpdatePasswordEvent) {
         when (event) {
             is UpdatePasswordEvent.ConfirmPasswordChanged -> {
-                state.value = state.value.copy(confirmPassword = event.confirmPassword)
+                _state.update { it.copy(confirmPassword = event.confirmPassword) }
             }
 
             is UpdatePasswordEvent.PasswordChanged -> {
-                state.value = state.value.copy(password = event.password)
+                _state.update { it.copy(password = event.password) }
             }
 
             is UpdatePasswordEvent.PasswordVisibilityChanged -> {
-                state.value = state.value.copy(isPasswordVisible = event.isVisible)
-            }
-
-            UpdatePasswordEvent.DismissAlertDialog -> {
-                state.value = state.value.copy(alertMessage = null)
+                _state.update { it.copy(isPasswordVisible = event.isVisible) }
             }
 
             UpdatePasswordEvent.UpdatePasswordClicked -> {
                 updatePassword()
             }
+
         }
     }
 
     private fun updatePassword() {
+        val passwordValidationError = validatePassword(password = _state.value.password)
 
-        val passwordValidationError = Validators.validatePassword(password = state.value.password)
 
-
-        if (passwordValidationError != null) {
-            state.value = state.value.copy(
-                passwordError = passwordValidationError,
+        _state.update {
+            it.copy(
+                passwordError = passwordValidationError.errorMessage,
                 isPasswordVisible = true
             )
+        }
+
+        if (!passwordValidationError.successful) {
             return
         }
 
-        if (state.value.password != state.value.confirmPassword) {
-            state.value = state.value.copy(
-                confirmPasswordError = "Password and confirm password are not same",
+        var errorMessage: String? = null
+
+        if (_state.value.password != _state.value.confirmPassword) {
+            errorMessage = "Passwords do not match."
+        }
+
+        _state.update {
+            it.copy(
                 passwordError = null,
-                isPasswordVisible = true
+                isPasswordVisible = errorMessage != null
             )
+        }
+
+        if (_state.value.passwordError != null) {
             return
         }
+
         updateAdminPasswordUseCase(
-            password = state.value.password, confirmPassword = state.value.confirmPassword
+            password = _state.value.password, confirmPassword = _state.value.confirmPassword
         ).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
-                    state.value = state.value.copy(
-                        isUpdating = true,
-                        passwordError = null,
-                        confirmPasswordError = null,
-                        isPasswordVisible = false
-                    )
+                    _state.update {
+                        it.copy(
+                            isUpdating = true,
+                            isPasswordVisible = false
+                        )
+                    }
                 }
 
                 is Resource.Error -> {
-                    state.value = state.value.copy(
-                        passwordError = null,
-                        confirmPasswordError = null,
-                        isUpdating = false,
-                        isPasswordVisible = true
-                    )
+                    _state.update {
+                        it.copy(
+                            isUpdating = false,
+                            isPasswordVisible = true
+                        )
+                    }
                     result.message?.let { resultMessage ->
-                        if (resultMessage.contains("password", ignoreCase = true)) {
-                            state.value = state.value.copy(passwordError = resultMessage)
-                        } else {
-                            state.value = state.value.copy(alertMessage = resultMessage)
-                        }
+                        SnackbarController.sendEvent(SnackbarEvent(resultMessage))
                     }
                 }
 
                 is Resource.Success -> {
-                    state.value = state.value.copy(
-                        isUpdating = false,
-                        isUpdated = true
-                    )
+                    _state.update {
+                        it.copy(
+                            isUpdating = false,
+                            isUpdated = true
+                        )
+                    }
+                    SnackbarController.sendEvent(SnackbarEvent("Password update successfully."))
                 }
             }
         }.launchIn(viewModelScope)

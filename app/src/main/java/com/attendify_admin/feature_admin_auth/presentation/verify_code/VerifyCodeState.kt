@@ -6,5 +6,4 @@ data class VerifyCodeState (
     val isVerified: Boolean = false,
     val isLoading: Boolean = false,
     val email: String = "",
-    val isOtherError: String? = null
 )

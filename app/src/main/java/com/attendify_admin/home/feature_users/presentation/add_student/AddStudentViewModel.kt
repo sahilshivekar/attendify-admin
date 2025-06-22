@@ -2,410 +2,500 @@ package com.attendify_admin.home.feature_users.presentation.add_student
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.attendify_admin.common.data.remote.Resource
-import com.attendify_admin.common.domain.model.Student
+import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarController
+import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarEvent
+import com.attendify_admin.common.utils.DateTimeUtil
+import com.attendify_admin.common.utils.DateTimeUtil.getDateInYYYYMMDDFromDDMMYYYY
 import com.attendify_admin.common.utils.FileUtil
-import com.attendify_admin.common.validation.Validators
+import com.attendify_admin.common.utils.PhoneUtil.getCountryByPhoneCode
+import com.attendify_admin.common.validation.ValidateEmail
 import com.attendify_admin.home.feature_academics.domain.use_case.GetBranchesUseCase
-import com.attendify_admin.home.feature_academics.domain.use_case.GetSchemesUseCase
+import com.attendify_admin.home.feature_users.data.dto.request.UpdateStudentDetailsRequest
 import com.attendify_admin.home.feature_users.domain.use_case.AddStudentUseCase
 import com.attendify_admin.home.feature_users.domain.use_case.GetStudentDetailsByIdUseCase
-import com.attendify_admin.home.feature_users.domain.use_case.RemoveStudentImageUseCase
 import com.attendify_admin.home.feature_users.domain.use_case.UpdateStudentDetailsUseCase
-import com.attendify_admin.home.feature_users.domain.use_case.UpdateStudentImageUseCase
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.AdmissionTypeChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.AdmissionTypeDropDownVisibilityChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.AdmissionYearChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.AdmissionYearDropDownVisibilityChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.BackClicked
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.BranchChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.BranchDropDownVisibilityChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.CloseImageClicked
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.CountryCodeDropDownVisibilityChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.DatePickerVisibilityChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.DobChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.EmailChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.FirstNameChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.GenderChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.GenderDropDownVisibilityChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.LastNameChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.MiddleNameChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.ParentEmailChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.PhoneNumberChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.PhoneNumberCountryCodeChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.PrnChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.SchemeChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.SchemeDropDownVisibilityChanged
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.ShowImageClicked
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.StudentImageUriUpdated
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.SubmitClicked
+import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentEvent.ValidateFields
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.io.File
-import java.time.LocalDate
 import javax.inject.Inject
+
 
 @HiltViewModel
 class AddStudentViewModel @Inject constructor(
+    private val getBranchesUseCase: GetBranchesUseCase,
     private val addStudentUseCase: AddStudentUseCase,
-    getBranchesUseCase: GetBranchesUseCase,
-    getSchemesUseCase: GetSchemesUseCase,
+    private val validateEmail: ValidateEmail,
     private val getStudentDetailsByIdUseCase: GetStudentDetailsByIdUseCase,
-    private val updateStudentImageUseCase: UpdateStudentImageUseCase,
-    private val removeStudentImageUseCase: RemoveStudentImageUseCase,
     private val updateStudentDetailsUseCase: UpdateStudentDetailsUseCase,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    var state = MutableStateFlow(AddStudentState())
-        private set
+    private val _state = MutableStateFlow(AddStudentState())
+    val state = _state.asStateFlow()
 
     init {
-        getBranchesUseCase(searchQuery = null).onEach { result ->
-            when (result) {
-                is Resource.Error -> {
-                    state.value = state.value.copy(dialogText = result.message)
-                }
-
-                is Resource.Loading -> {
-                    // do nothing let it load in the background until the user is filling above details
-                }
-
-                is Resource.Success -> {
-                    state.value = state.value.copy(
-                        branchOptions = result?.data ?: emptyList()
+        getBranches()
+        savedStateHandle.get<Int>("studentId")?.let { studentId ->
+            if (studentId != -1) { // -1 is the default value indicating no studentId was passed
+                _state.update {
+                    it.copy(
+                        studentId = studentId,
                     )
+                }
+                getStudent(studentId)
+            }
+        }
+    }
+
+
+    private fun getBranches() {
+        getBranchesUseCase(null).onEach { result ->
+            when (result) {
+                is Resource.Error -> viewModelScope.launch {
+                    SnackbarController.sendEvent(
+                        SnackbarEvent(message = result.message ?: "Error fetching branches")
+                    )
+                }
+
+                is Resource.Loading -> Unit
+                is Resource.Success -> _state.update {
+                    it.copy(branchOptions = result.data?.toImmutableList())
                 }
             }
         }.launchIn(viewModelScope)
-        getSchemesUseCase(searchQuery = "").onEach { result ->
-            when (result) {
-                is Resource.Error -> {
-                    state.value = state.value.copy(dialogText = result.message)
-                }
-
-                is Resource.Loading -> {
-                    // do nothing let it load in the background until the user is filling above details
-                }
-
-                is Resource.Success -> {
-                    state.value = state.value.copy(
-                        schemeOptions = result.data ?: emptyList()
-                    )
-                }
-            }
-
-        }.launchIn(viewModelScope)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun setStudentId(studentId: Int) {
-        state.value = state.value.copy(
-            studentId = studentId
-        )
-        getStudent(studentId)
-    }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun getStudent(studentId: Int) {
-        var student: Student? = null
-        getStudentDetailsByIdUseCase(studentId = studentId).onEach { result ->
+        getStudentDetailsByIdUseCase(studentId).onEach { result ->
             when (result) {
-                is Resource.Error -> {
-                    state.value = state.value.copy(
-                        dialogText = result.message
+                is Resource.Error -> viewModelScope.launch {
+                    SnackbarController.sendEvent(
+                        SnackbarEvent(message = result.message ?: "Error fetching student details")
                     )
                 }
 
-                is Resource.Loading -> {
-                    state.value = state.value.copy(
-                        isLoadingInitialStudentDetails = true
-                    )
-                }
-
+                is Resource.Loading -> _state.update { it.copy(isLoadingInitialStudentDetails = true) }
                 is Resource.Success -> {
-                    state.value = state.value.copy(
-                        isLoadingInitialStudentDetails = false,
-                    )
-                    student = result.data
-                    var dob: LocalDate? = null
-
-                    student?.dob?.let {
-                        val year = student?.dob?.substring(0, 4)?.toInt()
-                        val month = student?.dob?.substring(5, 7)?.toInt()
-                        val day = student?.dob?.substring(8, 10)?.toInt()
-                        if (year != null && month != null && day != null) {
-                            dob = LocalDate.of(
-                                year,
-                                month,
-                                day
-                            )
-                        }
+                    val student = result.data!!
+                    val phone = student.phoneNumber.reversed().substring(0, 10).reversed()
+                    val countryCode = student.phoneNumber.replace(phone, "")
+                    _state.update {
+                        it.copy(
+                            isLoadingInitialStudentDetails = false,
+                            prn = student.prn,
+                            firstName = student.firstName,
+                            middleName = student.middleName ?: "",
+                            lastName = student.lastName,
+                            email = student.email,
+                            phoneNumber = phone,
+                            gender = student.gender,
+                            dob = student.dob?.let { DateTimeUtil.getDateInDDMMYYYYFromYYYYMMDD(it) }
+                                ?: "",
+                            admissionType = AdmissionType.getTypeFromString(student.admissionType.toString()),
+                            admissionYear = student.admissionYear.toString(),
+                            selectedBranch = student.branch,
+                            selectedScheme = student.scheme,
+                            parentEmail = student.parentEmail ?: "",
+                            country = getCountryByPhoneCode(countryCode)
+                        )
                     }
-
-                    //image, branch and scheme remaining
-                    state.value = state.value.copy(
-                        prn = student?.prn.toString(),
-                        firstName = student?.firstName.toString(),
-                        middleName = student?.middleName.toString(),
-                        lastName = student?.lastName.toString(),
-                        email = student?.email.toString(),
-                        phoneNumber = student?.phoneNumber.toString(),
-                        gender = student?.gender.toString(),
-                        dob = dob,
-                        admissionType = student?.admissionType.toString(),
-//                        academicStatus = student?.academicStatus.toString(),
-                        admissionYear = student?.admissionYear.toString(),
-                        selectedBranch = student?.branch,
-                        selectedScheme = student?.scheme,
-                    )
                 }
-
             }
         }.launchIn(viewModelScope)
     }
-
 
     @SuppressLint("NewApi")
     fun onEvent(event: AddStudentEvent) {
         when (event) {
-            is AddStudentEvent.PrnChanged -> {
-                state.value = state.value.copy(prn = event.newPrn, isPRNError = null)
+            CloseImageClicked -> _state.update { it.copy(isImageVisible = false) }
+            ShowImageClicked -> _state.update { it.copy(isImageVisible = true) }
+            is PrnChanged -> _state.update { it.copy(prn = event.newPrn, isPRNError = null) }
+            is FirstNameChanged -> _state.update {
+                it.copy(
+                    firstName = event.newFirstName,
+                    isFirstNameError = null
+                )
             }
 
-            is AddStudentEvent.FirstNameChanged -> {
-                state.value =
-                    state.value.copy(firstName = event.newFirstName, isFirstNameError = null)
+            is MiddleNameChanged -> _state.update {
+                it.copy(
+                    middleName = event.newMiddleName,
+                    isMiddleNameError = null
+                )
             }
 
-            is AddStudentEvent.MiddleNameChanged -> {
-                state.value =
-                    state.value.copy(middleName = event.newMiddleName, isMiddleNameError = null)
+            is LastNameChanged -> _state.update {
+                it.copy(
+                    lastName = event.newLastName,
+                    isLastNameError = null
+                )
             }
 
-            is AddStudentEvent.LastNameChanged -> {
-                state.value = state.value.copy(lastName = event.newLastName, isLastNameError = null)
+            is EmailChanged -> _state.update {
+                it.copy(
+                    email = event.newEmail,
+                    isEmailError = null
+                )
             }
 
-            is AddStudentEvent.EmailChanged -> {
-                state.value = state.value.copy(email = event.newEmail, isEmailError = null)
+            is PhoneNumberChanged -> _state.update {
+                it.copy(
+                    phoneNumber = event.newPhoneNumber,
+                    isPhoneNumberError = null
+                )
             }
 
-            is AddStudentEvent.PhoneNumberChanged -> {
-                state.value =
-                    state.value.copy(phoneNumber = event.newPhoneNumber, isPhoneNumberError = null)
+            is GenderChanged -> _state.update {
+                it.copy(
+                    gender = event.newGender,
+                    isGenderError = null
+                )
             }
 
-            is AddStudentEvent.GenderChanged -> {
-                state.value = state.value.copy(gender = event.newGender, isGenderError = null)
+            is DobChanged -> _state.update {
+                it.copy(
+                    dob = DateTimeUtil.getDateInDDMMYYYYFromYYYYMMDD(event.newDob),
+                    isDobError = null
+                )
             }
 
-            is AddStudentEvent.DobChanged -> {
-                state.value = state.value.copy(dob = event.newDob, isDobError = null)
-            }
-
-            is AddStudentEvent.AdmissionYearChanged -> {
-                state.value = state.value.copy(
+            is AdmissionYearChanged -> _state.update {
+                it.copy(
                     admissionYear = event.newAdmissionYear,
                     isAdmissionYearError = null
                 )
             }
 
-            is AddStudentEvent.AdmissionTypeChanged -> {
-                state.value = state.value.copy(
-                    admissionType = event.newAdmissionType,
+            is AdmissionTypeChanged -> _state.update {
+                it.copy(
+                    admissionType = AdmissionType.getTypeFromString(event.newAdmissionType),
                     isAdmissionTypeError = null
                 )
             }
 
-            is AddStudentEvent.BranchChanged -> {
-                state.value =
-                    state.value.copy(selectedBranch = event.newBranch, isBranchError = null)
+            is BranchChanged -> _state.update {
+                it.copy(
+                    selectedBranch = event.newBranch,
+                    isBranchError = null
+                )
             }
 
-            is AddStudentEvent.SchemeChanged -> {
-                state.value =
-                    state.value.copy(selectedScheme = event.newScheme, isSchemeError = null)
+            is SchemeChanged -> _state.update {
+                it.copy(
+                    selectedScheme = event.newScheme,
+                    isSchemeError = null
+                )
             }
 
-            is AddStudentEvent.StudentImageChanged -> {
-                state.value = state.value.copy(studentImageFile = event.newStudentImage)
+            is DatePickerVisibilityChanged -> _state.update { it.copy(isDatePickerVisible = !it.isDatePickerVisible) }
+
+
+            is GenderDropDownVisibilityChanged -> _state.update { it.copy(isGenderDropDownOpen = event.newVisibility) }
+            is PhoneNumberCountryCodeChanged -> _state.update {
+                it.copy(
+                    country = event.country,
+                    isCountryError = null
+                )
             }
 
-            is AddStudentEvent.DatePickerVisibilityChanged -> {
-                state.value =
-                    state.value.copy(isDatePickerVisible = !state.value.isDatePickerVisible)
+            is CountryCodeDropDownVisibilityChanged -> _state.update {
+                it.copy(
+                    isCountryCodeDropDownOpen = event.newVisibility
+                )
             }
 
-            is AddStudentEvent.DismissAlertDialog -> {
-                state.value = state.value.copy(dialogText = null)
+            is AdmissionYearDropDownVisibilityChanged -> _state.update {
+                it.copy(
+                    isAdmissionYearDropDownOpen = event.newVisibility
+                )
             }
 
-            is AddStudentEvent.ResetClicked -> {
-                state.value = AddStudentState()
+            is AdmissionTypeDropDownVisibilityChanged -> _state.update {
+                it.copy(
+                    isAdmissionTypeDropDownOpen = event.newVisibility
+                )
             }
 
+            is BranchDropDownVisibilityChanged -> _state.update { it.copy(isBranchDropDownOpen = event.newVisibility) }
+            is SchemeDropDownVisibilityChanged -> _state.update { it.copy(isSchemeDropDownOpen = event.newVisibility) }
 
-            is AddStudentEvent.GenderDropDownVisibilityChanged -> {
-                state.value = state.value.copy(isGenderDropDownOpen = event.newVisibility)
-            }
-
-            is AddStudentEvent.PhoneNumberCountryCodeChanged -> {
-                state.value =
-                    state.value.copy(phoneNumberCountryCode = event.newPhoneNumberCountryCode)
-            }
-
-            is AddStudentEvent.CountryCodeDropDownVisibilityChanged -> {
-                state.value = state.value.copy(isCountryCodeDropDownOpen = event.newVisibility)
-            }
-
-            is AddStudentEvent.AdmissionYearDropDownVisibilityChanged -> {
-                state.value = state.value.copy(isAdmissionYearDropDownOpen = event.newVisibility)
-            }
-
-            is AddStudentEvent.AdmissionTypeDropDownVisibilityChanged -> {
-                state.value = state.value.copy(isAdmissionTypeDropDownOpen = event.newVisibility)
-            }
-
-            is AddStudentEvent.BranchDropDownVisibilityChanged -> {
-                state.value = state.value.copy(isBranchDropDownOpen = event.newVisibility)
-            }
-
-            is AddStudentEvent.SchemeDropDownVisibilityChanged -> {
-                state.value = state.value.copy(isSchemeDropDownOpen = event.newVisibility)
-            }
-
-            is AddStudentEvent.StudentImageUriUpdated -> {
+            is StudentImageUriUpdated -> {
                 if (event.updatedUri == null) {
-                    viewModelScope.launch {
-                        state.value.studentImageFile?.delete()
-                    }
-                    state.value = state.value.copy(
-                        studentImageFile = null,
-                        studentImageFileName = null,
-                        studentImageUri = null
-                    )
+                    _state.update { it.copy(studentImageFileName = null, studentImageUri = null) }
                 } else {
-                    state.value = state.value.copy(isStudentFileUploading = true)
                     viewModelScope.launch {
-                        val file: File? = FileUtil.getFileFromUri(
-                            context,
-                            event.updatedUri
-                        )
-                        val fileName = FileUtil.getFileNameFromUri(
-                            context,
-                            event.updatedUri
-                        )
-                        state.value = state.value.copy(
-                            studentImageFile = file,
-                            studentImageFileName = fileName,
-                            studentImageUri = event.updatedUri,
-                            isStudentFileUploading = false
-                        )
+                        val fileName = FileUtil.getFileNameFromUri(context, event.updatedUri)
+                        _state.update {
+                            it.copy(
+                                studentImageFileName = fileName,
+                                studentImageUri = event.updatedUri,
+                            )
+                        }
                     }
                 }
             }
 
-
-            is AddStudentEvent.SubmitClicked -> {
-                addStudent()
+            is SubmitClicked -> {
+                if (state.value.studentId == null) addStudent()
+                else updateStudent()
             }
 
+            ValidateFields -> {
+                when (state.value.currStep) {
+                    AddStudentSteps.PERSONAL_DETAILS -> {
+                        if (isStudentPersonalDetailsValid()) {
+                            _state.update { it.copy(currStep = AddStudentSteps.CONTACT_DETAILS) }
+                        }
+                    }
+
+                    AddStudentSteps.CONTACT_DETAILS -> {
+                        if (isStudentContactDetailsValid()) {
+                            _state.update { it.copy(currStep = AddStudentSteps.ACADEMIC_DETAILS) }
+                        }
+                    }
+
+                    AddStudentSteps.ACADEMIC_DETAILS -> {
+                        if (isStudentAcademicDetailsValid()) {
+                            if (state.value.studentId == null) addStudent()
+                            else updateStudent()
+                        }
+                    }
+                }
+            }
+
+            BackClicked -> {
+                _state.update {
+                    it.copy(
+                        currStep = if (it.currStep == AddStudentSteps.CONTACT_DETAILS)
+                            AddStudentSteps.PERSONAL_DETAILS else AddStudentSteps.CONTACT_DETAILS
+                    )
+                }
+            }
+
+            is ParentEmailChanged -> _state.update {
+                it.copy(
+                    parentEmail = event.newEmail,
+                    isParentEmailError = null
+                )
+            }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun addStudent() {
-        if (isStudentDataValid()) {
-            Log.d("in if", "valid hai")
+        if (isStudentPersonalDetailsValid() && isStudentContactDetailsValid() && isStudentAcademicDetailsValid()) {
+            val dob = state.value.dob
+            val studentImageUri = state.value.studentImageUri
             addStudentUseCase(
                 prn = state.value.prn,
                 firstName = state.value.firstName,
                 middleName = state.value.middleName,
                 lastName = state.value.lastName,
                 email = state.value.email,
-                phoneNumber = state.value.phoneNumber,
+                phoneNumber = state.value.country!!.phoneCode + state.value.phoneNumber,
                 gender = state.value.gender,
-                dob = state.value.dob?.toString(),
+                dob = if (dob == null) null else getDateInYYYYMMDDFromDDMMYYYY(dob),
                 schemeId = state.value.selectedScheme!!.id,
                 admissionYear = state.value.admissionYear,
-                admissionType = state.value.admissionType,
+                admissionType = state.value.admissionType.displayName,
                 branchId = state.value.selectedBranch!!.id,
-                studentImageFile = state.value.studentImageFile,
+                studentImageFile = studentImageUri?.let { FileUtil.getFileFromUri(context, it) },
+                parentEmail = state.value.parentEmail
             ).onEach {
                 when (it) {
                     is Resource.Error -> {
-                        state.value = state.value.copy(
-                            dialogText = it.message,
-                            isSubmitting = false
-                        )
+                        _state.update { s -> s.copy(isSubmitting = false) }
+                        viewModelScope.launch {
+                            SnackbarController.sendEvent(
+                                SnackbarEvent(
+                                    message = it.message ?: "Failed to add student"
+                                )
+                            )
+                        }
                     }
 
-                    is Resource.Loading -> {
-                        state.value = state.value.copy(
-                            isSubmitting = true
-                        )
-                    }
-
+                    is Resource.Loading -> _state.update { s -> s.copy(isSubmitting = true) }
                     is Resource.Success -> {
-                        state.value = state.value.copy(
-                            isSubmitting = false,
-                            isSubmitted = true,
-                            dialogText = "Student added successfully"
-                        )
+                        _state.update { s ->
+                            s.copy(
+                                isSubmitting = false,
+                                isSubmitted = true
+                            )
+                        }
+                        viewModelScope.launch { SnackbarController.sendEvent(SnackbarEvent(message = "Student added successfully")) }
                     }
                 }
             }.launchIn(viewModelScope)
         }
     }
 
-    private fun isStudentDataValid(): Boolean {
-        return when {
+    private fun updateStudent() {
+        if (isStudentPersonalDetailsValid() && isStudentContactDetailsValid() && isStudentAcademicDetailsValid()) {
+            val dob = state.value.dob
+            val requestBody = UpdateStudentDetailsRequest(
+                prn = state.value.prn,
+                firstName = state.value.firstName,
+                middleName = state.value.middleName,
+                lastName = state.value.lastName,
+                email = state.value.email,
+                phoneNumber = state.value.country!!.phoneCode + state.value.phoneNumber,
+                gender = state.value.gender,
+                dob = if (dob == null) null else getDateInYYYYMMDDFromDDMMYYYY(dob),
+                schemeId = state.value.selectedScheme!!.id,
+                admissionYear = state.value.admissionYear,
+                admissionType = state.value.admissionType.displayName,
+                branchId = state.value.selectedBranch!!.id,
+                parentEmail = state.value.parentEmail,
+                id = state.value.studentId!!
+            )
+            updateStudentDetailsUseCase(requestBody).onEach {
+                when (it) {
+                    is Resource.Error -> {
+                        _state.update { s -> s.copy(isSubmitting = false) }
+                        viewModelScope.launch {
+                            SnackbarController.sendEvent(
+                                SnackbarEvent(
+                                    message = it.message ?: "Failed to update student"
+                                )
+                            )
+                        }
+                    }
 
+                    is Resource.Loading -> _state.update { s -> s.copy(isSubmitting = true) }
+                    is Resource.Success -> {
+                        _state.update { s ->
+                            s.copy(
+                                isSubmitting = false,
+                                isSubmitted = true
+                            )
+                        }
+                        viewModelScope.launch { SnackbarController.sendEvent(SnackbarEvent(message = "Student updated successfully")) }
+                    }
+                }
+            }.launchIn(viewModelScope)
+        }
+    }
+
+    private fun isStudentPersonalDetailsValid(): Boolean {
+        val isValid = when {
             state.value.firstName.isBlank() -> {
-                state.value = state.value.copy(isFirstNameError = "First name cannot be empty")
+                _state.update { it.copy(isFirstNameError = "First name is required") }
                 false
             }
 
             state.value.lastName.isBlank() -> {
-                state.value = state.value.copy(isLastNameError = "Last name cannot be empty")
-                false
-            }
-
-            state.value.prn.isBlank() -> {
-                state.value = state.value.copy(isPRNError = "PRN cannot be empty")
-                false
-            }
-
-            state.value.email.isBlank() -> {
-                state.value = state.value.copy(isEmailError = "Email cannot be empty")
-                false
-            }
-
-            state.value.phoneNumber.isBlank() -> {
-                state.value = state.value.copy(isPhoneNumberError = "Phone number cannot be empty")
+                _state.update { it.copy(isLastNameError = "Last name is required") }
                 false
             }
 
             state.value.gender.isBlank() -> {
-                state.value = state.value.copy(isGenderError = "Gender cannot be empty")
-                false
-            }
-
-            state.value.admissionYear.isBlank() -> {
-                state.value =
-                    state.value.copy(isAdmissionYearError = "Admission year cannot be empty")
-                false
-            }
-
-            state.value.admissionType.isBlank() -> {
-                state.value =
-                    state.value.copy(isAdmissionTypeError = "Admission type cannot be empty")
-                false
-            }
-
-            state.value.selectedBranch == null -> {
-                state.value = state.value.copy(isBranchError = "Branch cannot be empty")
-                false
-            }
-
-            state.value.selectedScheme == null -> {
-                state.value = state.value.copy(isSchemeError = "Scheme cannot be empty")
-                false
-            }
-
-            Validators.validateEmail(state.value.email) != null -> {
-                state.value =
-                    state.value.copy(isEmailError = Validators.validateEmail(state.value.email))
+                _state.update { it.copy(isGenderError = "Gender is required") }
                 false
             }
 
             else -> true
         }
-
+        return isValid
     }
 
+    private fun isStudentContactDetailsValid(): Boolean {
+        val emailResult = validateEmail(state.value.email)
+        val parentEmailResult = validateEmail(state.value.parentEmail)
+
+        val isValid = when {
+            state.value.country == null -> {
+                _state.update { it.copy(isCountryError = "Country code is required") }
+                false
+            }
+
+            state.value.phoneNumber.isBlank() -> {
+                _state.update { it.copy(isPhoneNumberError = "Phone number is required") }
+                false
+            }
+
+            state.value.phoneNumber.length < 10 -> { // Basic validation, consider more robust validation
+                _state.update { it.copy(isPhoneNumberError = "Phone number is invalid") }
+                false
+            }
+
+            !emailResult.successful -> {
+                _state.update { it.copy(isEmailError = emailResult.errorMessage) }
+
+                false
+            }
+
+            state.value.parentEmail.isNotBlank() && !parentEmailResult.successful -> {
+                _state.update { it.copy(isParentEmailError = parentEmailResult.errorMessage) }
+                false
+            }
+
+            else -> true
+        }
+        return isValid
+    }
+
+    private fun isStudentAcademicDetailsValid(): Boolean {
+        val isValid = when {
+            state.value.admissionYear.isBlank() -> {
+                _state.update { it.copy(isAdmissionYearError = "Admission year is required") }
+                false
+            }
+
+            state.value.selectedBranch == null -> {
+                _state.update { it.copy(isBranchError = "Branch is required") }
+                false
+            }
+
+            state.value.selectedScheme == null -> {
+                _state.update { it.copy(isSchemeError = "Scheme is required") }
+                false
+            }
+
+            state.value.prn.isBlank() -> {
+                _state.update { it.copy(isPRNError = "PRN is required") }
+                false
+            }
+
+            else -> true
+        }
+        return isValid
+    }
 }

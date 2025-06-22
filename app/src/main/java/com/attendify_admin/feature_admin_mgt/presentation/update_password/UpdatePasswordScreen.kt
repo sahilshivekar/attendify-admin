@@ -7,6 +7,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -14,15 +19,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction.Companion.Done
+import androidx.compose.ui.text.input.ImeAction.Companion.Next
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.attendify_admin.R
-import com.attendify_admin.common.presentation.components.AttendifyAlertDialog
+import com.attendify_admin.common.presentation.PreviewWrapper
+import com.attendify_admin.common.presentation.UiConstants
 import com.attendify_admin.common.presentation.components.AttendifyButton
 import com.attendify_admin.common.presentation.components.AttendifyTextField
 import com.attendify_admin.common.presentation.components.top_bar.AttendifyTopAppBar
@@ -36,21 +49,15 @@ fun UpdatePasswordScreen(
     state: UpdatePasswordState,
     onEvent: (UpdatePasswordEvent) -> Unit,
     navigateToAdminDetailsScreen: () -> Unit,
-    onBackIconButtonClick: () -> Unit
+    onBackIconButtonClick: () -> Unit,
 ) {
-
-
-    state.alertMessage?.let {
-        AttendifyAlertDialog(
-            dialogText = it,
-            onDismiss = { onEvent(UpdatePasswordEvent.DismissAlertDialog) }
-        )
+    LaunchedEffect(state.isUpdated) {
+        if (state.isUpdated) {
+            navigateToAdminDetailsScreen()
+        }
     }
 
-    if (state.isUpdated) {
-        navigateToAdminDetailsScreen()
-    }
-
+    val confirmPasswordFocusRequester = remember { FocusRequester() }
     Scaffold(
         topBar = {
             AttendifyTopAppBar(
@@ -68,18 +75,21 @@ fun UpdatePasswordScreen(
             modifier = modifier
                 .padding(paddingValues)
                 .padding(16.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween
+                .fillMaxSize()
+                .widthIn(max = UiConstants.MAX_WIDTH)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
 
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
 
                 Text(
                     text = "Enter your new password and confirm it.",
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.align(Alignment.Start),
                     style = MaterialTheme.typography.bodyLarge
                 )
 
@@ -94,6 +104,8 @@ fun UpdatePasswordScreen(
                     supportingText = state.passwordError,
                     enabled = !state.isUpdating && !state.isUpdated,
                     visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(imeAction = Next),
+                    keyboardActions = KeyboardActions(onNext = { confirmPasswordFocusRequester.requestFocus() }),
                     trailingIcon = {
                         IconButton(
                             onClick = {
@@ -118,10 +130,14 @@ fun UpdatePasswordScreen(
                         onEvent(UpdatePasswordEvent.ConfirmPasswordChanged(confirmPassword))
                     },
                     label = "Confirm password",
-                    isError = state.confirmPasswordError != null,
-                    supportingText = state.confirmPasswordError,
                     enabled = !state.isUpdating && !state.isUpdated,
                     visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    modifier = Modifier
+                        .widthIn(max = UiConstants.MAX_WIDTH)
+                        .fillMaxWidth()
+                        .focusRequester(confirmPasswordFocusRequester),
+                    keyboardOptions = KeyboardOptions(imeAction = Done),
+                    keyboardActions = KeyboardActions(onDone = { onEvent(UpdatePasswordEvent.UpdatePasswordClicked) })
                 )
             }
 
@@ -134,3 +150,19 @@ fun UpdatePasswordScreen(
         }
     }
 }
+
+@PreviewScreenSizes
+@Composable
+fun UpdatePasswordScreenPreview() {
+    PreviewWrapper {
+        UpdatePasswordScreen(
+            state = UpdatePasswordState(),
+            onEvent = {},
+            navigateToAdminDetailsScreen = {},
+            onBackIconButtonClick = {}
+        )
+    }
+}
+
+
+

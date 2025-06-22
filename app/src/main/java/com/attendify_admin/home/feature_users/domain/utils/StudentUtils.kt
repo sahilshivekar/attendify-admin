@@ -1,4 +1,4 @@
-package com.attendify_admin.home.feature_users.utils
+package com.attendify_admin.home.feature_users.domain.utils
 
 object StudentUtils {
     fun getCurrentYearFromSem(semesterNumber: Int): String {

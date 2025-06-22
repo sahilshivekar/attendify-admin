@@ -2,7 +2,6 @@ package com.attendify_admin.home.feature_users.domain.use_case
 
 import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.domain.RemoteUtils
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStaffRequest
 import com.attendify_admin.home.feature_users.domain.repository.StaffRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -12,11 +11,11 @@ import javax.inject.Inject
 class RemoveStaffUseCase @Inject constructor(
     private val staffRepository: StaffRepository
 ) {
-    operator fun invoke(requestBody: RemoveStaffRequest): Flow<Resource<Unit?>> = flow {
+    operator fun invoke(staffId: Int): Flow<Resource<Unit?>> = flow {
         emit(Resource.Loading())
 
         val response = runCatching {
-            staffRepository.removeStaff(requestBody)
+            staffRepository.removeStaff(staffId)
         }
 
         response.onSuccess { response ->

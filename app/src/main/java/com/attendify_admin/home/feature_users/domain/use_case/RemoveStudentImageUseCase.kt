@@ -1,10 +1,10 @@
 package com.attendify_admin.home.feature_users.domain.use_case
 
+import android.util.Log
 import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.dto.response.toStudent
 import com.attendify_admin.common.domain.RemoteUtils
 import com.attendify_admin.common.domain.model.Student
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStudentImageRequest
 import com.attendify_admin.home.feature_users.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -14,11 +14,11 @@ import javax.inject.Inject
 class RemoveStudentImageUseCase @Inject constructor(
     private val studentRepository: StudentRepository
 ) {
-    operator fun invoke(requestBody: RemoveStudentImageRequest): Flow<Resource<Student?>> = flow {
+    operator fun invoke(studentId: Int): Flow<Resource<Student?>> = flow {
         emit(Resource.Loading())
 
         val response = runCatching {
-            studentRepository.removeStudentImage(requestBody)
+            studentRepository.removeStudentImage(studentId)
         }
 
         response.onSuccess { response ->
@@ -31,6 +31,7 @@ class RemoveStudentImageUseCase @Inject constructor(
         }
 
         response.onFailure { exception ->
+            Log.d("failure", exception.toString())
             when (exception) {
                 is IOException -> emit(Resource.Error(message = RemoteUtils.NETWORK_IO_ERROR_MESSAGE))
                 else -> emit(Resource.Error(message = RemoteUtils.UNKNOWN_NETWORK_ERROR_MESSAGE))

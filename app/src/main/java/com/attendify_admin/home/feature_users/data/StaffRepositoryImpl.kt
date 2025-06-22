@@ -7,8 +7,6 @@ import com.attendify_admin.common.data.remote.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.StaffDto
 import com.attendify_admin.common.data.remote.dto.response.TeacherTeachesDto
 import com.attendify_admin.home.feature_users.data.dto.request.AddTeachingSubjectRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveImageRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStaffRequest
 import com.attendify_admin.home.feature_users.data.dto.request.UpdateStaffDetailsRequest
 import com.attendify_admin.home.feature_users.data.dto.request.UpdateStaffPasswordRequest
 import com.attendify_admin.home.feature_users.domain.repository.StaffRepository
@@ -109,12 +107,12 @@ class StaffRepositoryImpl(
         )
     }
 
-    override suspend fun removeStaff(requestBody: RemoveStaffRequest): Response<AttendifyApiResponse<Unit>> {
-        return staffApi.removeStaff(requestBody)
+    override suspend fun removeStaff(staffId: Int): Response<AttendifyApiResponse<Unit>> {
+        return staffApi.removeStaff(staffId)
     }
 
-    override suspend fun removeImage(requestBody: RemoveImageRequest): Response<AttendifyApiResponse<StaffDto>> {
-        return staffApi.removeImage(requestBody)
+    override suspend fun removeImage(staffId: Int): Response<AttendifyApiResponse<StaffDto>> {
+        return staffApi.removeImage(staffId)
     }
 
     override suspend fun getTeachingSubjects(staffId: Int): Response<AttendifyApiResponse<List<TeacherTeachesDto>?>> {

@@ -1,6 +1,7 @@
 package com.attendify_admin.home.feature_users.navigation
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -9,9 +10,11 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.attendify_admin.home.feature_users.presentation.add_staff.AddStaffScreen
 import com.attendify_admin.home.feature_users.presentation.add_staff.AddStaffViewModel
 import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentScreen
@@ -30,6 +33,8 @@ import com.attendify_admin.home.feature_users.presentation.search_staff.SearchSt
 import com.attendify_admin.home.feature_users.presentation.search_staff.SearchStaffViewModel
 import com.attendify_admin.home.feature_users.presentation.search_student.SearchStudentScreen
 import com.attendify_admin.home.feature_users.presentation.search_student.SearchStudentViewModel
+import com.attendify_admin.home.feature_users.presentation.staff_details.StaffDetailsScreen
+import com.attendify_admin.home.feature_users.presentation.staff_details.StaffDetailsViewModel
 import com.attendify_admin.home.feature_users.presentation.student_details.StudentDetailsScreen
 import com.attendify_admin.home.feature_users.presentation.student_details.StudentDetailsViewModel
 import com.attendify_admin.home.feature_users.presentation.unassign_subject_to_teacher.UnassignSubjectTeacherScreen
@@ -50,7 +55,8 @@ fun UsersNavHost() {
                 fadeIn() + slideInHorizontally { -it / 2 }
             },
             exitTransition = {
-                val previousDestinationRoute = navController.previousBackStackEntry?.destination?.route
+                val previousDestinationRoute =
+                    navController.previousBackStackEntry?.destination?.route
                 // following logic will work bcz we are popping the entire back stack on tab switch
                 if (previousDestinationRoute == UsersDestination.UsersDashboard.route) {
                     fadeOut() + slideOutHorizontally { -it / 2 }
@@ -100,12 +106,51 @@ fun UsersNavHost() {
         }
 
         composable(
-            route = UsersDestination.AddStudent.route
+            route = UsersDestination.AddStudent.route,
+            enterTransition = {
+                fadeIn() + slideInHorizontally { it / 2 }
+            },
+            exitTransition = {
+                fadeOut() + slideOutHorizontally { -it / 2 }
+            },
+            popEnterTransition = {
+                fadeIn() + slideInHorizontally { -it / 2 }
+            },
+            popExitTransition = {
+                fadeOut() + slideOutHorizontally { it / 2 }
+            }
         ) {
             val viewModel = hiltViewModel<AddStudentViewModel>()
-            val studentId = navController.currentBackStackEntry?.arguments?.getString("studentId")
-                ?.toIntOrNull()
-            studentId?.let { viewModel.setStudentId(studentId) }
+            AddStudentScreen(
+                onEvent = viewModel::onEvent,
+                state = viewModel.state.collectAsStateWithLifecycle().value,
+                onAddStudentSuccess = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        composable(
+            route = UsersDestination.AddStudent.route + "?studentId={studentId}",
+            arguments = listOf(
+                navArgument("studentId") {
+                    type = NavType.IntType
+                }
+            ),
+            enterTransition = {
+                fadeIn() + slideInHorizontally { it / 2 }
+            },
+            exitTransition = {
+                fadeOut() + slideOutHorizontally { -it / 2 }
+            },
+            popEnterTransition = {
+                fadeIn() + slideInHorizontally { -it / 2 }
+            },
+            popExitTransition = {
+                fadeOut() + slideOutHorizontally { it / 2 }
+            }
+        ) {
+            val viewModel = hiltViewModel<AddStudentViewModel>()
             AddStudentScreen(
                 onEvent = viewModel::onEvent,
                 state = viewModel.state.collectAsStateWithLifecycle().value,
@@ -130,16 +175,16 @@ fun UsersNavHost() {
                 fadeOut() + slideOutHorizontally { it / 2 }
             }
         ) {
+
             val viewModel = hiltViewModel<SearchStudentViewModel>()
+            val state = viewModel.state.collectAsStateWithLifecycle().value
             SearchStudentScreen(
                 onEvent = viewModel::onEvent,
-                state = viewModel.state.collectAsStateWithLifecycle().value,
+                state = state,
                 onStudentCardClick = { studentId ->
+
                     navController.navigate(
-                        UsersDestination.StudentDetails.route.replace(
-                            "{studentId}",
-                            studentId.toString()
-                        )
+                        UsersDestination.StudentDetails.route + "?studentId=$studentId"
                     )
                 },
             )
@@ -171,6 +216,71 @@ fun UsersNavHost() {
         }
 
         composable(
+            route = UsersDestination.AddStaff.route + "?staffId={staffId}",
+            arguments = listOf(
+                navArgument("staffId") {
+                    type = NavType.IntType
+                }
+            ),
+            enterTransition = {
+                fadeIn() + slideInHorizontally { it / 2 }
+            },
+            exitTransition = {
+                fadeOut() + slideOutHorizontally { -it / 2 }
+            },
+            popEnterTransition = {
+                fadeIn() + slideInHorizontally { -it / 2 }
+            },
+            popExitTransition = {
+                fadeOut() + slideOutHorizontally { it / 2 }
+            }
+        ) {
+            val viewModel = hiltViewModel<AddStaffViewModel>()
+            AddStaffScreen(
+                onEvent = viewModel::onEvent,
+                state = viewModel.state.collectAsStateWithLifecycle().value,
+                onAddStaffSuccess = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        composable(
+            route = UsersDestination.StaffDetails.route + "?staffId={staffId}",
+            arguments = listOf(
+                navArgument("staffId") {
+                    type = NavType.IntType
+                }
+            ),
+            enterTransition = {
+                fadeIn() + slideInHorizontally { it / 2 }
+            },
+            exitTransition = {
+                fadeOut() + slideOutHorizontally { -it / 2 }
+            },
+            popEnterTransition = {
+                fadeIn() + slideInHorizontally { -it / 2 }
+            },
+            popExitTransition = {
+                fadeOut() + slideOutHorizontally { it / 2 }
+            }
+        ) {
+            Log.d("navgraph", "staff details before viewmodel created")
+            val viewModel = hiltViewModel<StaffDetailsViewModel>()
+            val state = viewModel.state.collectAsStateWithLifecycle().value
+            StaffDetailsScreen(
+                onEvent = viewModel::onEvent,
+                state = state,
+                onEditStaffDetails = {
+                    navController.navigate(route = UsersDestination.AddStaff.route + "?staffId=${state.staff?.id}")
+                },
+                navigateUp = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        composable(
             route = UsersDestination.SearchStaff.route,
             enterTransition = {
                 fadeIn() + slideInHorizontally { it / 2 }
@@ -189,6 +299,14 @@ fun UsersNavHost() {
             SearchStaffScreen(
                 onEvent = viewModel::onEvent,
                 state = viewModel.state.collectAsStateWithLifecycle().value,
+                onStaffCardClick = { staffId ->
+                    Log.d("navgraph", "called navigate to staffdetails id: $staffId")
+                    navController.navigate(
+                        UsersDestination.StaffDetails.route + "?staffId=$staffId"
+                    )
+                    Log.d("navgraph", "after calling navigate id: $staffId")
+
+                }
             )
         }
 
@@ -369,7 +487,12 @@ fun UsersNavHost() {
         }
 
         composable(
-            route = UsersDestination.StudentDetails.route,
+            route = UsersDestination.StudentDetails.route + "?studentId={studentId}",
+            arguments = listOf(
+                navArgument("studentId") {
+                    type = NavType.IntType
+                }
+            ),
             enterTransition = {
                 fadeIn() + slideInHorizontally { it / 2 }
             },
@@ -384,19 +507,17 @@ fun UsersNavHost() {
             }
         ) {
             val viewModel = hiltViewModel<StudentDetailsViewModel>()
-            val studentId = navController.currentBackStackEntry?.arguments?.getString("studentId")
-                ?.toIntOrNull()
-            studentId?.let { viewModel.setStudentIdAndGetStudent(studentId) }
+            val state = viewModel.state.collectAsStateWithLifecycle().value
             StudentDetailsScreen(
-                state = viewModel.state.collectAsStateWithLifecycle().value,
+                state = state,
                 onEvent = viewModel::onEvent,
                 onEditStudentDetails = {
                     navController.navigate(
-                        UsersDestination.AddStudent.route.replace(
-                            "{studentId}",
-                            studentId.toString()
-                        )
+                        UsersDestination.AddStudent.route + "?studentId=${state.studentId}"
                     )
+                },
+                navigateUp = {
+                    navController.navigateUp()
                 }
             )
 

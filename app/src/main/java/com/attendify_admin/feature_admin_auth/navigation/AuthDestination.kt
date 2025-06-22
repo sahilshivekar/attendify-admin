@@ -8,7 +8,7 @@ sealed class AuthDestination(
 
     data object ForgotPasswordScreen : AuthDestination("forgot_password_screen")
 
-    data object VerifyCodeScreen : AuthDestination("verify_code_screen/{email}")
+    data object VerifyCodeScreen : AuthDestination("verify_code_screen")
 
 }
 

@@ -1,5 +1,6 @@
 [versions]
 hiltVersion = "2.53.1"
+kotlinxCollectionsImmutable = "0.3.7"
 kspVersion = "2.1.0-1.0.29"
 libphonenumber = "8.13.16"
 roomVersion = "2.6.1"
@@ -28,6 +29,7 @@ androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version = "1.
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.2.0" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version = "1.0.1" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navVersion" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumber" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVersion" }
 retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofitVersion" }

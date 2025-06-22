@@ -1,5 +1,8 @@
 package com.attendify_admin.common.presentation.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -16,17 +19,17 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
 import com.attendify_admin.R
 import com.attendify_admin.common.presentation.ComponentPreview
 import com.attendify_admin.common.presentation.PreviewWrapper
+import com.attendify_admin.common.presentation.UiConstants
 import com.attendify_admin.ui.theme.Typography
 
 
 @Composable
 fun AttendifyTextField(
     modifier: Modifier = Modifier
-        .widthIn(max = 500.dp)
+        .widthIn(max = UiConstants.MAX_WIDTH)
         .fillMaxWidth(),
     value: String,
     onValueChange: (String) -> Unit,
@@ -89,8 +92,15 @@ fun AttendifyTextField(
         },
         isError = isError,
         supportingText = {
-            if (supportingText != null) {
-                Text(text = supportingText, style = MaterialTheme.typography.labelSmall)
+            AnimatedVisibility(
+                visible = supportingText != null,
+                enter = expandVertically(),
+                exit = shrinkVertically()
+                ) {
+                Text(
+                    text = supportingText ?: "",
+                    style = MaterialTheme.typography.labelSmall
+                )
             }
         },
         leadingIcon = leadingIcon,

@@ -3,30 +3,50 @@ package com.attendify_admin.home.feature_users.presentation.search_student
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.attendify_admin.common.data.remote.Resource
+import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarController
+import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarEvent
 import com.attendify_admin.home.feature_academics.domain.use_case.GetBranchesUseCase
 import com.attendify_admin.home.feature_users.domain.use_case.GetStudentsUseCase
+import com.attendify_admin.home.feature_users.domain.utils.StudentUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 @HiltViewModel
 class SearchStudentViewModel @Inject constructor(
     private val getStudentsUseCase: GetStudentsUseCase,
-    getBranchesUseCase: GetBranchesUseCase
+    getBranchesUseCase: GetBranchesUseCase,
 ) : ViewModel() {
 
-    var state = MutableStateFlow(SearchStudentState())
-        private set
+    private val _state = MutableStateFlow(SearchStudentState())
+    val state: StateFlow<SearchStudentState> = _state.asStateFlow()
 
     init {
         getBranchesUseCase(searchQuery = null).onEach { result ->
             when (result) {
                 is Resource.Error -> {
-                    state.value =
-                        state.value.copy(dialogText = result.message, areBranchesLoading = false)
+                    _state.update {
+                        it.copy(areBranchesLoading = false)
+                    }
+                    // Send Snackbar event instead of updating dialogText
+                    viewModelScope.launch {
+                        SnackbarController.sendEvent(
+                            SnackbarEvent(
+                                message = result.message ?: "Error fetching branches"
+                            )
+                        )
+                    }
                 }
 
                 is Resource.Loading -> {
@@ -34,252 +54,233 @@ class SearchStudentViewModel @Inject constructor(
                 }
 
                 is Resource.Success -> {
-                    state.value = state.value.copy(
-                        branchOptions = result.data,
-                        areBranchesLoading = false
-                    )
+                    _state.update {
+                        it.copy(
+                            branchOptions = result.data,
+                            areBranchesLoading = false
+                        )
+                    }
                 }
             }
         }.launchIn(viewModelScope)
         getStudents()
     }
 
-
     private fun getStudents() {
         val students = getStudentsUseCase(
-            searchQuery = state.value.searchQuery,
-            branchIds = state.value.selectedBranches.map { branch ->
+            searchQuery = _state.value.searchQuery,
+            branchIds = _state.value.selectedBranches?.map { branch ->
                 branch.id
             },
-            semesterNumbers = state.value.selectedSemesters,
-            academicStartYearOfSemester = state.value.selectedAcademicStartYearOfSemester?.toIntOrNull(),
-            academicEndYearOfSemester = state.value.selectedAcademicEndYearOfSemester?.toIntOrNull(),
-            academicStatuses = state.value.selectedAcademicStatuses,
-            admissionTypes = state.value.selectedAdmissionTypes.map { admissionType ->
+            semesterNumbers = _state.value.selectedSemesters,
+            academicStartYearOfSemester = _state.value.selectedAcademicStartYearOfSemester?.toIntOrNull(),
+            academicEndYearOfSemester = _state.value.selectedAcademicEndYearOfSemester?.toIntOrNull(),
+            admissionTypes = _state.value.selectedAdmissionTypes?.map { admissionType ->
                 when (admissionType) {
                     "First Year" -> "FE"
                     "Direct Second Year" -> "DSE"
                     else -> ""
                 }
             },
-            admissionYear = state.value.selectedAdmissionYear?.toIntOrNull(),
+            admissionYear = _state.value.selectedAdmissionYear?.toIntOrNull(),
             currentSemester = true,
         ).cachedIn(viewModelScope)
-        state.value = state.value.copy(students = students)
+
+        val studentCards = students.map { pagingData ->
+            pagingData.map { student ->
+                StudentCard(
+                    id = student.id,
+                    studentName = "${student.firstName} ${if (student.middleName != null) student.middleName + " " else ""}${student.lastName}",
+                    studentBranch = student.branch?.abbreviation ?: "",
+                    studentYear = if (
+                        (student.studentSemesters?.size ?: 0) > 0 &&
+                        student.studentSemesters?.first()?.semester?.semesterNumber != null
+                    )
+                        StudentUtils.getCurrentYearFromSem(
+                            student.studentSemesters.first().semester.semesterNumber
+                        ) else null,
+                    studentImageUrl = student.studentImgUrl
+                )
+            }
+
+        }
+        _state.update {
+            it.copy(
+                students = studentCards
+            )
+        }
     }
 
     fun onEvent(event: SearchStudentEvent) {
         when (event) {
 
             is SearchStudentEvent.AcademicEndYearOfSemesterDropDownVisibilityChanged -> {
-                state.value =
-                    state.value.copy(isAcademicEndYearOfSemesterDropDownVisible = event.isVisible)
+                _state.update {
+                    it.copy(isAcademicEndYearOfSemesterDropDownVisible = event.isVisible)
+                }
             }
 
 
             is SearchStudentEvent.AcademicStartYearOfSemesterDropDownVisibilityChanged -> {
-                state.value =
-                    state.value.copy(isAcademicStartYearOfSemesterDropDownVisible = event.isVisible)
+                _state.update {
+                    it.copy(isAcademicStartYearOfSemesterDropDownVisible = event.isVisible)
+                }
             }
 
             SearchStudentEvent.ApplyFilters -> {
                 getStudents()
-                state.value = state.value.copy(
-                    isBottomSheetVisible = false
-                )
+                _state.update {
+                    it.copy(
+                        isBottomSheetVisible = false
+                    )
+                }
             }
 
 
             SearchStudentEvent.ResetFilters -> {
-                state.value = state.value.copy(
-                    selectedBranches = emptyList(),
-                    selectedSemesters = emptyList(),
-                    selectedAcademicStartYearOfSemester = null,
-                    selectedAcademicEndYearOfSemester = null,
-                    selectedAcademicStatuses = emptyList(),
-                    selectedAdmissionTypes = emptyList(),
-                    selectedSchemes = emptyList(),
-                    selectedDivisions = emptyList(),
-                    selectedBatches = emptyList(),
-                    selectedAdmissionYear = null,
-                )
+                _state.update {
+                    it.copy(
+                        selectedBranches = null,
+                        selectedSemesters = null,
+                        selectedAcademicStartYearOfSemester = null,
+                        selectedAcademicEndYearOfSemester = null,
+                        selectedAdmissionTypes = null,
+                        selectedSchemes = null,
+                        selectedDivisions = null,
+                        selectedBatches = null,
+                        selectedAdmissionYear = null,
+                    )
+                }
             }
 
             SearchStudentEvent.FetchStudents -> {
-                state.value = state.value.copy(
-                    isFetchingStudents = true
-                )
+                _state.update {
+                    it.copy(
+                        isFetchingStudents = true // This might be better managed by observing PagingData load states
+                    )
+                }
                 getStudents()
             }
 
             is SearchStudentEvent.SearchQueryChanged -> {
-                state.value = state.value.copy(searchQuery = event.searchQuery)
+                _state.update { it.copy(searchQuery = event.searchQuery) }
             }
 
-
-            SearchStudentEvent.DismissAlertDialog -> {
-                state.value = state.value.copy(dialogText = null)
-            }
 
             is SearchStudentEvent.AcademicEndYearOfSemesterChanged -> {
-                val startYear = state.value.selectedAcademicStartYearOfSemester?.toIntOrNull()
+                val startYear = _state.value.selectedAcademicStartYearOfSemester?.toIntOrNull()
                 val endYear = event.year.toIntOrNull()
 
                 if (startYear != null && endYear != null && startYear >= endYear) {
-                    state.value = state.value.copy(
-                        dialogText = "Academic start year should be less than academic end year"
-                    )
+                    viewModelScope.launch {
+                        SnackbarController.sendEvent(SnackbarEvent("Academic start year should be less than academic end year"))
+                    }
                     return
                 }
-                state.value = state.value.copy(selectedAcademicEndYearOfSemester = event.year)
+                _state.update { it.copy(selectedAcademicEndYearOfSemester = event.year) }
 
             }
 
             is SearchStudentEvent.AcademicStartYearOfSemesterChanged -> {
                 val startYear = event.year.toIntOrNull()
-                val endYear = state.value.selectedAcademicEndYearOfSemester?.toIntOrNull()
+                val endYear = _state.value.selectedAcademicEndYearOfSemester?.toIntOrNull()
 
                 if (startYear != null && endYear != null && startYear >= endYear) {
-                    state.value = state.value.copy(
-                        dialogText = "Academic start year should be less than academic end year"
-                    )
+                    viewModelScope.launch {
+                        SnackbarController.sendEvent(SnackbarEvent("Academic start year should be less than academic end year"))
+                    }
                     return
                 }
-                state.value = state.value.copy(selectedAcademicStartYearOfSemester = event.year)
+                _state.update { it.copy(selectedAcademicStartYearOfSemester = event.year) }
             }
 
-            is SearchStudentEvent.AcademicStatusAdded -> {
-                state.value = state.value.copy(
-                    selectedAcademicStatuses = state.value.selectedAcademicStatuses.plus(
-                        event.academicStatus
-                    )
-                )
-            }
-
-            is SearchStudentEvent.AcademicStatusRemoved -> {
-                state.value = state.value.copy(
-                    selectedAcademicStatuses = state.value.selectedAcademicStatuses.minus(
-                        event.academicStatus
-                    )
-                )
-            }
 
             is SearchStudentEvent.AdmissionTypeAdded -> {
-                state.value = state.value.copy(
-                    selectedAdmissionTypes = state.value.selectedAdmissionTypes.plus(
-                        event.type
+                _state.update { currentState ->
+                    currentState.copy(
+                        selectedAdmissionTypes = currentState.selectedAdmissionTypes?.add(
+                            event.type
+                        )
+                            ?: persistentListOf(event.type)
                     )
-                )
+                }
             }
 
             is SearchStudentEvent.AdmissionTypeRemoved -> {
-                state.value = state.value.copy(
-                    selectedAdmissionTypes = state.value.selectedAdmissionTypes.minus(
-                        event.type
+                _state.update { currentState ->
+                    currentState.copy(
+                        selectedAdmissionTypes = currentState.selectedAdmissionTypes?.remove(
+                            event.type
+                        )
                     )
-                )
+                }
             }
 
-//            is SearchStudentEvent.BatchAdded -> {
-//                state.value = state.value.copy(
-//                    selectedBatches = state.value.selectedBatches.plus(
-//                        event.batch
-//                    )
-//                )
-//            }
-//
-//            is SearchStudentEvent.BatchRemoved -> {
-//                state.value = state.value.copy(
-//                    selectedBatches = state.value.selectedBatches.minus(
-//                        event.batch
-//                    )
-//                )
-//            }
-
             is SearchStudentEvent.BranchAdded -> {
-                state.value = state.value.copy(
-                    selectedBranches = state.value.selectedBranches.plus(
-                        event.branch
+                _state.update { currentState ->
+                    currentState.copy(
+                        selectedBranches = currentState.selectedBranches?.add(
+                            event.branch
+                        ) ?: persistentListOf(event.branch)
                     )
-                )
+                }
             }
 
             is SearchStudentEvent.BranchRemoved -> {
-                state.value = state.value.copy(
-                    selectedBranches = state.value.selectedBranches.minus(
-                        event.branch
+                _state.update { currentState ->
+                    currentState.copy(
+                        selectedBranches = currentState.selectedBranches?.remove(
+                            event.branch
+                        )
                     )
-                )
+                }
             }
 
-//            is SearchStudentEvent.DivisionAdded -> {
-//                state.value = state.value.copy(
-//                    selectedDivisions = state.value.selectedDivisions.plus(
-//                        event.division
-//                    )
-//                )
-//            }
-//
-//            is SearchStudentEvent.DivisionRemoved -> {
-//                state.value = state.value.copy(
-//                    selectedDivisions = state.value.selectedDivisions.minus(
-//                        event.division
-//                    )
-//                )
-//            }
-
-//            is SearchStudentEvent.SchemeAdded -> {
-//                state.value = state.value.copy(
-//                    selectedSchemes = state.value.selectedSchemes.plus(
-//                        event.scheme
-//                    )
-//                )
-//            }
-//
-//            is SearchStudentEvent.SchemeRemoved -> {
-//                state.value = state.value.copy(
-//                    selectedSchemes = state.value.selectedSchemes.minus(
-//                        event.scheme
-//                    )
-//                )
-//            }
 
             is SearchStudentEvent.SemesterAdded -> {
-                state.value = state.value.copy(
-                    selectedSemesters = state.value.selectedSemesters.plus(
-                        event.semester
+                _state.update { currentState ->
+                    currentState.copy(
+                        selectedSemesters = currentState.selectedSemesters?.add(
+                            event.semester
+                        ) ?: persistentListOf(event.semester)
                     )
-                )
+                }
             }
 
             is SearchStudentEvent.SemesterRemoved -> {
-                state.value = state.value.copy(
-                    selectedSemesters = state.value.selectedSemesters.minus(
-                        event.semester
+                _state.update { currentState ->
+                    currentState.copy(
+                        selectedSemesters = currentState.selectedSemesters?.remove(
+                            event.semester
+                        )
                     )
-                )
+                }
             }
 
             is SearchStudentEvent.AdmissionYearChanged -> {
-                state.value = state.value.copy(selectedAdmissionYear = event.year)
+                _state.update { it.copy(selectedAdmissionYear = event.year) }
             }
 
             is SearchStudentEvent.AdmissionYearDropDownVisibilityChanged -> {
-                state.value =
-                    state.value.copy(isAdmissionYearDropDownVisible = event.isVisible)
+                _state.update {
+                    it.copy(isAdmissionYearDropDownVisible = event.isVisible)
+                }
             }
 
             is SearchStudentEvent.BottomSheetVisibilityChanged -> {
-                state.value = state.value.copy(isBottomSheetVisible = event.newVisibility)
+                _state.update { it.copy(isBottomSheetVisible = event.newVisibility) }
             }
 
 
             is SearchStudentEvent.SearchExpandedChange -> {
-                state.value = state.value.copy(isSearchExpanded = event.isExpanded)
+                _state.update { it.copy(isSearchExpanded = event.isExpanded) }
             }
 
             is SearchStudentEvent.ShowAlertDialog -> {
-                state.value = state.value.copy(dialogText = event.message)
+                // Replace dialogText update with Snackbar event
+                viewModelScope.launch {
+                    SnackbarController.sendEvent(SnackbarEvent(event.message))
+                }
             }
         }
     }

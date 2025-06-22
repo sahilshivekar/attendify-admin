@@ -69,7 +69,7 @@ annotation class AllScreenPreviewDarkMode()
  */
 @Composable
 fun PreviewWrapper(content: @Composable () -> Unit) {
-    AttendifyAdminTheme() {
+    AttendifyAdminTheme {
         Surface {
             content()
         }

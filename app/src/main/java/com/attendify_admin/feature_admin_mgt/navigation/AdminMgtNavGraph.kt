@@ -21,7 +21,7 @@ import com.attendify_admin.root_navigation.AppDestination
 
 
 fun NavGraphBuilder.adminMgtNavGraph(
-    rootNavController: NavController
+    rootNavController: NavController,
 ) {
 
     navigation(
@@ -32,7 +32,7 @@ fun NavGraphBuilder.adminMgtNavGraph(
         composable(
             route = AdminMgtDestination.AdminDetails.route,
             enterTransition = {
-                fadeIn() + slideInHorizontally{ it / 2 }
+                fadeIn() + slideInHorizontally { it / 2 }
             },
             exitTransition = {
                 fadeOut() + slideOutHorizontally { -it / 2 }
@@ -57,10 +57,7 @@ fun NavGraphBuilder.adminMgtNavGraph(
                 },
                 navigateToVerifyCode = {
                     rootNavController.navigate(
-                        route = AuthDestination.VerifyCodeScreen.route.replace(
-                            oldValue = "{email}",
-                            newValue = state.orgEmail
-                        )
+                        route = AuthDestination.VerifyCodeScreen.route + "?email=${state.orgEmail}"
                     )
                 },
                 navigateToAddAdmin = {
@@ -75,7 +72,7 @@ fun NavGraphBuilder.adminMgtNavGraph(
         composable(
             route = AdminMgtDestination.UpdatePassword.route,
             enterTransition = {
-                fadeIn() + slideInHorizontally{ it / 2 }
+                fadeIn() + slideInHorizontally { it / 2 }
             },
             exitTransition = {
                 fadeOut() + slideOutHorizontally { -it / 2 }
@@ -106,7 +103,7 @@ fun NavGraphBuilder.adminMgtNavGraph(
         composable(
             route = AdminMgtDestination.AddAdmin.route,
             enterTransition = {
-                fadeIn() + slideInHorizontally{ it / 2 }
+                fadeIn() + slideInHorizontally { it / 2 }
             },
             exitTransition = {
                 fadeOut() + slideOutHorizontally { -it / 2 }
@@ -125,10 +122,7 @@ fun NavGraphBuilder.adminMgtNavGraph(
             AddAdminScreen(
                 onEvent = viewModel::onEvent,
                 state = state,
-                navigateToAdminDetailsScreen = {
-                    rootNavController.navigateUp()
-                },
-                onBackIconButtonClick = {
+                navigateUp = {
                     rootNavController.navigateUp()
                 }
             )

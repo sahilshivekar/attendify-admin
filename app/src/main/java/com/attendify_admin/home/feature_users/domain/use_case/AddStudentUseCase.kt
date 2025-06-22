@@ -1,5 +1,6 @@
 package com.attendify_admin.home.feature_users.domain.use_case
 
+import android.util.Log
 import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.dto.response.toStudent
 import com.attendify_admin.common.domain.RemoteUtils
@@ -27,7 +28,8 @@ class AddStudentUseCase @Inject constructor(
         admissionYear: String,
         admissionType: String,
         branchId: Int,
-        studentImageFile: File?
+        studentImageFile: File?,
+        parentEmail: String?
     ): Flow<Resource<Student?>> = flow {
 
         emit(Resource.Loading<Student?>())
@@ -46,13 +48,18 @@ class AddStudentUseCase @Inject constructor(
                 admissionYear,
                 admissionType,
                 branchId,
-                studentImageFile
+                studentImageFile,
+                parentEmail
             )
         }
 
         response.onSuccess { response ->
             if (response.isSuccessful) {
+
+                Log.d("success",response.body()?.data.toString())
                 emit(Resource.Success(response.body()?.data?.toStudent()))
+                Log.d("success conversion",response.body()?.data?.toStudent().toString())
+
             } else {
                 val errorMessage = RemoteUtils.getErrorMessage(response)
                 emit(Resource.Error(message = errorMessage))

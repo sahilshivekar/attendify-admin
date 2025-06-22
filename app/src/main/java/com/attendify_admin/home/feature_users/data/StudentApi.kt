@@ -15,11 +15,6 @@ import com.attendify_admin.home.feature_users.data.dto.request.AddStudentToDivis
 import com.attendify_admin.home.feature_users.data.dto.request.AddStudentToSemesterRequest
 import com.attendify_admin.home.feature_users.data.dto.request.ChangeStudentBatchRequest
 import com.attendify_admin.home.feature_users.data.dto.request.ChangeStudentDivisionRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveDropoutRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStudentFcmTokenRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStudentFromSemesterRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStudentImageRequest
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveStudentRequest
 import com.attendify_admin.home.feature_users.data.dto.request.UpdateStudentDetailsRequest
 import com.attendify_admin.home.feature_users.data.dto.request.UpdateStudentFcmTokenRequest
 import com.attendify_admin.home.feature_users.data.dto.request.UpdateStudentPasswordRequest
@@ -75,6 +70,7 @@ interface StudentApi {
         @Part("admissionType") admissionType: RequestBody,
         @Part("branchId") branchId: RequestBody,
         @Part studentImageFile: MultipartBody.Part?,
+        @Part("parentEmail") parentEmail: RequestBody,
     ): Response<AttendifyApiResponse<StudentDto>>
 
     @PUT("api/v1/student/admin/update-details")
@@ -91,10 +87,10 @@ interface StudentApi {
     ): Response<AttendifyApiResponse<StudentDto>>
 
     @DELETE("api/v1/student/admin/remove-image")
-    suspend fun removeStudentImage(@Body requestBody: RemoveStudentImageRequest): Response<AttendifyApiResponse<StudentDto>>
+    suspend fun removeStudentImage(@Query("id") studentId: Int): Response<AttendifyApiResponse<StudentDto>>
 
     @DELETE("api/v1/student/admin/remove")
-    suspend fun removeStudent(@Body requestBody: RemoveStudentRequest): Response<AttendifyApiResponse<Unit>>
+    suspend fun removeStudent(@Query("id") studentId: Int): Response<AttendifyApiResponse<Unit>>
 
     @GET("api/v1/student/admin/get-student-details-by-id")
     suspend fun getStudentDetailsById(@Query("studentId") studentId: Int): Response<AttendifyApiResponse<StudentDto>>
@@ -103,7 +99,7 @@ interface StudentApi {
     suspend fun addStudentToSemester(@Body requestBody: AddStudentToSemesterRequest): Response<AttendifyApiResponse<StudentSemesterDto>>
 
     @DELETE("api/v1/student/admin/remove-from-semester")
-    suspend fun removeStudentFromSemester(@Body requestBody: RemoveStudentFromSemesterRequest): Response<AttendifyApiResponse<Unit>>
+    suspend fun removeStudentFromSemester(@Query("studentSemesterId") studentSemesterId: Int): Response<AttendifyApiResponse<Unit>>
 
     @POST("api/v1/student/admin/add-to-division")
     suspend fun addStudentToDivision(@Body requestBody: AddStudentToDivisionRequest): Response<AttendifyApiResponse<StudentDivisionDto>>
@@ -136,7 +132,11 @@ interface StudentApi {
     suspend fun addStudentToDropout(@Body requestBody: AddDropoutRequest): Response<AttendifyApiResponse<DropoutDto?>>
 
     @DELETE("api/v1/dropout/admin/remove-student-from-dropout")
-    suspend fun removeStudentFromDropout(@Body requestBody: RemoveDropoutRequest): Response<AttendifyApiResponse<Unit>>
+    suspend fun removeStudentFromDropout(
+        @Query("studentId") studentId: Int,
+        @Query("academicStartYear") academicStartYear: Int,
+        @Query("academicEndYear") academicEndYear: Int,
+    ): Response<AttendifyApiResponse<Unit>>
 
     @GET("api/v1/dropout/admin/get-dropout-by-id")
     suspend fun getDropoutById(@Query("dropoutId") dropoutId: Int): Response<AttendifyApiResponse<DropoutDto?>>
@@ -151,6 +151,6 @@ interface StudentApi {
     suspend fun updateStudentFcmToken(@Body requestBody: UpdateStudentFcmTokenRequest): Response<AttendifyApiResponse<StudentFCMTokenDto?>>
 
     @DELETE("api/v1/student-fcm-token/admin/remove-student-fcm-token")
-    suspend fun removeStudentFcmToken(@Body requestBody: RemoveStudentFcmTokenRequest): Response<AttendifyApiResponse<Unit>>
+    suspend fun removeStudentFcmToken(@Query("studentId") studentId: Int): Response<AttendifyApiResponse<Unit>>
 }
 

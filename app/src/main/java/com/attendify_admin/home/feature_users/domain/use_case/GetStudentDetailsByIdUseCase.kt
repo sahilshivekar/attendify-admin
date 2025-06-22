@@ -1,5 +1,6 @@
 package com.attendify_admin.home.feature_users.domain.use_case
 
+import android.util.Log
 import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.dto.response.toStudent
 import com.attendify_admin.common.domain.RemoteUtils
@@ -23,6 +24,7 @@ class GetStudentDetailsByIdUseCase @Inject constructor(
 
         response.onSuccess { response ->
             if (response.isSuccessful) {
+                Log.d("response", response.body()?.data.toString())
                 emit(Resource.Success(response.body()?.data?.toStudent()))
             } else {
                 val errorMessage = RemoteUtils.getErrorMessage(response)

@@ -4,7 +4,7 @@ sealed class UsersDestination(
     val route: String
 ) {
     data object UsersDashboard : UsersDestination("users_dashboard")
-    data object AddStudent : UsersDestination("add_student/{studentId}")
+    data object AddStudent : UsersDestination("add_student")
     data object SearchStudent: UsersDestination("search_student")
     data object AddStaff : UsersDestination("add_staff")
     data object SearchStaff : UsersDestination("search_staff")
@@ -16,6 +16,6 @@ sealed class UsersDestination(
     data object ModifyStudentBatch : UsersDestination("modify_student_batch")
     data object AssignSubjectToTeacher: UsersDestination("assign_subject_to_teacher")
     data object UnassignSubjectToTeacher: UsersDestination("unassign_subject_to_teacher")
-    data object StudentDetails : UsersDestination("student_details/{studentId}")
-    data object StaffDetails : UsersDestination("staff_details/{staffId}")
+    data object StudentDetails : UsersDestination("student_details")
+    data object StaffDetails : UsersDestination("staff_details")
 }

@@ -6,39 +6,46 @@ import androidx.paging.cachedIn
 import com.attendify_admin.home.feature_users.domain.use_case.GetStaffUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchStaffViewModel @Inject constructor(
-    private val getStaffUseCase: GetStaffUseCase
+    private val getStaffUseCase: GetStaffUseCase,
 ) : ViewModel() {
 
-    var state = MutableStateFlow(SearchStaffState())
-        private set
+    private val _state = MutableStateFlow(SearchStaffState()) // Made private
+    val state: StateFlow<SearchStaffState> = _state.asStateFlow() // Exposed as StateFlow
+
     init {
         getStaff()
     }
+
     private fun getStaff() {
+        // Access value from _state
         val staff = getStaffUseCase(
-            searchQuery = state.value.searchQuery
+            searchQuery = _state.value.searchQuery
         ).cachedIn(viewModelScope)
-        state.value = state.value.copy(staff = staff)
+        _state.update { // Used .update
+            it.copy(staff = staff)
+        }
     }
 
     fun onEvent(event: SearchStaffEvent) {
         when (event) {
-            SearchStaffEvent.DismissAlertDialog -> {
-                state.value = state.value.copy(dialogText = null)
-            }
             SearchStaffEvent.FetchStaff -> {
-                state.value = state.value.copy(isFetchingStaff = true)
+                _state.update {
+                    it.copy(isFetchingStaff = true)
+                }
                 getStaff()
             }
+
             is SearchStaffEvent.SearchQueryChanged -> {
-                state.value = state.value.copy(searchQuery = event.searchQuery)
-            }
-            is SearchStaffEvent.ShowAlertDialog -> {
-                state.value = state.value.copy(dialogText = event.message)
+                _state.update {
+                    it.copy(searchQuery = event.searchQuery)
+                }
             }
         }
     }

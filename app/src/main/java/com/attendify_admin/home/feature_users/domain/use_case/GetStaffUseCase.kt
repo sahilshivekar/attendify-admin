@@ -1,5 +1,6 @@
 package com.attendify_admin.home.feature_users.domain.use_case
 
+import android.util.Log
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.attendify_admin.common.data.remote.dto.response.StaffDto
@@ -17,6 +18,7 @@ class GetStaffUseCase @Inject constructor(private val staffRepository: StaffRepo
         courseId: Int? = null,
     ): Flow<PagingData<Staff>> {
         return staffRepository.getStaff(searchQuery, courseId).map {
+            Log.d("get staff use case", it.toString())
             it.map(StaffDto::toStaff)
         }
     }

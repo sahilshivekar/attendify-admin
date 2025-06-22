@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 fun ModalBottomSheetForSearchStudentScreen(
     sheetState: SheetState,
     onEvent: (SearchStudentEvent) -> Unit,
-    state: SearchStudentState
+    state: SearchStudentState,
 ) {
 
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
@@ -61,9 +61,9 @@ fun ModalBottomSheetForSearchStudentScreen(
             onEvent(SearchStudentEvent.BottomSheetVisibilityChanged(false))
         },
         sheetState = sheetState,
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.surface,
         modifier = Modifier
-            .statusBarsPadding(),
+            .statusBarsPadding()
     ) {
 
         Row(
@@ -137,7 +137,9 @@ fun ModalBottomSheetForSearchStudentScreen(
                                     onUnselect = {
                                         onEvent(SearchStudentEvent.BranchRemoved(branch))
                                     },
-                                    isSelected = state.selectedBranches.contains(branch)
+                                    isSelected = if (state.selectedBranches == null) false else state.selectedBranches.contains(
+                                        branch
+                                    )
                                 )
                                 Spacer(modifier = Modifier.width(12.dp))
                             }
@@ -169,7 +171,9 @@ fun ModalBottomSheetForSearchStudentScreen(
                             onUnselect = {
                                 onEvent(SearchStudentEvent.SemesterRemoved(semester))
                             },
-                            isSelected = state.selectedSemesters.contains(semester)
+                            isSelected = if (state.selectedSemesters == null) false else state.selectedSemesters.contains(
+                                semester
+                            )
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                     }
@@ -332,33 +336,6 @@ fun ModalBottomSheetForSearchStudentScreen(
             }
 
 
-            //academic status option
-            Column {
-                Text(
-                    text = "Academic Status",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-                FlowRow {
-                    state.academicStatusOptions?.forEach { status ->
-                        status.let {
-                            AttendifyFilterOption(
-                                option = status,
-                                optionText = status,
-                                onSelect = {
-                                    onEvent(SearchStudentEvent.AcademicStatusAdded(status))
-                                },
-                                onUnselect = {
-                                    onEvent(SearchStudentEvent.AcademicStatusRemoved(status))
-                                },
-                                isSelected = state.selectedAcademicStatuses.contains(status)
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(12.dp))
-                    }
-                }
-            }
 
             //admission year option
             Column {
@@ -462,7 +439,9 @@ fun ModalBottomSheetForSearchStudentScreen(
                                 onUnselect = {
                                     onEvent(SearchStudentEvent.AdmissionTypeRemoved(type))
                                 },
-                                isSelected = state.selectedAdmissionTypes.contains(type)
+                                isSelected = if (state.selectedAdmissionTypes == null) false else state.selectedAdmissionTypes.contains(
+                                    type
+                                )
                             )
                         }
                         Spacer(modifier = Modifier.width(12.dp))

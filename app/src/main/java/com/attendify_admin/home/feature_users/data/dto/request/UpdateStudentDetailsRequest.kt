@@ -10,6 +10,9 @@ data class UpdateStudentDetailsRequest(
     val phoneNumber: String?,
     val dob: String?,
     val schemeId: Int?,
-    val academicStatus: String?,
-    val branchId: Int?
+    val branchId: Int?,
+    val admissionYear: String,
+    val admissionType: String,
+    val prn: String,
+    val parentEmail: String,
 )

@@ -2,7 +2,6 @@ package com.attendify_admin.home.feature_users.domain.use_case
 
 import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.domain.RemoteUtils
-import com.attendify_admin.home.feature_users.data.dto.request.RemoveDropoutRequest
 import com.attendify_admin.home.feature_users.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -10,13 +9,21 @@ import java.io.IOException
 import javax.inject.Inject
 
 class RemoveStudentFromDropoutUseCase @Inject constructor(
-    private val studentRepository: StudentRepository
+    private val studentRepository: StudentRepository,
 ) {
-    operator fun invoke(requestBody: RemoveDropoutRequest): Flow<Resource<Unit?>> = flow {
+    operator fun invoke(
+        studentId: Int,
+        academicStartYear: Int,
+        academicEndYear: Int,
+    ): Flow<Resource<Unit?>> = flow {
         emit(Resource.Loading())
 
         val response = runCatching {
-            studentRepository.removeStudentFromDropout(requestBody)
+            studentRepository.removeStudentFromDropout(
+                studentId,
+                academicStartYear,
+                academicEndYear
+            )
         }
 
         response.onSuccess { response ->

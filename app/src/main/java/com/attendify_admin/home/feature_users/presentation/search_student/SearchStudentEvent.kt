@@ -15,8 +15,6 @@ sealed class SearchStudentEvent {
     data class AcademicStartYearOfSemesterChanged(val year: String) : SearchStudentEvent()
     data class AcademicEndYearOfSemesterChanged(val year: String) : SearchStudentEvent()
 
-    data class AcademicStatusAdded(val academicStatus: String) : SearchStudentEvent()
-    data class AcademicStatusRemoved(val academicStatus: String) : SearchStudentEvent()
 
     data class AdmissionTypeAdded(val type: String) : SearchStudentEvent()
     data class AdmissionTypeRemoved(val type: String) : SearchStudentEvent()
@@ -32,7 +30,6 @@ sealed class SearchStudentEvent {
     data class AcademicEndYearOfSemesterDropDownVisibilityChanged(val isVisible: Boolean) :
         SearchStudentEvent()
 
-    data object DismissAlertDialog : SearchStudentEvent()
     data class ShowAlertDialog(val message: String) : SearchStudentEvent()
     data class AdmissionYearChanged(val year: String?) : SearchStudentEvent()
     data class AdmissionYearDropDownVisibilityChanged(val isVisible: Boolean) : SearchStudentEvent()

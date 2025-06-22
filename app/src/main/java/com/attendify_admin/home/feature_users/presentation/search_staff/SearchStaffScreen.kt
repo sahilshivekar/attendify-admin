@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,12 +15,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.attendify_admin.common.presentation.PreviewWrapper
-import com.attendify_admin.common.presentation.ScreenPreview
-import com.attendify_admin.common.presentation.components.AttendifyAlertDialog
+import com.attendify_admin.common.presentation.UiConstants
 import com.attendify_admin.common.presentation.components.AttendifyNoResultsIndicator
 import com.attendify_admin.common.presentation.components.AttendifySearchBar
 import com.attendify_admin.home.feature_users.presentation.search_staff.components.StaffCard
@@ -30,16 +31,10 @@ import com.attendify_admin.home.feature_users.presentation.search_staff.componen
 fun SearchStaffScreen(
     modifier: Modifier = Modifier,
     state: SearchStaffState,
-    onEvent: (SearchStaffEvent) -> Unit
+    onEvent: (SearchStaffEvent) -> Unit,
+    onStaffCardClick: (Int) -> Unit = {},
 ) {
 
-
-    if (state.dialogText != null) {
-        AttendifyAlertDialog(
-            dialogText = state.dialogText,
-            onDismiss = { onEvent(SearchStaffEvent.DismissAlertDialog) }
-        )
-    }
 
     Column(
         modifier = modifier
@@ -48,80 +43,86 @@ fun SearchStaffScreen(
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Column(
+            modifier = Modifier.widthIn(max = UiConstants.MAX_WIDTH),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        AttendifySearchBar(
-            modifier = Modifier
-                .padding(vertical = 16.dp),
-            searchQuery = state.searchQuery,
-            onSearchQueryValueChange = {
-                onEvent(SearchStaffEvent.SearchQueryChanged(it))
-                onEvent(SearchStaffEvent.FetchStaff)
-            },
-            onSearchIconClick = { onEvent(SearchStaffEvent.FetchStaff) },
-            showFilterIcon = false,
-            searchBarPlaceholder = "Search Staff",
-        )
 
-        val staff = state.staff?.collectAsLazyPagingItems()
+            AttendifySearchBar(
+                modifier = Modifier
+                    .padding(vertical = 16.dp),
+                searchQuery = state.searchQuery,
+                onSearchQueryValueChange = {
+                    onEvent(SearchStaffEvent.SearchQueryChanged(it))
+                    onEvent(SearchStaffEvent.FetchStaff)
+                },
+                onSearchIconClick = { onEvent(SearchStaffEvent.FetchStaff) },
+                showFilterIcon = false,
+                searchBarPlaceholder = "Search Staff",
+            )
 
-        staff?.let {
-            when {
-                staff.loadState.refresh is LoadState.NotLoading && staff.itemCount == 0 -> {
-                    AttendifyNoResultsIndicator()
+            val staff = state.staff.collectAsLazyPagingItems()
+
+            LazyColumn(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(
+                    count = staff.itemCount,
+                    key = { index -> index }
+
+                ) { index ->
+                    staff[index]?.let { staffMember ->
+                        StaffCard(
+                            name = "${staffMember.firstName} ${if (staffMember.middleName != null) staffMember.middleName + " " else ""}${staffMember.lastName}",
+                            role = staffMember.role,
+                            imageUrl = staffMember.staffImageUrl,
+                            highestQualification = staffMember.highestQualification,
+                            onClick = {
+                                onStaffCardClick(staffMember.id)
+                            }
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
 
-                staff.loadState.hasError -> {
-                    AttendifyNoResultsIndicator(text = "Some error occurred while fetching staff")
-                }
-
-                staff.loadState.refresh is LoadState.Loading -> {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        CircularProgressIndicator()
+                item {
+                    if (staff.loadState.append is LoadState.Loading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.padding(vertical = 32.dp)
+                        )
                     }
                 }
-
-                staff.itemCount > 0 -> {
-                    LazyColumn(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Top,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        items(count = staff.itemCount) { index ->
-                            staff[index]?.let { staffMember ->
-                                StaffCard(
-                                    name = "${staffMember.firstName} ${if (staffMember.middleName != null) staffMember.middleName + " " else ""}${staffMember.lastName}",
-                                    role = staffMember.role,
-                                    imageUrl = staffMember.staffImageUrl,
-                                    highestQualification = staffMember.highestQualification,
-                                    onClick = {
-
-                                    }
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(8.dp))
-                        }
-
-                        if (staff.loadState.append is LoadState.Loading) {
-                            item {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.padding(vertical = 32.dp)
-                                )
-                            }
+                item {
+                    if (staff.loadState.refresh is LoadState.NotLoading && staff.itemCount == 0) {
+                        AttendifyNoResultsIndicator()
+                    }
+                }
+                item {
+                    if (staff.loadState.hasError) {
+                        AttendifyNoResultsIndicator(text = "Some error occurred while fetching staff")
+                    }
+                }
+                item {
+                    if (staff.loadState.refresh is LoadState.Loading) {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            CircularProgressIndicator()
                         }
                     }
                 }
             }
         }
-
     }
 }
 
 
-@ScreenPreview
+@PreviewScreenSizes
 @Composable
 fun SearchStaffScreenPreview() {
     PreviewWrapper {

@@ -1,7 +1,7 @@
 package com.attendify_admin.home.feature_users.presentation.add_staff
 
 import android.net.Uri
-import java.io.File
+import com.attendify_admin.common.utils.PhoneUtil.Country
 
 sealed class AddStaffEvent {
     data class FirstNameChanged(val newFirstName: String) : AddStaffEvent()
@@ -13,14 +13,14 @@ sealed class AddStaffEvent {
     data class HighestQualificationChanged(val newQualification: String) : AddStaffEvent()
     data class RoleChanged(val newRole: StaffRole) : AddStaffEvent()
     data object SubmitClicked : AddStaffEvent()
-    data object DismissAlertDialog : AddStaffEvent()
     data object ResetClicked : AddStaffEvent()
-
+    data class CountryCodeDropDownVisibilityChanged(val newVisibility: Boolean) : AddStaffEvent()
     data class GenderDropDownVisibilityChanged(val newVisibility: Boolean) : AddStaffEvent()
     data class RoleDropDownVisibilityChanged(val newVisibility: Boolean) : AddStaffEvent()
-
+    data class PhoneNumberCountryCodeChanged(val newCountry: Country) : AddStaffEvent()
     data class StaffImageUriUpdated(val updatedUri: Uri?) : AddStaffEvent()
-    data class StaffImageChanged(val newStaffImage: File?) : AddStaffEvent()
+    data object CloseImageClicked : AddStaffEvent()
+    data object ShowImageClicked : AddStaffEvent()
 }
 
 enum class Gender(val displayName: String) {
