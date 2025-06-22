@@ -4,7 +4,7 @@ import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.dto.response.toStudent
 import com.attendify_admin.common.domain.RemoteUtils
 import com.attendify_admin.common.domain.model.Student
-import com.attendify_admin.home.feature_users.data.dto.request.UpdateStudentDetailsRequest
+import com.attendify_admin.home.feature_users.data.remote.dto.request.UpdateStudentDetailsRequest
 import com.attendify_admin.home.feature_users.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

@@ -4,7 +4,7 @@ import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.dto.response.toBatch
 import com.attendify_admin.common.domain.RemoteUtils
 import com.attendify_admin.common.domain.model.Batch
-import com.attendify_admin.home.feature_academics.data.dto.request.UpdateBatchRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.UpdateBatchRequest
 import com.attendify_admin.home.feature_academics.domain.repository.BatchRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

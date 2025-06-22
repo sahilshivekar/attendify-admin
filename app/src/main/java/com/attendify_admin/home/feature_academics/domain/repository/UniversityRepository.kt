@@ -1,9 +1,9 @@
 package com.attendify_admin.home.feature_academics.domain.repository
 
-import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.UniversityDto
-import com.attendify_admin.home.feature_academics.data.dto.request.AddUniversityRequest
-import com.attendify_admin.home.feature_academics.data.dto.request.UpdateUniversityRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.AddUniversityRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.UpdateUniversityRequest
 import retrofit2.Response
 
 interface UniversityRepository {

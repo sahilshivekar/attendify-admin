@@ -14,7 +14,7 @@ import com.attendify_admin.common.utils.FileUtil
 import com.attendify_admin.common.utils.PhoneUtil.getCountryByPhoneCode
 import com.attendify_admin.common.validation.ValidateEmail
 import com.attendify_admin.home.feature_academics.domain.use_case.GetBranchesUseCase
-import com.attendify_admin.home.feature_users.data.dto.request.UpdateStudentDetailsRequest
+import com.attendify_admin.home.feature_users.data.remote.dto.request.UpdateStudentDetailsRequest
 import com.attendify_admin.home.feature_users.domain.use_case.AddStudentUseCase
 import com.attendify_admin.home.feature_users.domain.use_case.GetStudentDetailsByIdUseCase
 import com.attendify_admin.home.feature_users.domain.use_case.UpdateStudentDetailsUseCase

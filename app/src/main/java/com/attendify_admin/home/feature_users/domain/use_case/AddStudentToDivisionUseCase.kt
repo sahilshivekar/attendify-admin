@@ -4,7 +4,7 @@ import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.dto.response.toStudentDivision
 import com.attendify_admin.common.domain.RemoteUtils
 import com.attendify_admin.common.domain.model.StudentDivision
-import com.attendify_admin.home.feature_users.data.dto.request.AddStudentToDivisionRequest
+import com.attendify_admin.home.feature_users.data.remote.dto.request.AddStudentToDivisionRequest
 import com.attendify_admin.home.feature_users.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

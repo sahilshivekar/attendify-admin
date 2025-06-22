@@ -4,7 +4,7 @@ import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.dto.response.toSemester
 import com.attendify_admin.common.domain.RemoteUtils
 import com.attendify_admin.common.domain.model.Semester
-import com.attendify_admin.home.feature_academics.data.dto.request.UpdateSemesterRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.UpdateSemesterRequest
 import com.attendify_admin.home.feature_academics.domain.repository.SemesterRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

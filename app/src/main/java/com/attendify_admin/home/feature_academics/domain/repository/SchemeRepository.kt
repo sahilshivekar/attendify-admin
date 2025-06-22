@@ -1,10 +1,10 @@
 package com.attendify_admin.home.feature_academics.domain.repository
 
 
-import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.SchemeDto
-import com.attendify_admin.home.feature_academics.data.dto.request.AddSchemeRequest
-import com.attendify_admin.home.feature_academics.data.dto.request.UpdateSchemeRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.AddSchemeRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.UpdateSchemeRequest
 import retrofit2.Response
 
 interface SchemeRepository {

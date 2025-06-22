@@ -1,5 +1,7 @@
 package com.attendify_admin.home.feature_schedule.domain.use_case
 
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.dto.response.toClass
 import com.attendify_admin.common.domain.RemoteUtils
@@ -7,6 +9,7 @@ import com.attendify_admin.common.domain.model.Class
 import com.attendify_admin.home.feature_schedule.domain.repository.ClassRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
 
@@ -27,48 +30,25 @@ class GetClassesUseCase @Inject constructor(
         batchId: Int?,
         classType: String?,
         courseId: Int?,
-        semesterId: Int?,
-        page: Int,
-        limit: Int,
-    ): Flow<Resource<List<Class>?>> = flow {
-
-        emit(Resource.Loading<List<Class>?>())
-
-        val response = runCatching {
-            classRepository.getClasses(
-                searchQuery,
-                timetableId,
-                divisionId,
-                startTime,
-                endTime,
-                activeFrom,
-                activeTill,
-                instructorId,
-                dayOfWeek,
-                roomId,
-                batchId,
-                classType,
-                courseId,
-                semesterId,
-                page,
-                limit
-            )
-        }
-
-        response.onSuccess { response ->
-            if (response.isSuccessful) {
-                emit(Resource.Success(response.body()?.data?.map { it.toClass() }))
-            } else {
-                val errorMessage = RemoteUtils.getErrorMessage(response)
-                emit(Resource.Error(message = errorMessage))
-            }
-        }
-
-        response.onFailure { exception ->
-            when (exception) {
-                is IOException -> emit(Resource.Error(message = RemoteUtils.NETWORK_IO_ERROR_MESSAGE))
-                else -> emit(Resource.Error(message = RemoteUtils.UNKNOWN_NETWORK_ERROR_MESSAGE))
-            }
+        semesterId: Int?
+    ): Flow<PagingData<Class>> {
+        return classRepository.getClasses(
+            searchQuery,
+            timetableId,
+            divisionId,
+            startTime,
+            endTime,
+            activeFrom,
+            activeTill,
+            instructorId,
+            dayOfWeek,
+            roomId,
+            batchId,
+            classType,
+            courseId,
+            semesterId
+        ).map { pagingData ->
+            pagingData.map { it.toClass() }
         }
     }
 }

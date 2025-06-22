@@ -1,6 +1,6 @@
 package com.attendify_admin.feature_admin_mgt.domain.repository
 
-import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.feature_admin_auth.data.remote.dto.responses.AdminDto
 import com.attendify_admin.feature_admin_auth.data.remote.dto.responses.VerificationCodeDto
 import com.attendify_admin.feature_admin_mgt.data.remote.dto.request.AdminRequestBody

@@ -1,22 +1,22 @@
 package com.attendify_admin.home.feature_academics.domain.repository
 
 
-import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import androidx.paging.PagingData
+import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.DivisionDto
-import com.attendify_admin.home.feature_academics.data.dto.request.AddDivisionRequest
-import com.attendify_admin.home.feature_academics.data.dto.request.UpdateDivisionRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.AddDivisionRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.UpdateDivisionRequest
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 interface DivisionRepository {
-    suspend fun getDivisions(
+    fun getDivisions(
         semesterNumber: Int?,
         branchId: Int?,
         academicStartYear: Int?,
         academicEndYear: Int?,
-        searchQuery: String?,
-        page: Int,
-        limit: Int
-    ): Response<AttendifyApiResponse<List<DivisionDto>?>>
+        searchQuery: String?
+    ): Flow<PagingData<DivisionDto>>
 
     suspend fun addDivision(requestBody: AddDivisionRequest): Response<AttendifyApiResponse<DivisionDto?>>
 

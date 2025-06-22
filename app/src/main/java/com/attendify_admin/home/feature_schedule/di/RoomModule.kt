@@ -1,7 +1,7 @@
 package com.attendify_admin.home.feature_schedule.di
 
-import com.attendify_admin.home.feature_schedule.data.RoomApi
-import com.attendify_admin.home.feature_schedule.data.RoomRepositoryImpl
+import com.attendify_admin.home.feature_schedule.data.remote.RoomApi
+import com.attendify_admin.home.feature_schedule.data.repository.RoomRepositoryImpl
 import com.attendify_admin.home.feature_schedule.domain.repository.RoomRepository
 import dagger.Module
 import dagger.Provides

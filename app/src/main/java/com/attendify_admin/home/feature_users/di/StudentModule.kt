@@ -1,7 +1,7 @@
 package com.attendify_admin.home.feature_users.di
 
-import com.attendify_admin.home.feature_users.data.StudentApi
-import com.attendify_admin.home.feature_users.data.StudentRepositoryImpl
+import com.attendify_admin.home.feature_users.data.remote.StudentApi
+import com.attendify_admin.home.feature_users.data.repository.StudentRepositoryImpl
 import com.attendify_admin.home.feature_users.domain.repository.StudentRepository
 import dagger.Module
 import dagger.Provides

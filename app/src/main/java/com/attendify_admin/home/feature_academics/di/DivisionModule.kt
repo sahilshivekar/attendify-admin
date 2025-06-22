@@ -1,7 +1,7 @@
 package com.attendify_admin.home.feature_academics.di
 
-import com.attendify_admin.home.feature_academics.data.DivisionApi
-import com.attendify_admin.home.feature_academics.data.DivisionRepositoryImpl
+import com.attendify_admin.home.feature_academics.data.remote.DivisionApi
+import com.attendify_admin.home.feature_academics.data.repository.DivisionRepositoryImpl
 import com.attendify_admin.home.feature_academics.domain.repository.DivisionRepository
 import dagger.Module
 import dagger.Provides

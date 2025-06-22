@@ -1,7 +1,7 @@
 package com.attendify_admin.home.feature_academics.di
 
-import com.attendify_admin.home.feature_academics.data.BatchApi
-import com.attendify_admin.home.feature_academics.data.BatchRepositoryImpl
+import com.attendify_admin.home.feature_academics.data.remote.BatchApi
+import com.attendify_admin.home.feature_academics.data.repository.BatchRepositoryImpl
 import com.attendify_admin.home.feature_academics.domain.repository.BatchRepository
 import dagger.Module
 import dagger.Provides

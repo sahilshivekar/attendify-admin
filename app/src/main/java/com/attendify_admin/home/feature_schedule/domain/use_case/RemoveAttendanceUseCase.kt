@@ -2,7 +2,7 @@ package com.attendify_admin.home.feature_schedule.domain.use_case
 
 import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.domain.RemoteUtils
-import com.attendify_admin.home.feature_schedule.data.dto.request.RemoveAttendanceRequest
+import com.attendify_admin.home.feature_schedule.data.remote.dto.request.RemoveAttendanceRequest
 import com.attendify_admin.home.feature_schedule.domain.repository.AttendanceRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

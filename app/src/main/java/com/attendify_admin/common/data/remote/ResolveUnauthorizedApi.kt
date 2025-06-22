@@ -1,5 +1,6 @@
 package com.attendify_admin.common.data.remote
 
+import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.feature_admin_auth.data.remote.dto.request.GetAccessTokenRequest
 import com.attendify_admin.feature_admin_auth.data.remote.dto.responses.GetAccessRefreshTokenDto
 import retrofit2.Response

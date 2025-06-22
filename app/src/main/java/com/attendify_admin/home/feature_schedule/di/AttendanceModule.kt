@@ -1,7 +1,7 @@
 package com.attendify_admin.home.feature_schedule.di
 
-import com.attendify_admin.home.feature_schedule.data.AttendanceApi
-import com.attendify_admin.home.feature_schedule.data.AttendanceRepositoryImpl
+import com.attendify_admin.home.feature_schedule.data.remote.AttendanceApi
+import com.attendify_admin.home.feature_schedule.data.repository.AttendanceRepositoryImpl
 import com.attendify_admin.home.feature_schedule.domain.repository.AttendanceRepository
 import dagger.Module
 import dagger.Provides

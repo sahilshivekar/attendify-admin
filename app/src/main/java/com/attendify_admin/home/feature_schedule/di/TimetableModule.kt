@@ -1,7 +1,7 @@
 package com.attendify_admin.home.feature_schedule.di
 
-import com.attendify_admin.home.feature_schedule.data.TimetableApi
-import com.attendify_admin.home.feature_schedule.data.TimetableRepositoryImpl
+import com.attendify_admin.home.feature_schedule.data.remote.TimetableApi
+import com.attendify_admin.home.feature_schedule.data.repository.TimetableRepositoryImpl
 import com.attendify_admin.home.feature_schedule.domain.repository.TimetableRepository
 import dagger.Module
 import dagger.Provides

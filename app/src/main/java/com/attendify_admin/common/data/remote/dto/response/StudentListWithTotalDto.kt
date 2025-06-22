@@ -7,9 +7,3 @@ data class StudentListWithTotalDto(
     val totalStudents: Int
 )
 
-fun StudentListWithTotalDto.toStudentListWithTotal(): StudentListWithTotal {
-    return StudentListWithTotal(
-        students = students.map { it.toStudent() },
-        totalStudents = totalStudents
-    )
-}

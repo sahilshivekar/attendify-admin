@@ -102,7 +102,7 @@ fun StaffImageContainer(
                         }
                         if (state.staff?.staffImageUrl != null) {
                             AttendifyTextButton(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.wrapContentSize(),
                                 onClick = { onEvent(StaffDetailsEvent.RemoveImageClicked) },
                                 enabled = !state.isUpdatingImage && !state.isRemovingImage
                             ) {

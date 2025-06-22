@@ -20,26 +20,32 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.attendify_admin.R
+import com.attendify_admin.common.presentation.PreviewWrapper
 import com.attendify_admin.common.presentation.components.AttendifyButton
 import com.attendify_admin.common.presentation.components.AttendifyFilterOption
 import com.attendify_admin.common.presentation.components.AttendifyTextField
 import com.attendify_admin.home.feature_users.presentation.search_student.SearchStudentEvent
 import com.attendify_admin.home.feature_users.presentation.search_student.SearchStudentState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 
@@ -161,19 +167,19 @@ fun ModalBottomSheetForSearchStudentScreen(
                 )
                 FlowRow {
                     state.semesterOptions.forEach { semester ->
-                        AttendifyFilterOption(
-                            modifier = Modifier.padding(bottom = 12.dp),
-                            option = semester,
-                            optionText = semester.toString(),
-                            onSelect = {
-                                onEvent(SearchStudentEvent.SemesterAdded(semester))
+                        val isSelected = state.selectedSemesters.contains(semester)
+                        FilterChip(
+                            selected = state.selectedSemesters.contains(semester),
+                            onClick = {
+                                if (isSelected) {
+                                    onEvent(SearchStudentEvent.SemesterRemoved(semester))
+                                } else {
+                                    onEvent(SearchStudentEvent.SemesterAdded(semester))
+                                }
                             },
-                            onUnselect = {
-                                onEvent(SearchStudentEvent.SemesterRemoved(semester))
-                            },
-                            isSelected = if (state.selectedSemesters == null) false else state.selectedSemesters.contains(
-                                semester
-                            )
+                            label = {
+                                Text("Sem $semester")
+                            }
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                     }
@@ -336,7 +342,6 @@ fun ModalBottomSheetForSearchStudentScreen(
             }
 
 
-
             //admission year option
             Column {
 
@@ -429,103 +434,34 @@ fun ModalBottomSheetForSearchStudentScreen(
                 )
                 FlowRow {
                     state.admissionTypeOptions?.forEach { type ->
-                        type.let {
-                            AttendifyFilterOption(
-                                option = type,
-                                optionText = type,
-                                onSelect = {
-                                    onEvent(SearchStudentEvent.AdmissionTypeAdded(type))
-                                },
-                                onUnselect = {
+                        val isSelected = state.selectedAdmissionTypes.contains(type)
+
+                        FilterChip(
+                            selected = isSelected,
+                            onClick = {
+                                if (isSelected) {
                                     onEvent(SearchStudentEvent.AdmissionTypeRemoved(type))
-                                },
-                                isSelected = if (state.selectedAdmissionTypes == null) false else state.selectedAdmissionTypes.contains(
-                                    type
-                                )
-                            )
-                        }
+                                } else {
+                                    onEvent(SearchStudentEvent.AdmissionTypeAdded(type))
+                                }
+                            },
+                            label = {
+                                Text(type)
+                            }
+                        )
+
+                        AttendifyFilterOption(
+                            option = type,
+                            optionText = type,
+                            onSelect = {
+                            },
+                            onUnselect = {
+                            },
+                        )
                         Spacer(modifier = Modifier.width(12.dp))
                     }
                 }
             }
-
-            //scheme option
-//            Column {
-//                Text(
-//                    text = "Scheme",
-//                    style = MaterialTheme.typography.titleMedium,
-//                    color = MaterialTheme.colorScheme.onBackground,
-//                    modifier = Modifier.padding(bottom = 8.dp)
-//                )
-//                FlowRow {
-//                    state.schemeOptions.forEach { scheme ->
-//                        scheme?.let {
-//                            AttendifyFilterOption(
-//                                option = scheme,
-//                                optionText = scheme.name,
-//                                onSelect = {
-//                                    onEvent(SearchStudentEvent.SchemeAdded(scheme))
-//                                },
-//                                onUnselect = {
-//                                    onEvent(SearchStudentEvent.SchemeRemoved(scheme))
-//                                }
-//                            )
-//                        }
-//                        Spacer(modifier = Modifier.width(12.dp))
-//                    }
-//                }
-//            }
-
-            //division option
-//            Column {
-//                Text(
-//                    text = "Division",
-//                    style = MaterialTheme.typography.titleMedium,
-//                    color = MaterialTheme.colorScheme.onBackground,
-//                    modifier = Modifier.padding(bottom = 8.dp)
-//                )
-//                FlowRow {
-//                    state.divisionOptions.forEach { division ->
-//                        AttendifyFilterOption(
-//                            option = division,
-//                            optionText = division,
-//                            onSelect = {
-//                                onEvent(SearchStudentEvent.DivisionAdded(division))
-//                            },
-//                            onUnselect = {
-//                                onEvent(SearchStudentEvent.DivisionRemoved(division))
-//                            }
-//                        )
-//                    }
-//                    Spacer(modifier = Modifier.width(12.dp))
-//                }
-//            }
-//        }
-
-            //batch option
-//        Column {
-//            Text(
-//                text = "Batch",
-//                style = MaterialTheme.typography.titleMedium,
-//                color = MaterialTheme.colorScheme.onBackground,
-//                modifier = Modifier.padding(bottom = 8.dp)
-//            )
-//            FlowRow {
-//                state.batchOptions.forEach { batch ->
-//                    AttendifyFilterOption(
-//                        option = batch,
-//                        optionText = batch,
-//                        onSelect = {
-//                            onEvent(SearchStudentEvent.BatchAdded(batch))
-//                        },
-//                        onUnselect = {
-//                            onEvent(SearchStudentEvent.BatchRemoved(batch))
-//                        }
-//                    )
-//                }
-//                Spacer(modifier = Modifier.width(12.dp))
-//            }
-//        }
 
             AttendifyButton(
                 onClick = {
@@ -540,4 +476,3 @@ fun ModalBottomSheetForSearchStudentScreen(
         }
     }
 }
-

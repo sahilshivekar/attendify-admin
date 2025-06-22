@@ -1,23 +1,23 @@
 package com.attendify_admin.home.feature_academics.domain.repository
 
-import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import androidx.paging.PagingData
+import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.CourseDto
-import com.attendify_admin.home.feature_academics.data.dto.request.AddCourseRequest
-import com.attendify_admin.home.feature_academics.data.dto.request.AddCourseToBranchWithSemesterNumberRequest
-import com.attendify_admin.home.feature_academics.data.dto.request.RemoveCourseFromBranchWithSemesterNumberRequest
-import com.attendify_admin.home.feature_academics.data.dto.request.UpdateCourseRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.AddCourseRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.AddCourseToBranchWithSemesterNumberRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.RemoveCourseFromBranchWithSemesterNumberRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.UpdateCourseRequest
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 
 interface CourseRepository {
-    suspend fun getCourses(
+    fun getCourses(
         searchQuery: String?,
         branchId: Int?,
         semesterNumber: Int?,
         schemeId: Int?,
-        page: Int,
-        limit: Int
-    ): Response<AttendifyApiResponse<List<CourseDto>?>>
+    ): Flow<PagingData<CourseDto>>
 
     suspend fun addCourse(requestBody: AddCourseRequest): Response<AttendifyApiResponse<CourseDto?>>
 

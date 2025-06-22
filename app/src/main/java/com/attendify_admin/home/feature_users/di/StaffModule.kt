@@ -1,7 +1,7 @@
 package com.attendify_admin.home.feature_users.di
 
-import com.attendify_admin.home.feature_users.data.StaffApi
-import com.attendify_admin.home.feature_users.data.StaffRepositoryImpl
+import com.attendify_admin.home.feature_users.data.remote.StaffApi
+import com.attendify_admin.home.feature_users.data.repository.StaffRepositoryImpl
 import com.attendify_admin.home.feature_users.domain.repository.StaffRepository
 import dagger.Module
 import dagger.Provides

@@ -36,16 +36,12 @@ data class SearchStudentState(
     val divisionOptions: PersistentList<String>? = null, // will show distinct divisions
     val batchOptions: PersistentList<String>? = null, // will show distinct batches
     val admissionYearOptions: ImmutableList<String>? = DateTimeUtil.getPastTenYears(),
-    val selectedBranches: PersistentList<Branch>? = null,
-    val selectedSemesters: PersistentList<Int>? = null,
+    val selectedBranches: PersistentList<Branch> = persistentListOf(),
+    val selectedSemesters: PersistentList<Int> = persistentListOf(),
     val selectedAcademicStartYearOfSemester: String? = null,
     val selectedAcademicEndYearOfSemester: String? = null,
-    val selectedAdmissionTypes: PersistentList<String>? = null,
-    val selectedSchemes: PersistentList<Scheme>? = null,
-    val selectedDivisions: PersistentList<String>? = null,
-    val selectedBatches: PersistentList<String>? = null,
+    val selectedAdmissionTypes: PersistentList<String> = persistentListOf(),
     val selectedAdmissionYear: String? = null,
-
     val isBottomSheetVisible: Boolean = false,
     val areBranchesLoading: Boolean = true,
     val isSearchExpanded: Boolean = true

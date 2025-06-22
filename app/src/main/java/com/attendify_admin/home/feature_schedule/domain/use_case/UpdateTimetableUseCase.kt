@@ -4,7 +4,7 @@ import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.dto.response.toTimetable
 import com.attendify_admin.common.domain.RemoteUtils
 import com.attendify_admin.common.domain.model.Timetable
-import com.attendify_admin.home.feature_schedule.data.dto.request.UpdateTimetableRequest
+import com.attendify_admin.home.feature_schedule.data.remote.dto.request.UpdateTimetableRequest
 import com.attendify_admin.home.feature_schedule.domain.repository.TimetableRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

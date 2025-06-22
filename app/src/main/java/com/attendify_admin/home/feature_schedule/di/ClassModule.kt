@@ -1,7 +1,7 @@
 package com.attendify_admin.home.feature_schedule.di
 
-import com.attendify_admin.home.feature_schedule.data.ClassApi
-import com.attendify_admin.home.feature_schedule.data.ClassRepositoryImpl
+import com.attendify_admin.home.feature_schedule.data.remote.ClassApi
+import com.attendify_admin.home.feature_schedule.data.repository.ClassRepositoryImpl
 import com.attendify_admin.home.feature_schedule.domain.repository.ClassRepository
 import dagger.Module
 import dagger.Provides

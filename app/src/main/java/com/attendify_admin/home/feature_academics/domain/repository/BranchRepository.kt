@@ -1,10 +1,10 @@
 package com.attendify_admin.home.feature_academics.domain.repository
 
 
-import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.BranchDto
-import com.attendify_admin.home.feature_academics.data.dto.request.AddBranchRequest
-import com.attendify_admin.home.feature_academics.data.dto.request.UpdateBranchRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.AddBranchRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.UpdateBranchRequest
 import retrofit2.Response
 
 interface BranchRepository {

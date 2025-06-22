@@ -1,7 +1,7 @@
 package com.attendify_admin.feature_admin_auth.domain.repository
 
 
-import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.feature_admin_auth.data.remote.dto.request.ForgotPasswordRequest
 import com.attendify_admin.feature_admin_auth.data.remote.dto.request.GetAccessTokenRequest
 import com.attendify_admin.feature_admin_auth.data.remote.dto.request.LoginRequest

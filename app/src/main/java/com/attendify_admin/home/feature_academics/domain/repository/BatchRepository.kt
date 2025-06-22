@@ -1,21 +1,21 @@
 package com.attendify_admin.home.feature_academics.domain.repository
 
-import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import androidx.paging.PagingData
+import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.BatchDto
-import com.attendify_admin.home.feature_academics.data.dto.request.AddBatchRequest
-import com.attendify_admin.home.feature_academics.data.dto.request.UpdateBatchRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.AddBatchRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.UpdateBatchRequest
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 interface BatchRepository {
-    suspend fun getBatches(
+    fun getBatches(
         semesterNumber: Int?,
         branchId: Int?,
         academicStartYear: Int?,
         academicEndYear: Int?,
         searchQuery: String?,
-        page: Int,
-        limit: Int
-    ): Response<AttendifyApiResponse<List<BatchDto>?>>
+    ): Flow<PagingData<BatchDto>>
 
     suspend fun addBatch(requestBody: AddBatchRequest): Response<AttendifyApiResponse<BatchDto?>>
 

@@ -2,7 +2,7 @@ package com.attendify_admin.home.feature_academics.domain.use_case
 
 import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.domain.RemoteUtils
-import com.attendify_admin.home.feature_academics.data.dto.request.RemoveCourseFromBranchWithSemesterNumberRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.RemoveCourseFromBranchWithSemesterNumberRequest
 import com.attendify_admin.home.feature_academics.domain.repository.CourseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

@@ -4,7 +4,7 @@ import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.dto.response.toAttendanceStudent
 import com.attendify_admin.common.domain.RemoteUtils
 import com.attendify_admin.common.domain.model.AttendanceStudent
-import com.attendify_admin.home.feature_schedule.data.dto.request.UpdateStudentAttendanceRequest
+import com.attendify_admin.home.feature_schedule.data.remote.dto.request.UpdateStudentAttendanceRequest
 import com.attendify_admin.home.feature_schedule.domain.repository.AttendanceRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

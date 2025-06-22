@@ -1,15 +1,15 @@
 package com.attendify_admin.home.feature_schedule.domain.repository
 
-import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.AttendanceAllStudentsDto
 import com.attendify_admin.common.data.remote.dto.response.AttendanceDto
 import com.attendify_admin.common.data.remote.dto.response.AttendanceStudentAggregatedAndDetailedAttendanceDto
 import com.attendify_admin.common.data.remote.dto.response.AttendanceStudentDto
 import com.attendify_admin.common.data.remote.dto.response.NoParentEmailStudentsDto
-import com.attendify_admin.home.feature_schedule.data.dto.request.AddStudentsAttendanceRequest
-import com.attendify_admin.home.feature_schedule.data.dto.request.CreateAttendanceRequest
-import com.attendify_admin.home.feature_schedule.data.dto.request.RemoveAttendanceRequest
-import com.attendify_admin.home.feature_schedule.data.dto.request.UpdateStudentAttendanceRequest
+import com.attendify_admin.home.feature_schedule.data.remote.dto.request.AddStudentsAttendanceRequest
+import com.attendify_admin.home.feature_schedule.data.remote.dto.request.CreateAttendanceRequest
+import com.attendify_admin.home.feature_schedule.data.remote.dto.request.RemoveAttendanceRequest
+import com.attendify_admin.home.feature_schedule.data.remote.dto.request.UpdateStudentAttendanceRequest
 import retrofit2.Response
 
 interface AttendanceRepository {

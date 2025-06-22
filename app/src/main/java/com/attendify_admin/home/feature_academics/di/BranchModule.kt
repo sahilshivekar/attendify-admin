@@ -1,7 +1,7 @@
 package com.attendify_admin.home.feature_academics.di
 
-import com.attendify_admin.home.feature_academics.data.BranchApi
-import com.attendify_admin.home.feature_academics.data.BranchRepositoryImpl
+import com.attendify_admin.home.feature_academics.data.remote.BranchApi
+import com.attendify_admin.home.feature_academics.data.repository.BranchRepositoryImpl
 import com.attendify_admin.home.feature_academics.domain.repository.BranchRepository
 import dagger.Module
 import dagger.Provides

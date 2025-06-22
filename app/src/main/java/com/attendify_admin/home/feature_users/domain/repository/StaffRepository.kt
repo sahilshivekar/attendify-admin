@@ -1,12 +1,12 @@
 package com.attendify_admin.home.feature_users.domain.repository
 
 import androidx.paging.PagingData
-import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.StaffDto
 import com.attendify_admin.common.data.remote.dto.response.TeacherTeachesDto
-import com.attendify_admin.home.feature_users.data.dto.request.AddTeachingSubjectRequest
-import com.attendify_admin.home.feature_users.data.dto.request.UpdateStaffDetailsRequest
-import com.attendify_admin.home.feature_users.data.dto.request.UpdateStaffPasswordRequest
+import com.attendify_admin.home.feature_users.data.remote.dto.request.AddTeachingSubjectRequest
+import com.attendify_admin.home.feature_users.data.remote.dto.request.UpdateStaffDetailsRequest
+import com.attendify_admin.home.feature_users.data.remote.dto.request.UpdateStaffPasswordRequest
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import java.io.File

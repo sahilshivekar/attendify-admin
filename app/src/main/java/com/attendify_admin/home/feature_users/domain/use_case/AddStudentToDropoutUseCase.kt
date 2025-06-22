@@ -4,7 +4,7 @@ import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.dto.response.toDropout
 import com.attendify_admin.common.domain.RemoteUtils
 import com.attendify_admin.common.domain.model.Dropout
-import com.attendify_admin.home.feature_users.data.dto.request.AddDropoutRequest
+import com.attendify_admin.home.feature_users.data.remote.dto.request.AddDropoutRequest
 import com.attendify_admin.home.feature_users.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

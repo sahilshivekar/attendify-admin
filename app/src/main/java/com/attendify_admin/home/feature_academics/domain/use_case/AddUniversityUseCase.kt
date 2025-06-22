@@ -4,7 +4,7 @@ import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.data.remote.dto.response.toUniversity
 import com.attendify_admin.common.domain.RemoteUtils
 import com.attendify_admin.common.domain.model.University
-import com.attendify_admin.home.feature_academics.data.dto.request.AddUniversityRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.AddUniversityRequest
 import com.attendify_admin.home.feature_academics.domain.repository.UniversityRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

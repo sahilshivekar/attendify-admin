@@ -1,7 +1,7 @@
 package com.attendify_admin.home.feature_academics.di
 
-import com.attendify_admin.home.feature_academics.data.CourseApi
-import com.attendify_admin.home.feature_academics.data.CourseRepositoryImpl
+import com.attendify_admin.home.feature_academics.data.remote.CourseApi
+import com.attendify_admin.home.feature_academics.data.repository.CourseRepositoryImpl
 import com.attendify_admin.home.feature_academics.domain.repository.CourseRepository
 import dagger.Module
 import dagger.Provides

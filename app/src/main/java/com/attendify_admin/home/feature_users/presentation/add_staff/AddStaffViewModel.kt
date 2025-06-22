@@ -11,7 +11,7 @@ import com.attendify_admin.common.presentation.components.global_snackbar.Snackb
 import com.attendify_admin.common.utils.FileUtil
 import com.attendify_admin.common.utils.PhoneUtil.getCountryByPhoneCode
 import com.attendify_admin.common.validation.ValidateEmail
-import com.attendify_admin.home.feature_users.data.dto.request.UpdateStaffDetailsRequest
+import com.attendify_admin.home.feature_users.data.remote.dto.request.UpdateStaffDetailsRequest
 import com.attendify_admin.home.feature_users.domain.use_case.AddStaffUseCase
 import com.attendify_admin.home.feature_users.domain.use_case.GetStaffByIdUseCase
 import com.attendify_admin.home.feature_users.domain.use_case.UpdateStaffDetailsUseCase

@@ -69,13 +69,13 @@ class SearchStudentViewModel @Inject constructor(
     private fun getStudents() {
         val students = getStudentsUseCase(
             searchQuery = _state.value.searchQuery,
-            branchIds = _state.value.selectedBranches?.map { branch ->
+            branchIds = _state.value.selectedBranches.map { branch ->
                 branch.id
             },
             semesterNumbers = _state.value.selectedSemesters,
             academicStartYearOfSemester = _state.value.selectedAcademicStartYearOfSemester?.toIntOrNull(),
             academicEndYearOfSemester = _state.value.selectedAcademicEndYearOfSemester?.toIntOrNull(),
-            admissionTypes = _state.value.selectedAdmissionTypes?.map { admissionType ->
+            admissionTypes = _state.value.selectedAdmissionTypes.map { admissionType ->
                 when (admissionType) {
                     "First Year" -> "FE"
                     "Direct Second Year" -> "DSE"
@@ -140,14 +140,11 @@ class SearchStudentViewModel @Inject constructor(
             SearchStudentEvent.ResetFilters -> {
                 _state.update {
                     it.copy(
-                        selectedBranches = null,
-                        selectedSemesters = null,
+                        selectedBranches = persistentListOf(),
+                        selectedSemesters = persistentListOf(),
                         selectedAcademicStartYearOfSemester = null,
                         selectedAcademicEndYearOfSemester = null,
-                        selectedAdmissionTypes = null,
-                        selectedSchemes = null,
-                        selectedDivisions = null,
-                        selectedBatches = null,
+                        selectedAdmissionTypes = persistentListOf(),
                         selectedAdmissionYear = null,
                     )
                 }
@@ -198,10 +195,9 @@ class SearchStudentViewModel @Inject constructor(
             is SearchStudentEvent.AdmissionTypeAdded -> {
                 _state.update { currentState ->
                     currentState.copy(
-                        selectedAdmissionTypes = currentState.selectedAdmissionTypes?.add(
+                        selectedAdmissionTypes = currentState.selectedAdmissionTypes.add(
                             event.type
                         )
-                            ?: persistentListOf(event.type)
                     )
                 }
             }
@@ -209,7 +205,7 @@ class SearchStudentViewModel @Inject constructor(
             is SearchStudentEvent.AdmissionTypeRemoved -> {
                 _state.update { currentState ->
                     currentState.copy(
-                        selectedAdmissionTypes = currentState.selectedAdmissionTypes?.remove(
+                        selectedAdmissionTypes = currentState.selectedAdmissionTypes.remove(
                             event.type
                         )
                     )
@@ -219,9 +215,9 @@ class SearchStudentViewModel @Inject constructor(
             is SearchStudentEvent.BranchAdded -> {
                 _state.update { currentState ->
                     currentState.copy(
-                        selectedBranches = currentState.selectedBranches?.add(
+                        selectedBranches = currentState.selectedBranches.add(
                             event.branch
-                        ) ?: persistentListOf(event.branch)
+                        )
                     )
                 }
             }
@@ -229,7 +225,7 @@ class SearchStudentViewModel @Inject constructor(
             is SearchStudentEvent.BranchRemoved -> {
                 _state.update { currentState ->
                     currentState.copy(
-                        selectedBranches = currentState.selectedBranches?.remove(
+                        selectedBranches = currentState.selectedBranches.remove(
                             event.branch
                         )
                     )
@@ -240,9 +236,9 @@ class SearchStudentViewModel @Inject constructor(
             is SearchStudentEvent.SemesterAdded -> {
                 _state.update { currentState ->
                     currentState.copy(
-                        selectedSemesters = currentState.selectedSemesters?.add(
+                        selectedSemesters = currentState.selectedSemesters.add(
                             event.semester
-                        ) ?: persistentListOf(event.semester)
+                        )
                     )
                 }
             }
@@ -250,7 +246,7 @@ class SearchStudentViewModel @Inject constructor(
             is SearchStudentEvent.SemesterRemoved -> {
                 _state.update { currentState ->
                     currentState.copy(
-                        selectedSemesters = currentState.selectedSemesters?.remove(
+                        selectedSemesters = currentState.selectedSemesters.remove(
                             event.semester
                         )
                     )

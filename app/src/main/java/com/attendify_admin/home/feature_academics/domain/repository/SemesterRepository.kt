@@ -1,22 +1,22 @@
 package com.attendify_admin.home.feature_academics.domain.repository
 
 
-import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import androidx.paging.PagingData
+import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.SemesterDto
-import com.attendify_admin.home.feature_academics.data.dto.request.AddSemesterRequest
-import com.attendify_admin.home.feature_academics.data.dto.request.UpdateSemesterRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.AddSemesterRequest
+import com.attendify_admin.home.feature_academics.data.remote.dto.request.UpdateSemesterRequest
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 interface SemesterRepository {
-    suspend fun getSemesters(
+    fun getSemesters(
         semesterNumber: Int?,
         academicStartYear: Int?,
         academicEndYear: Int?,
         branchId: Int?,
-        schemeId: Int?,
-        page: Int,
-        limit: Int
-    ): Response<AttendifyApiResponse<List<SemesterDto>?>>
+        schemeId: Int?
+    ): Flow<PagingData<SemesterDto>>
 
     suspend fun addSemester(requestBody: AddSemesterRequest): Response<AttendifyApiResponse<SemesterDto?>>
 

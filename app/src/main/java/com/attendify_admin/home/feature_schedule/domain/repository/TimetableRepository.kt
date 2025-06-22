@@ -1,21 +1,21 @@
 package com.attendify_admin.home.feature_schedule.domain.repository
 
-import com.attendify_admin.common.data.remote.AttendifyApiResponse
+import androidx.paging.PagingData
+import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.TimetableDto
-import com.attendify_admin.home.feature_schedule.data.dto.request.AddTimetableRequest
-import com.attendify_admin.home.feature_schedule.data.dto.request.UpdateTimetableRequest
+import com.attendify_admin.home.feature_schedule.data.remote.dto.request.AddTimetableRequest
+import com.attendify_admin.home.feature_schedule.data.remote.dto.request.UpdateTimetableRequest
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 interface TimetableRepository {
 
     // Get all timetables
-    suspend fun getTimetables(
+    fun getTimetables(
         semesterNumber: Int?,
         academicStartYearOfSemester: Int?,
         academicEndYearOfSemester: Int?,
-        page: Int = 1,
-        limit: Int = 10
-    ): Response<AttendifyApiResponse<List<TimetableDto>?>>
+    ): Flow<PagingData<TimetableDto>>
 
     // Get timetable by ID
     suspend fun getTimetableById(timetableId: Int): Response<AttendifyApiResponse<TimetableDto>>
