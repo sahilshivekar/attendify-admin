@@ -50,7 +50,7 @@ fun StaffDetailsScreen(
     }
 
     AnimatedContent(
-        targetState = !state.isLoadingInitialStaffDetails,
+        targetState = state.isLoadingInitialStaffDetails,
         transitionSpec = {
             (slideInVertically { it / 4 } + fadeIn()).togetherWith(fadeOut())
         }

@@ -32,7 +32,8 @@ class GetStaffPagingSource(
             val newResponse = staffApi.getStaff(
                 searchQuery,
                 courseId,
-                page
+                page,
+                params.loadSize
             )
             staffTotalCount += newResponse.body()?.data?.staff?.size ?: 0
 

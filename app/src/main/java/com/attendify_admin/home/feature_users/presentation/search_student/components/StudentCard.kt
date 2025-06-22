@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
@@ -78,12 +80,14 @@ fun StudentCard(
             AsyncImage(
                 model = studentImageUrl,
                 contentDescription = "Student Image",
-                modifier = Modifier.size(50.dp).clip(CircleShape),
+                modifier = Modifier
+                    .size(42.dp)
+                    .clip(CircleShape),
                 placeholder = painter,
                 error = painter,
                 fallback = painter,
                 onLoading = null,
-                onSuccess = { imageLoaded = true },
+                onSuccess = { if (studentImageUrl != null) imageLoaded = true },
                 onError = null,
                 alignment = Alignment.Center,
                 contentScale = ContentScale.Crop,

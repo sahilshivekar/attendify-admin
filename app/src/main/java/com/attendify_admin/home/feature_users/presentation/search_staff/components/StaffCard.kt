@@ -57,7 +57,7 @@ fun StaffCard(
             contentColor = MaterialTheme.colorScheme.onSurface
         ),
     ) {
-
+        val painter = rememberAsyncImagePainter(R.drawable.baseline_account_circle_24)
         var imageLoaded by remember { mutableStateOf(false) }
 
         Row(
@@ -72,25 +72,18 @@ fun StaffCard(
                     onSuccess = {
                         imageLoaded = true
                     },
-                    placeholder = painterResource(R.drawable.baseline_account_circle_24),
-                    fallback = painterResource(R.drawable.baseline_account_circle_24),
-                    error = painterResource(R.drawable.baseline_account_circle_24)
+                    placeholder = painter,
+                    fallback = painter,
+                    error = painter
                 ),
                 contentDescription = null,
                 modifier = Modifier
-
-                    //to understand why the padding, width and height is applied this
-                    //way then make it normal (without the if condition) and you will see
-                    //image is taking larger size than icons which doesn't look good on screen
-
-                    // or the icon is having some additional default padding
-//                    .padding(vertical = if (imageLoaded) 16.dp else 12.dp)
-                    .padding(end = if (imageLoaded) 16.dp else 12.dp)
-                    .padding(vertical = if (imageLoaded) 8.dp else 4.dp)
-                    .padding(start = if (imageLoaded) 8.dp else 4.dp)
+                    .padding(end = 16.dp)
+                    .padding(vertical = 8.dp)
+                    .padding(start = 8.dp)
                     .clip(CircleShape)
-                    .height(if (imageLoaded) 42.dp else 50.dp)
-                    .width(if (imageLoaded) 42.dp else 50.dp),
+                    .height(42.dp)
+                    .width(42.dp),
                 contentScale = ContentScale.Crop,
                 colorFilter = if (imageLoaded) null else ColorFilter.tint(
                     MaterialTheme.colorScheme.onSurface.copy(

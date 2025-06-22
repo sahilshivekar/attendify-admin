@@ -60,7 +60,8 @@ class GetStudentsPagingSource(
                 currentSemester,
                 divisionCode,
                 batchCode,
-                page
+                page,
+                params.loadSize
             )
             totalStudentsCount += newResponse.body()?.data?.students?.size ?: 0
 

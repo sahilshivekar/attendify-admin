@@ -51,7 +51,7 @@ interface StudentApi {
         @Query("divisionCode") divisionCode: String?,
         @Query("batchCode") batchCode: String?,
         @Query("page") page: Int,
-//        @Query("limit") limit: Int
+        @Query("limit") limit: Int
     ): Response<AttendifyApiResponse<StudentListWithTotalDto>>
 
     @Multipart

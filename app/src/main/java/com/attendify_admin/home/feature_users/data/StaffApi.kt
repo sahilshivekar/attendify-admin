@@ -26,6 +26,7 @@ interface StaffApi {
         @Query("searchQuery") searchQuery: String?,
         @Query("courseId") courseId: Int?,
         @Query("page") page: Int,
+        @Query("limit") limit: Int
     ): Response<AttendifyApiResponse<StaffListWithTotalDto>>
 
     @GET("api/v1/staff/admin/get-staff-by-id")
