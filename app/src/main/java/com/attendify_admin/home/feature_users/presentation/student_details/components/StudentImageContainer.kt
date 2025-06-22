@@ -70,7 +70,7 @@ fun StudentImageContainer(
         ) {
             Column(
                 modifier = modifier
-                    .fillMaxWidth()
+                    .widthIn(max = UiConstants.MAX_WIDTH)
                     .wrapContentHeight()
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp)

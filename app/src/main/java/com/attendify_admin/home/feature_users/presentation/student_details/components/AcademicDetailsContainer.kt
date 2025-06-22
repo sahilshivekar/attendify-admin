@@ -22,7 +22,6 @@ import com.attendify_admin.home.feature_users.presentation.student_details.Stude
 fun AcademicDetailsContainer(modifier: Modifier = Modifier, state: StudentDetailsState) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
             .wrapContentHeight()
             .widthIn(max = UiConstants.MAX_WIDTH)
             .padding(top = 16.dp),

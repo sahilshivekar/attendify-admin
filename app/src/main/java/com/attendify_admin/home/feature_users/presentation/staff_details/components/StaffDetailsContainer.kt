@@ -22,10 +22,9 @@ import com.attendify_admin.home.feature_users.presentation.staff_details.StaffDe
 fun StaffDetailsContainer(modifier: Modifier = Modifier, state: StaffDetailsState) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .widthIn(max = UiConstants.MAX_WIDTH)
             .wrapContentHeight()
-            .padding(top = 16.dp),
+            .padding(top = 16.dp)
+            .widthIn(max = UiConstants.MAX_WIDTH),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )

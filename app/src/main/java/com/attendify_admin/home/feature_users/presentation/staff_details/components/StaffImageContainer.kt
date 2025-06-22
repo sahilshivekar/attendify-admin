@@ -68,15 +68,15 @@ fun StaffImageContainer(
             ) {
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .wrapContentHeight()
                         .verticalScroll(rememberScrollState())
                         .padding(horizontal = 16.dp)
-                        .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.medium),
+                        .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.medium)
+                        .widthIn(max = UiConstants.MAX_WIDTH),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     AsyncImage(
-                        model =if (state.newUploadedImageFileUri == null) state.staff?.staffImageUrl else state.newUploadedImageFileUri,
+                        model = if (state.newUploadedImageFileUri == null) state.staff?.staffImageUrl else state.newUploadedImageFileUri,
                         placeholder = painter,
                         error = painter,
                         fallback = painter,

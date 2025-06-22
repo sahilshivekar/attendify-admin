@@ -33,7 +33,6 @@ fun SemesterDetailsContainer(modifier: Modifier = Modifier, state: StudentDetail
     state.semesters?.let {
         Card(
             modifier = Modifier
-                .fillMaxWidth()
                 .wrapContentHeight()
                 .widthIn(max = UiConstants.MAX_WIDTH)
                 .padding(vertical = 16.dp),

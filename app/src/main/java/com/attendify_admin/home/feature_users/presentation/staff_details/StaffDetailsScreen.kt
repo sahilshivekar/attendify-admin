@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
@@ -25,9 +27,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.attendify_admin.common.domain.model.Staff
 import com.attendify_admin.common.presentation.PreviewWrapper
+import com.attendify_admin.common.presentation.UiConstants
 import com.attendify_admin.common.presentation.components.AttendifyTextButton
 import com.attendify_admin.home.feature_users.presentation.staff_details.components.StaffDetailsContainer
 import com.attendify_admin.home.feature_users.presentation.staff_details.components.StaffImageContainer
@@ -46,7 +50,7 @@ fun StaffDetailsScreen(
     }
 
     AnimatedContent(
-        targetState = state.isLoadingInitialStaffDetails,
+        targetState = !state.isLoadingInitialStaffDetails,
         transitionSpec = {
             (slideInVertically { it / 4 } + fadeIn()).togetherWith(fadeOut())
         }
@@ -74,34 +78,40 @@ fun StaffDetailsScreen(
 
                 StaffDetailsContainer(state = state)
 
-
-                Row(
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .padding(top = 16.dp)
+                        .widthIn(max = UiConstants.MAX_WIDTH),
                 ) {
-                    AttendifyTextButton(
-                        onClick = onEditStaffDetails,
-                        enabled = !state.isRemovingStaffMember
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("Edit details", color = MaterialTheme.colorScheme.primary)
-                    }
-                    AttendifyTextButton(
-                        onClick = { onEvent(StaffDetailsEvent.RemoveStaffClicked) },
-                        enabled = !state.isRemovingStaffMember
-                    ) {
-                        if (state.isRemovingStaffMember) {
-                            CircularProgressIndicator(
-                                color = MaterialTheme.colorScheme.error,
-                                modifier = Modifier.size(20.dp),
-                                strokeWidth = 2.dp,
-                            )
-                        } else {
-                            Text(
-                                text = "Remove staff member",
-                                color = MaterialTheme.colorScheme.error
-                            )
+                        AttendifyTextButton(
+                            onClick = onEditStaffDetails,
+                            enabled = !state.isRemovingStaffMember
+                        ) {
+                            Text("Edit details", color = MaterialTheme.colorScheme.primary)
+                        }
+                        AttendifyTextButton(
+                            onClick = { onEvent(StaffDetailsEvent.RemoveStaffClicked) },
+                            enabled = !state.isRemovingStaffMember
+                        ) {
+                            if (state.isRemovingStaffMember) {
+                                CircularProgressIndicator(
+                                    color = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.size(20.dp),
+                                    strokeWidth = 2.dp,
+                                )
+                            } else {
+                                Text(
+                                    text = "Remove staff member",
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
                         }
                     }
                 }
@@ -113,7 +123,7 @@ fun StaffDetailsScreen(
 }
 
 
-@Preview
+@PreviewScreenSizes
 @Composable
 fun StaffDetailsScreenPreview() {
     PreviewWrapper {

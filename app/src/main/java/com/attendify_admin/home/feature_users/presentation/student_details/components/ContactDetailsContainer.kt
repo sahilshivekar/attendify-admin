@@ -23,7 +23,6 @@ fun ContactDetailsContainer(modifier: Modifier = Modifier, state: StudentDetails
 
     Card(
         modifier = Modifier
-            .fillMaxWidth()
             .wrapContentHeight()
             .widthIn(max = UiConstants.MAX_WIDTH)
             .padding(top = 16.dp),

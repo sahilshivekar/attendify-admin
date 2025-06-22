@@ -26,7 +26,6 @@ fun PersonalDetailsContainer(
     //personal details card
     Card(
         modifier = Modifier
-            .fillMaxWidth()
             .wrapContentHeight()
             .widthIn(max = UiConstants.MAX_WIDTH)
             .padding(top = 16.dp),

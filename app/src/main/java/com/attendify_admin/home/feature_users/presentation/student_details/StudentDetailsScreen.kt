@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
@@ -24,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.attendify_admin.common.domain.model.Batch
 import com.attendify_admin.common.domain.model.Branch
@@ -36,6 +38,7 @@ import com.attendify_admin.common.domain.model.StudentDivision
 import com.attendify_admin.common.domain.model.StudentSemester
 import com.attendify_admin.common.presentation.PreviewWrapper
 import com.attendify_admin.common.presentation.ScreenPreview
+import com.attendify_admin.common.presentation.UiConstants
 import com.attendify_admin.common.presentation.components.AttendifyTextButton
 import com.attendify_admin.home.feature_users.presentation.student_details.components.AcademicDetailsContainer
 import com.attendify_admin.home.feature_users.presentation.student_details.components.ContactDetailsContainer
@@ -85,33 +88,40 @@ fun StudentDetailsScreen(
 
                 AcademicDetailsContainer(state = state)
 
-                Row(
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .padding(top = 16.dp)
+                        .widthIn(max = UiConstants.MAX_WIDTH),
                 ) {
-                    AttendifyTextButton(
-                        onClick = onEditStudentDetails,
-                        enabled = !state.isRemovingStudent
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Edit details", color = MaterialTheme.colorScheme.primary)
-                    }
-                    AttendifyTextButton(
-                        onClick = { onEvent(StudentDetailsEvent.RemoveStudentClicked) },
-                        enabled = !state.isRemovingStudent
-                    ) {
-                        if (state.isRemovingStudent) {
-                            CircularProgressIndicator(
-                                color = MaterialTheme.colorScheme.error,
-                                modifier = Modifier.size(20.dp),
-                                strokeWidth = 2.dp,
-                            )
-                        } else {
-                            Text(
-                                text = "Remove student",
-                                color = MaterialTheme.colorScheme.error
-                            )
+                        AttendifyTextButton(
+                            onClick = onEditStudentDetails,
+                            enabled = !state.isRemovingStudent
+                        ) {
+                            Text(text = "Edit details", color = MaterialTheme.colorScheme.primary)
+                        }
+                        AttendifyTextButton(
+                            onClick = { onEvent(StudentDetailsEvent.RemoveStudentClicked) },
+                            enabled = !state.isRemovingStudent
+                        ) {
+                            if (state.isRemovingStudent) {
+                                CircularProgressIndicator(
+                                    color = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.size(20.dp),
+                                    strokeWidth = 2.dp,
+                                )
+                            } else {
+                                Text(
+                                    text = "Remove student",
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
                         }
                     }
                 }
@@ -126,7 +136,7 @@ fun StudentDetailsScreen(
 }
 
 
-@ScreenPreview
+@PreviewScreenSizes
 @Composable
 fun StudentDetailsScreenPreview() {
     PreviewWrapper {
