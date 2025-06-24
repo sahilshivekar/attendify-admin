@@ -32,7 +32,8 @@ class GetCoursesPagingSource(
                 semesterNumber = semesterNumber,
                 schemeId = schemeId,
                 page = page,
-                limit = params.loadSize
+                limit = params.loadSize,
+                false
             )
 
             val responseBody = response.body()?.data

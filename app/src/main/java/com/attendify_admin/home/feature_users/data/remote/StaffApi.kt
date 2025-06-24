@@ -25,9 +25,11 @@ interface StaffApi {
     suspend fun getStaff(
         @Query("searchQuery") searchQuery: String?,
         @Query("courseId") courseId: Int?,
-        @Query("page") page: Int,
-        @Query("limit") limit: Int
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("getAll") getAll: Boolean,
     ): Response<AttendifyApiResponse<StaffListWithTotalDto>>
+
 
     @GET("api/v1/staff/admin/get-staff-by-id")
     suspend fun getStaffById(@Query("staffId") staffId: Int): Response<AttendifyApiResponse<StaffDto>>
@@ -44,7 +46,7 @@ interface StaffApi {
         @Part("highestQualification") highestQualification: RequestBody?,
         @Part("role") role: RequestBody,
         @Part("isActive") isActive: RequestBody,
-        @Part staffImageFile: MultipartBody.Part?
+        @Part staffImageFile: MultipartBody.Part?,
     ): Response<AttendifyApiResponse<StaffDto>>
 
     @PUT("api/v1/staff/admin/update-details")
@@ -57,7 +59,7 @@ interface StaffApi {
     @PUT("api/v1/staff/admin/update-image")
     suspend fun updateStaffImage(
         @Part("id") id: RequestBody,
-        @Part staffImageFile: MultipartBody.Part
+        @Part staffImageFile: MultipartBody.Part,
     ): Response<AttendifyApiResponse<StaffDto>>
 
     @DELETE("api/v1/staff/admin/remove")

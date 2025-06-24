@@ -29,7 +29,8 @@ class GetRoomsPagingSource(
                 sortBy = sortBy,
                 sortOrder = sortOrder,
                 page = page,
-                limit = params.loadSize
+                limit = params.loadSize,
+                false
             )
 
             val rooms = response.body()?.data?.rooms ?: emptyList()

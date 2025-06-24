@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.RoomDto
+import com.attendify_admin.common.data.remote.dto.response.RoomListWithTotalCountDto
 import com.attendify_admin.home.feature_schedule.data.remote.RoomApi
 import com.attendify_admin.home.feature_schedule.data.remote.dto.request.AddRoomRequest
 import com.attendify_admin.home.feature_schedule.data.remote.dto.request.UpdateRoomRequest
@@ -37,6 +38,21 @@ class RoomRepositoryImpl @Inject constructor(
             }
         ).flow
     }
+    override suspend fun getAllRooms(
+        searchQuery: String?,
+        sortBy: String,
+        sortOrder: String
+    ): Response<AttendifyApiResponse<RoomListWithTotalCountDto>> {
+        return roomApi.getRooms(
+            searchQuery = searchQuery,
+            sortBy = sortBy,
+            sortOrder = sortOrder,
+            page = 1,
+            limit = 10,
+            getAll = true
+        )
+    }
+
 
 
     override suspend fun getRoomById(roomId: Int): Response<AttendifyApiResponse<RoomDto?>> =

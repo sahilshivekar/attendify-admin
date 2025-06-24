@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.CourseDto
+import com.attendify_admin.common.data.remote.dto.response.CourseListWIthTotalCountDto
 import com.attendify_admin.home.feature_academics.data.remote.CourseApi
 import com.attendify_admin.home.feature_academics.data.remote.dto.request.AddCourseRequest
 import com.attendify_admin.home.feature_academics.data.remote.dto.request.AddCourseToBranchWithSemesterNumberRequest
@@ -38,6 +39,24 @@ class CourseRepositoryImpl @Inject constructor(
             }
         ).flow
     }
+
+    override suspend fun getAllCourses(
+        searchQuery: String?,
+        branchId: Int?,
+        semesterNumber: Int?,
+        schemeId: Int?
+    ): Response<AttendifyApiResponse<CourseListWIthTotalCountDto>> {
+        return courseApi.getCourses(
+            searchQuery = searchQuery,
+            branchId = branchId,
+            semesterNumber = semesterNumber,
+            schemeId = schemeId,
+            page = 1,
+            limit = 10,
+            getAll = true
+        )
+    }
+
 
     override suspend fun addCourse(requestBody: AddCourseRequest): Response<AttendifyApiResponse<CourseDto?>> =
         courseApi.addCourse(requestBody)

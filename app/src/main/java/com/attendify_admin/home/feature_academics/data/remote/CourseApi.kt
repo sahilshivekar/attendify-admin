@@ -24,9 +24,11 @@ interface CourseApi {
         @Query("branchId") branchId: Int?,
         @Query("semesterNumber") semesterNumber: Int?,
         @Query("schemeId") schemeId: Int?,
-        @Query("page") page: Int,
-        @Query("limit") limit: Int,
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("getAll") getAll: Boolean
     ): Response<AttendifyApiResponse<CourseListWIthTotalCountDto>>
+
 
     @POST("api/v1/course/admin/add")
     suspend fun addCourse(@Body requestBody: AddCourseRequest): Response<AttendifyApiResponse<CourseDto?>>

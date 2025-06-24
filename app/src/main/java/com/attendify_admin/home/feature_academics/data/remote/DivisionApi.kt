@@ -24,8 +24,9 @@ interface DivisionApi {
         @Query("academicStartYear") academicStartYear: Int?,
         @Query("academicEndYear") academicEndYear: Int?,
         @Query("searchQuery") searchQuery: String?,
-        @Query("page") page: Int,
-        @Query("limit") limit: Int
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("getAll") getAll: Boolean
     ): Response<AttendifyApiResponse<DivisionListWithTotalCountDto>>
 
     @POST("api/v1/division/admin/add")

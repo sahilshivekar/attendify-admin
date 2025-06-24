@@ -22,9 +22,11 @@ interface SemesterApi {
         @Query("academicEndYear") academicEndYear: Int?,
         @Query("branchId") branchId: Int?,
         @Query("schemeId") schemeId: Int?,
-        @Query("page") page: Int,
-        @Query("limit") limit: Int
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("getAll") getAll: Boolean,
     ): Response<AttendifyApiResponse<SemesterListWithTotalCountDto>>
+
 
     @POST("api/v1/semester/admin/add")
     suspend fun addSemester(@Body requestBody: AddSemesterRequest): Response<AttendifyApiResponse<SemesterDto?>>

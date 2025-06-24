@@ -34,7 +34,8 @@ class GetStaffPagingSource(
                 searchQuery,
                 courseId,
                 page,
-                params.loadSize
+                params.loadSize,
+                false
             )
             staffTotalCount += newResponse.body()?.data?.staff?.size ?: 0
 

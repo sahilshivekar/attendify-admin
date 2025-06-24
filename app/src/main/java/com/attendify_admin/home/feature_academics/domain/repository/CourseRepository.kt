@@ -3,6 +3,7 @@ package com.attendify_admin.home.feature_academics.domain.repository
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.CourseDto
+import com.attendify_admin.common.data.remote.dto.response.CourseListWIthTotalCountDto
 import com.attendify_admin.home.feature_academics.data.remote.dto.request.AddCourseRequest
 import com.attendify_admin.home.feature_academics.data.remote.dto.request.AddCourseToBranchWithSemesterNumberRequest
 import com.attendify_admin.home.feature_academics.data.remote.dto.request.RemoveCourseFromBranchWithSemesterNumberRequest
@@ -18,6 +19,14 @@ interface CourseRepository {
         semesterNumber: Int?,
         schemeId: Int?,
     ): Flow<PagingData<CourseDto>>
+
+    suspend fun getAllCourses(
+        searchQuery: String?,
+        branchId: Int?,
+        semesterNumber: Int?,
+        schemeId: Int?
+    ): Response<AttendifyApiResponse<CourseListWIthTotalCountDto>>
+
 
     suspend fun addCourse(requestBody: AddCourseRequest): Response<AttendifyApiResponse<CourseDto?>>
 

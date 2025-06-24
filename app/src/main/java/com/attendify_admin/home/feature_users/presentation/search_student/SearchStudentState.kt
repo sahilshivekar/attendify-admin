@@ -3,12 +3,15 @@ package com.attendify_admin.home.feature_users.presentation.search_student
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.paging.PagingData
+import com.attendify_admin.common.domain.model.Batch
 import com.attendify_admin.common.domain.model.Branch
+import com.attendify_admin.common.domain.model.Division
 import com.attendify_admin.common.domain.model.Scheme
 import com.attendify_admin.common.utils.DateTimeUtil
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -26,25 +29,45 @@ data class SearchStudentState(
 
     val isAdmissionYearDropDownVisible: Boolean = false,
 
+    val selectedDropoutYear: String? = null,
+    val dropoutYearOptions: ImmutableList<String> = DateTimeUtil.getPastTenYears().toMutableList()
+        .map { year ->
+            "${year.toInt() - 1} - $year"
+        }.toImmutableList(),
 
     val branchOptions: PersistentList<Branch>? = null,
     val semesterOptions: PersistentList<Int> = persistentListOf(1, 2, 3, 4, 5, 6, 7, 8),
-    val academicStartYearOfSemesterOptions: ImmutableList<String> = DateTimeUtil.getPastTenYears(),
-    val academicEndYearOfSemesterOptions: ImmutableList<String> = DateTimeUtil.getPastTenYears(),
-    val admissionTypeOptions: PersistentList<String>? = persistentListOf("First Year", "Direct Second Year"),
-    val schemeOptions: PersistentList<Scheme>? = null,
-    val divisionOptions: PersistentList<String>? = null, // will show distinct divisions
-    val batchOptions: PersistentList<String>? = null, // will show distinct batches
+    val academicYearOfSemesterOptions: ImmutableList<String> = DateTimeUtil.getPastTenYears()
+        .toMutableList()
+        .map { year ->
+            "${year.toInt() - 1} - $year"
+        }.toImmutableList(),
+
+    val admissionTypeOptions: PersistentList<String>? = persistentListOf(
+        "First Year",
+        "Direct Second Year"
+    ),
     val admissionYearOptions: ImmutableList<String>? = DateTimeUtil.getPastTenYears(),
-    val selectedBranches: PersistentList<Branch> = persistentListOf(),
-    val selectedSemesters: PersistentList<Int> = persistentListOf(),
-    val selectedAcademicStartYearOfSemester: String? = null,
-    val selectedAcademicEndYearOfSemester: String? = null,
+    val selectedAcademicYearOfSemester: String? = null,
     val selectedAdmissionTypes: PersistentList<String> = persistentListOf(),
     val selectedAdmissionYear: String? = null,
     val isBottomSheetVisible: Boolean = false,
     val areBranchesLoading: Boolean = true,
-    val isSearchExpanded: Boolean = true
+    val isSearchExpanded: Boolean = true,
+    val selectedBranches: PersistentList<Branch> = persistentListOf(),
+    val selectedSemesters: PersistentList<Int> = persistentListOf(),
+
+    val selectedScheme: Scheme? = null,
+    val selectedDivision: Division? = null,
+    val selectedBatch: Batch? = null,
+
+    val schemeOptions: ImmutableList<Scheme> = persistentListOf(),
+    val divisionOptions: ImmutableList<Division> = persistentListOf(),
+    val batchOptions: ImmutableList<Batch> = persistentListOf(),
+
+    val areDivisionsLoading: Boolean = false,
+    val areBatchesLoading: Boolean = false,
+    val areSchemesLoading: Boolean = false,
 )
 
 @Immutable

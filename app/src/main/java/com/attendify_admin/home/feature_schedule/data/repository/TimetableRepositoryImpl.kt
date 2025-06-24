@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.TimetableDto
+import com.attendify_admin.common.data.remote.dto.response.TimetableListWithTotalCountDto
 import com.attendify_admin.home.feature_schedule.data.remote.TimetableApi
 import com.attendify_admin.home.feature_schedule.data.remote.dto.request.AddTimetableRequest
 import com.attendify_admin.home.feature_schedule.data.remote.dto.request.UpdateTimetableRequest
@@ -34,6 +35,21 @@ class TimetableRepositoryImpl(
             }
         ).flow
     }
+    override suspend fun getAllTimetables(
+        semesterNumber: Int?,
+        academicStartYearOfSemester: Int?,
+        academicEndYearOfSemester: Int?
+    ): Response<AttendifyApiResponse<TimetableListWithTotalCountDto>> {
+        return timetableApi.getTimetables(
+            semesterNumber = semesterNumber,
+            academicStartYearOfSemester = academicStartYearOfSemester,
+            academicEndYearOfSemester = academicEndYearOfSemester,
+            page = 1,
+            limit = 10,
+            getAll = true
+        )
+    }
+
 
     override suspend fun getTimetableById(timetableId: Int): Response<AttendifyApiResponse<TimetableDto>> {
         return timetableApi.getTimetableById(timetableId)

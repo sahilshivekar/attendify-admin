@@ -7,6 +7,7 @@ import com.attendify_admin.common.data.remote.dto.response.StudentBatchDto
 import com.attendify_admin.common.data.remote.dto.response.StudentDivisionDto
 import com.attendify_admin.common.data.remote.dto.response.StudentDto
 import com.attendify_admin.common.data.remote.dto.response.StudentFCMTokenDto
+import com.attendify_admin.common.data.remote.dto.response.StudentListWithTotalDto
 import com.attendify_admin.common.data.remote.dto.response.StudentSemesterDto
 import com.attendify_admin.home.feature_users.data.remote.dto.request.AddDropoutRequest
 import com.attendify_admin.home.feature_users.data.remote.dto.request.AddStudentFcmTokenRequest
@@ -42,7 +43,31 @@ interface StudentRepository {
         currentSemester: Boolean?,
         divisionCode: String?,
         batchCode: String?,
+        dropoutAcademicStartYear: String? = null,
+        dropoutAcademicEndYear: String? = null,
     ): Flow<PagingData<StudentDto>>
+
+    suspend fun getAllStudents(
+        searchQuery: String?,
+        branchIds: List<Int>?,
+        semesterNumbers: List<Int>?,
+        academicStartYearOfSemester: Int?,
+        academicEndYearOfSemester: Int?,
+        batchId: Int?,
+        schemeId: Int?,
+        divisionId: Int?,
+        academicStatuses: List<String>?,
+        admissionTypes: List<String>?,
+        admissionYear: Int?,
+        currentBatch: Boolean?,
+        currentDivision: Boolean?,
+        currentSemester: Boolean?,
+        divisionCode: String?,
+        batchCode: String?,
+        dropoutAcademicStartYear: String?,
+        dropoutAcademicEndYear: String?
+    ): Response<AttendifyApiResponse<StudentListWithTotalDto>>
+
 
     // Add a student
     suspend fun addStudent(

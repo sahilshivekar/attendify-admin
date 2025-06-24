@@ -30,7 +30,8 @@ class GetTimetablesPagingSource(
                 academicStartYearOfSemester = academicStartYearOfSemester,
                 academicEndYearOfSemester = academicEndYearOfSemester,
                 page = page,
-                limit = params.loadSize
+                limit = params.loadSize,
+                false
             )
 
             val timetables = response.body()?.data?.timetables ?: emptyList()

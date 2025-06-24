@@ -1,5 +1,9 @@
 package com.attendify_admin.home.feature_users.presentation.search_staff
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +16,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +30,7 @@ import com.attendify_admin.common.presentation.UiConstants
 import com.attendify_admin.common.presentation.components.AttendifyNoResultsIndicator
 import com.attendify_admin.common.presentation.components.AttendifySearchBar
 import com.attendify_admin.home.feature_users.presentation.search_staff.components.StaffCard
+import com.attendify_admin.home.feature_users.presentation.search_student.SearchStudentEvent
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,48 +71,32 @@ fun SearchStaffScreen(
 
             val staff = state.staff.collectAsLazyPagingItems()
 
-            LazyColumn(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top,
-                modifier = Modifier.fillMaxSize()
+            val pullRefreshState = rememberPullToRefreshState()
+
+            if (staff.loadState.refresh is LoadState.Loading) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+            AnimatedVisibility(
+                visible = staff.itemCount > 0 || (staff.loadState.refresh is LoadState.NotLoading && staff.itemCount == 0) || staff.loadState.hasError,
+                enter = fadeIn() + slideInVertically {
+                    it / 5
+                },
+                exit = fadeOut()
             ) {
-                items(
-                    count = staff.itemCount,
-                    key = { index -> index }
+                PullToRefreshBox(
+                    isRefreshing = false,
+                    onRefresh = {
+                        onEvent(SearchStaffEvent.FetchStaff)
+                    },
+                    state = pullRefreshState
+                ) {
 
-                ) { index ->
-                    staff[index]?.let { staffMember ->
-                        StaffCard(
-                            name = "${staffMember.firstName} ${if (staffMember.middleName != null) staffMember.middleName + " " else ""}${staffMember.lastName}",
-                            role = staffMember.role,
-                            imageUrl = staffMember.staffImageUrl,
-                            highestQualification = staffMember.highestQualification,
-                            onClick = {
-                                onStaffCardClick(staffMember.id)
-                            }
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-
-                item {
-                    if (staff.loadState.append is LoadState.Loading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.padding(vertical = 32.dp)
-                        )
-                    }
-                }
-                item {
-                    if (staff.loadState.refresh is LoadState.NotLoading && staff.itemCount == 0) {
-                        AttendifyNoResultsIndicator()
-                    }
-                }
-                item {
-                    if (staff.loadState.hasError) {
-                        AttendifyNoResultsIndicator(text = "Some error occurred while fetching staff")
-                    }
-                }
-                item {
                     if (staff.loadState.refresh is LoadState.Loading) {
                         Column(
                             verticalArrangement = Arrangement.Center,
@@ -113,6 +104,42 @@ fun SearchStaffScreen(
                             modifier = Modifier.fillMaxSize()
                         ) {
                             CircularProgressIndicator()
+                        }
+                    }
+                    if (staff.loadState.refresh is LoadState.NotLoading && staff.itemCount == 0) {
+                        AttendifyNoResultsIndicator()
+                    }
+
+                    if (staff.loadState.hasError) {
+                        AttendifyNoResultsIndicator(text = "Some error occurred while fetching students")
+                    }
+                    LazyColumn(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Top,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(
+                            count = staff.itemCount,
+                            key = { index -> index }
+
+                        ) { index ->
+                            staff[index]?.let { staffMember ->
+                                StaffCard(
+                                    name = "${staffMember.firstName} ${if (staffMember.middleName != null) staffMember.middleName + " " else ""}${staffMember.lastName}",
+                                    role = staffMember.role,
+                                    imageUrl = staffMember.staffImageUrl,
+                                    highestQualification = staffMember.highestQualification,
+                                    onClick = {
+                                        onStaffCardClick(staffMember.id)
+                                    }
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(8.dp))
+                            if (staff.loadState.append is LoadState.Loading) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.padding(vertical = 32.dp)
+                                )
+                            }
                         }
                     }
                 }

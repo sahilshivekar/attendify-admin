@@ -34,7 +34,8 @@ class GetSemestersPagingSource(
                 branchId = branchId,
                 schemeId = schemeId,
                 page = page,
-                limit = params.loadSize
+                limit = params.loadSize,
+                false
             )
 
             val data = response.body()?.data

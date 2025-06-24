@@ -21,6 +21,7 @@ interface ClassApi {
     @POST("api/v1/class/admin/admin/add-class")
     suspend fun addClass(@Body requestBody: AddClassRequest): Response<AttendifyApiResponse<ClassDto>>
 
+
     @GET("api/v1/class/admin/get-classes")
     suspend fun getClasses(
         @Query("searchQuery") searchQuery: String?,
@@ -37,9 +38,11 @@ interface ClassApi {
         @Query("classType") classType: String?,
         @Query("courseId") courseId: Int?,
         @Query("semesterId") semesterId: Int?,
-        @Query("page") page: Int,
-        @Query("limit") limit: Int,
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("getAll") getAll: Boolean,
     ): Response<AttendifyApiResponse<ClassListWithTotalCountDto>>
+
 
     @GET("api/v1/class/admin/get-class-by-id")
     suspend fun getClassById(@Query("classId") classId: Int): Response<AttendifyApiResponse<ClassDto>>
@@ -65,7 +68,9 @@ interface ClassApi {
         @Query("divisionId") divisionId: Int,
         @Query("batchId") batchId: Int,
         @Query("date") date: String,
-        @Query("page") page: Int,
-        @Query("limit") limit: Int,
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("getAll") getAll: Boolean,
     ): Response<AttendifyApiResponse<CancelledClassListWithTotalCountDto>>
+
 }

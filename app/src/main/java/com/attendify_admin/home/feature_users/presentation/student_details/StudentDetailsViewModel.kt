@@ -10,6 +10,7 @@ import com.attendify_admin.common.presentation.components.global_snackbar.Snackb
 import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarController
 import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarEvent
 import com.attendify_admin.common.utils.FileUtil
+import com.attendify_admin.home.feature_users.domain.use_case.GetDropoutDetailsOfStudentUseCase
 import com.attendify_admin.home.feature_users.domain.use_case.GetStudentBatchesByIdUseCase
 import com.attendify_admin.home.feature_users.domain.use_case.GetStudentDetailsByIdUseCase
 import com.attendify_admin.home.feature_users.domain.use_case.GetStudentDivisionsByIdUseCase
@@ -19,6 +20,7 @@ import com.attendify_admin.home.feature_users.domain.use_case.RemoveStudentUseCa
 import com.attendify_admin.home.feature_users.domain.use_case.UpdateStudentImageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,6 +40,7 @@ class StudentDetailsViewModel @Inject constructor(
     private val updateStudentImageUseCase: UpdateStudentImageUseCase,
     private val removeStudentImageUseCase: RemoveStudentImageUseCase,
     private val removeStudentUseCase: RemoveStudentUseCase,
+    private val getDropoutDetailsOfStudentUseCase: GetDropoutDetailsOfStudentUseCase,
     savedStateHandle: SavedStateHandle,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
@@ -55,6 +58,7 @@ class StudentDetailsViewModel @Inject constructor(
                 getSemesters()
                 getDivisions()
                 getBatches()
+                getStudentDropoutDetails(studentId)
             }
         }
 
@@ -132,6 +136,38 @@ class StudentDetailsViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun getStudentDropoutDetails(studentId: Int){
+        getDropoutDetailsOfStudentUseCase(studentId).onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    _state.update { it.copy(areDropoutDetailsLoading = true) }
+                }
+
+                is Resource.Success -> {
+                    _state.update {
+                        it.copy(
+                            dropoutDetails = result.data.orEmpty().toImmutableList(),
+                            areDropoutDetailsLoading = false
+                        )
+                    }
+                }
+
+                is Resource.Error -> {
+                    _state.update { it.copy(areDropoutDetailsLoading = false) }
+
+                    viewModelScope.launch {
+                        SnackbarController.sendEvent(
+                            SnackbarEvent(
+                                message = result.message ?: "Error fetching dropout details"
+                            )
+                        )
+                    }
+                }
+            }
+        }.launchIn(viewModelScope)
+
     }
 
     private fun removeStudent(studentId: Int) {

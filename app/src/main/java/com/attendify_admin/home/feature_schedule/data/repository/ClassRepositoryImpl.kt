@@ -5,7 +5,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.CancelledClassDto
+import com.attendify_admin.common.data.remote.dto.response.CancelledClassListWithTotalCountDto
 import com.attendify_admin.common.data.remote.dto.response.ClassDto
+import com.attendify_admin.common.data.remote.dto.response.ClassListWithTotalCountDto
 import com.attendify_admin.home.feature_schedule.data.remote.ClassApi
 import com.attendify_admin.home.feature_schedule.data.remote.dto.request.AddClassRequest
 import com.attendify_admin.home.feature_schedule.data.remote.dto.request.AddExtraClassRequest
@@ -64,6 +66,44 @@ class ClassRepositoryImpl(
         ).flow
     }
 
+    override suspend fun getAllClasses(
+        searchQuery: String?,
+        timetableId: Int?,
+        divisionId: Int?,
+        startTime: String?,
+        endTime: String?,
+        activeFrom: String?,
+        activeTill: String?,
+        instructorId: Int?,
+        dayOfWeek: String?,
+        roomId: Int?,
+        batchId: Int?,
+        classType: String?,
+        courseId: Int?,
+        semesterId: Int?
+    ): Response<AttendifyApiResponse<ClassListWithTotalCountDto>> {
+        return classApi.getClasses(
+            searchQuery = searchQuery,
+            timetableId = timetableId,
+            divisionId = divisionId,
+            startTime = startTime,
+            endTime = endTime,
+            activeFrom = activeFrom,
+            activeTill = activeTill,
+            instructorId = instructorId,
+            dayOfWeek = dayOfWeek,
+            roomId = roomId,
+            batchId = batchId,
+            classType = classType,
+            courseId = courseId,
+            semesterId = semesterId,
+            page = 1,
+            limit = 10,
+            getAll = true
+        )
+    }
+
+
 
     override suspend fun getClassById(classId: Int): Response<AttendifyApiResponse<ClassDto>> {
         return classApi.getClassById(classId)
@@ -103,5 +143,21 @@ class ClassRepositoryImpl(
             }
         ).flow
     }
+
+    override suspend fun getAllCancelledClasses(
+        divisionId: Int,
+        batchId: Int,
+        date: String
+    ): Response<AttendifyApiResponse<CancelledClassListWithTotalCountDto>> {
+        return classApi.getCancelledClasses(
+            divisionId = divisionId,
+            batchId = batchId,
+            date = date,
+            page = 1,
+            limit = 10,
+            getAll = true
+        )
+    }
+
 
 }

@@ -34,7 +34,8 @@ class GetBatchesPagingSource(
                 academicEndYear = academicEndYear,
                 searchQuery = searchQuery,
                 page = page,
-                limit = params.loadSize
+                limit = params.loadSize,
+                false
             )
 
             val batches = response.body()?.data?.batches ?: emptyList()

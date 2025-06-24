@@ -20,9 +20,11 @@ interface TimetableApi {
         @Query("semesterNumber") semesterNumber: Int?,
         @Query("academicStartYearOfSemester") academicStartYearOfSemester: Int?,
         @Query("academicEndYearOfSemester") academicEndYearOfSemester: Int?,
-        @Query("page") page: Int,
-        @Query("limit") limit: Int
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("getAll") getAll: Boolean,
     ): Response<AttendifyApiResponse<TimetableListWithTotalCountDto>>
+
 
     @GET("api/v1/timetable/admin/get-timetable-by-id")
     suspend fun getTimetableById(@Query("timetableId") timetableId: Int): Response<AttendifyApiResponse<TimetableDto>>

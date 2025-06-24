@@ -253,7 +253,7 @@ fun UsersNavHost() {
                 }
             ),
             enterTransition = {
-                fadeIn() + slideInHorizontally { it / 2 }
+                fadeIn()
             },
             exitTransition = {
                 fadeOut() + slideOutHorizontally { -it / 2 }
@@ -494,7 +494,7 @@ fun UsersNavHost() {
                 }
             ),
             enterTransition = {
-                fadeIn() + slideInHorizontally { it / 2 }
+                fadeIn()
             },
             exitTransition = {
                 fadeOut() + slideOutHorizontally { -it / 2 }

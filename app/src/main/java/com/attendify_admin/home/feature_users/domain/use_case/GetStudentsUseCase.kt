@@ -29,12 +29,14 @@ class GetStudentsUseCase @Inject constructor(private val studentRepository: Stud
         currentSemester: Boolean? = null,
         divisionCode: String? = null,
         batchCode: String? = null,
+        dropoutAcademicStartYear: String? = null,
+        dropoutAcademicEndYear: String? = null,
     ): Flow<PagingData<Student>> {
         return studentRepository.getStudents(
             searchQuery, branchIds, semesterNumbers, academicStartYearOfSemester,
             academicEndYearOfSemester, batchId, schemeId, divisionId, academicStatuses,
             admissionTypes, admissionYear, currentBatch, currentDivision, currentSemester,
-            divisionCode, batchCode
+            divisionCode, batchCode, dropoutAcademicStartYear, dropoutAcademicEndYear
         ).map { it.map(StudentDto::toStudent) }
     }
 }

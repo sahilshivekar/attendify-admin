@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.StaffDto
+import com.attendify_admin.common.data.remote.dto.response.StaffListWithTotalDto
 import com.attendify_admin.common.data.remote.dto.response.TeacherTeachesDto
 import com.attendify_admin.home.feature_users.data.remote.StaffApi
 import com.attendify_admin.home.feature_users.data.remote.dto.request.AddTeachingSubjectRequest
@@ -32,6 +33,20 @@ class StaffRepositoryImpl(
             pagingSourceFactory = { GetStaffPagingSource(staffApi, searchQuery, courseId) }
         ).flow
     }
+
+    override suspend fun getAllStaff(
+        searchQuery: String?,
+        courseId: Int?
+    ): Response<AttendifyApiResponse<StaffListWithTotalDto>> {
+        return staffApi.getStaff(
+            searchQuery = searchQuery,
+            courseId = courseId,
+            page = 1,
+            limit = 10,
+            getAll = true
+        )
+    }
+
 
     override suspend fun getStaffById(staffId: Int): Response<AttendifyApiResponse<StaffDto>> {
         return staffApi.getStaffById(staffId)

@@ -5,7 +5,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -21,16 +20,11 @@ import com.attendify_admin.root_navigation.AppDestination
 fun HomeScaffold(
     rootNavController: NavHostController,
     topAppBarState: TopAppBarState,
-    onDestinationChange: (String?) -> Unit
 ) {
     val homeNavController = rememberNavController()
 
     val currentDestinationRoute =
         homeNavController.currentBackStackEntryAsState().value?.destination?.route
-
-    LaunchedEffect(key1 = currentDestinationRoute) {
-        onDestinationChange(currentDestinationRoute)
-    }
 
     Scaffold(
         topBar = {
@@ -40,7 +34,6 @@ fun HomeScaffold(
                     rootNavController.navigate(route = AppDestination.AdminMgt.route)
                 }
             )
-
         },
 
         bottomBar = {

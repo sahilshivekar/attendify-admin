@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.SemesterDto
+import com.attendify_admin.common.data.remote.dto.response.SemesterListWithTotalCountDto
 import com.attendify_admin.home.feature_academics.data.remote.SemesterApi
 import com.attendify_admin.home.feature_academics.data.remote.dto.request.AddSemesterRequest
 import com.attendify_admin.home.feature_academics.data.remote.dto.request.UpdateSemesterRequest
@@ -39,6 +40,26 @@ class SemesterRepositoryImpl @Inject constructor(
             }
         ).flow
     }
+
+    override suspend fun getAllSemesters(
+        semesterNumber: Int?,
+        academicStartYear: Int?,
+        academicEndYear: Int?,
+        branchId: Int?,
+        schemeId: Int?
+    ): Response<AttendifyApiResponse<SemesterListWithTotalCountDto>> {
+        return semesterApi.getSemesters(
+            semesterNumber = semesterNumber,
+            academicStartYear = academicStartYear,
+            academicEndYear = academicEndYear,
+            branchId = branchId,
+            schemeId = schemeId,
+            page = 1,
+            limit = 10,
+            getAll = true
+        )
+    }
+
 
     override suspend fun addSemester(requestBody: AddSemesterRequest): Response<AttendifyApiResponse<SemesterDto?>> =
         semesterApi.addSemester(requestBody)

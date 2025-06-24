@@ -9,6 +9,7 @@ import com.attendify_admin.common.data.remote.dto.response.StudentBatchDto
 import com.attendify_admin.common.data.remote.dto.response.StudentDivisionDto
 import com.attendify_admin.common.data.remote.dto.response.StudentDto
 import com.attendify_admin.common.data.remote.dto.response.StudentFCMTokenDto
+import com.attendify_admin.common.data.remote.dto.response.StudentListWithTotalDto
 import com.attendify_admin.common.data.remote.dto.response.StudentSemesterDto
 import com.attendify_admin.home.feature_users.data.remote.StudentApi
 import com.attendify_admin.home.feature_users.data.remote.dto.request.AddDropoutRequest
@@ -51,6 +52,8 @@ class StudentRepositoryImpl(
         currentSemester: Boolean?,
         divisionCode: String?,
         batchCode: String?,
+        dropoutAcademicStartYear: String?,
+        dropoutAcademicEndYear: String?
     ): Flow<PagingData<StudentDto>> {
 
         return Pager(
@@ -73,12 +76,60 @@ class StudentRepositoryImpl(
                     currentDivision,
                     currentSemester,
                     divisionCode,
-                    batchCode
+                    batchCode,
+                    dropoutAcademicStartYear,
+                    dropoutAcademicEndYear
                 )
             }
         ).flow
 
     }
+
+    override suspend fun getAllStudents(
+        searchQuery: String?,
+        branchIds: List<Int>?,
+        semesterNumbers: List<Int>?,
+        academicStartYearOfSemester: Int?,
+        academicEndYearOfSemester: Int?,
+        batchId: Int?,
+        schemeId: Int?,
+        divisionId: Int?,
+        academicStatuses: List<String>?,
+        admissionTypes: List<String>?,
+        admissionYear: Int?,
+        currentBatch: Boolean?,
+        currentDivision: Boolean?,
+        currentSemester: Boolean?,
+        divisionCode: String?,
+        batchCode: String?,
+        dropoutAcademicStartYear: String?,
+        dropoutAcademicEndYear: String?
+    ): Response<AttendifyApiResponse<StudentListWithTotalDto>> {
+        return studentApi.getStudents(
+            searchQuery = searchQuery,
+            branchIds = branchIds,
+            semesterNumbers = semesterNumbers,
+            academicStartYearOfSemester = academicStartYearOfSemester,
+            academicEndYearOfSemester = academicEndYearOfSemester,
+            batchId = batchId,
+            schemeId = schemeId,
+            divisionId = divisionId,
+            academicStatuses = academicStatuses,
+            admissionTypes = admissionTypes,
+            admissionYear = admissionYear,
+            currentBatch = currentBatch,
+            currentDivision = currentDivision,
+            currentSemester = currentSemester,
+            divisionCode = divisionCode,
+            batchCode = batchCode,
+            page = 1,
+            limit = 10,
+            dropoutAcademicStartYear = dropoutAcademicStartYear,
+            dropoutAcademicEndYear = dropoutAcademicEndYear,
+            getAll = true
+        )
+    }
+
 
     override suspend fun addStudent(
         prn: String,

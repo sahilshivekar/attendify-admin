@@ -34,7 +34,8 @@ class GetDivisionsPagingSource(
                 academicEndYear = academicEndYear,
                 searchQuery = searchQuery,
                 page = page,
-                limit = params.loadSize
+                limit = params.loadSize,
+                getAll = false
             )
 
             val body = response.body()?.data

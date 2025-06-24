@@ -3,7 +3,9 @@ package com.attendify_admin.home.feature_schedule.domain.repository
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.CancelledClassDto
+import com.attendify_admin.common.data.remote.dto.response.CancelledClassListWithTotalCountDto
 import com.attendify_admin.common.data.remote.dto.response.ClassDto
+import com.attendify_admin.common.data.remote.dto.response.ClassListWithTotalCountDto
 import com.attendify_admin.home.feature_schedule.data.remote.dto.request.AddClassRequest
 import com.attendify_admin.home.feature_schedule.data.remote.dto.request.AddExtraClassRequest
 import com.attendify_admin.home.feature_schedule.data.remote.dto.request.CancelClassRequest
@@ -35,6 +37,23 @@ interface ClassRepository {
         semesterId: Int?,
     ): Flow<PagingData<ClassDto>>
 
+    suspend fun getAllClasses(
+        searchQuery: String?,
+        timetableId: Int?,
+        divisionId: Int?,
+        startTime: String?,
+        endTime: String?,
+        activeFrom: String?,
+        activeTill: String?,
+        instructorId: Int?,
+        dayOfWeek: String?,
+        roomId: Int?,
+        batchId: Int?,
+        classType: String?,
+        courseId: Int?,
+        semesterId: Int?
+    ): Response<AttendifyApiResponse<ClassListWithTotalCountDto>>
+
     // Get class by ID
     suspend fun getClassById(classId: Int): Response<AttendifyApiResponse<ClassDto>>
 
@@ -53,4 +72,11 @@ interface ClassRepository {
         batchId: Int,
         date: String,
     ): Flow<PagingData<CancelledClassDto>>
+
+    suspend fun getAllCancelledClasses(
+        divisionId: Int,
+        batchId: Int,
+        date: String
+    ): Response<AttendifyApiResponse<CancelledClassListWithTotalCountDto>>
+
 }

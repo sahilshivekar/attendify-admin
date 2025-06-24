@@ -1,5 +1,6 @@
 package com.attendify_admin.home.feature_users.presentation.search_student
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -7,11 +8,15 @@ import androidx.paging.map
 import com.attendify_admin.common.data.remote.Resource
 import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarController
 import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarEvent
+import com.attendify_admin.home.feature_academics.domain.use_case.GetAllBatchesUseCase
+import com.attendify_admin.home.feature_academics.domain.use_case.GetAllDivisionsUseCase
 import com.attendify_admin.home.feature_academics.domain.use_case.GetBranchesUseCase
+import com.attendify_admin.home.feature_academics.domain.use_case.GetSchemesUseCase
 import com.attendify_admin.home.feature_users.domain.use_case.GetStudentsUseCase
 import com.attendify_admin.home.feature_users.domain.utils.StudentUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,11 +26,15 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.text.trim
 
 
 @HiltViewModel
 class SearchStudentViewModel @Inject constructor(
     private val getStudentsUseCase: GetStudentsUseCase,
+    private val getAllDivisionsUseCase: GetAllDivisionsUseCase,
+    private val getAllBatchesUseCase: GetAllBatchesUseCase,
+    getSchemesUseCase: GetSchemesUseCase,
     getBranchesUseCase: GetBranchesUseCase,
 ) : ViewModel() {
 
@@ -63,8 +72,126 @@ class SearchStudentViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+
+        getSchemesUseCase(searchQuery = null).onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    _state.update { it.copy(areSchemesLoading = true) }
+                }
+
+                is Resource.Success -> {
+                    _state.update {
+                        it.copy(
+                            schemeOptions = result.data.orEmpty().toImmutableList(),
+                            areSchemesLoading = false
+                        )
+                    }
+                }
+
+                is Resource.Error -> {
+                    _state.update { it.copy(areSchemesLoading = false) }
+
+                    viewModelScope.launch {
+                        SnackbarController.sendEvent(
+                            SnackbarEvent(
+                                message = result.message ?: "Error fetching schemes"
+                            )
+                        )
+                    }
+                }
+            }
+        }.launchIn(viewModelScope)
+
         getStudents()
     }
+
+    private fun loadDivisionsAndBatchesIfReady() {
+
+        val state = _state.value
+
+        val semester = state.selectedSemesters.firstOrNull()
+        val branchId = state.selectedBranches.firstOrNull()?.id
+        val semesterAcademicYear = state.selectedAcademicYearOfSemester
+
+        if (semester != null && branchId != null && semesterAcademicYear != null) {
+            Log.d("loadDivisionsAndBatchesIfReady", "$semester $branchId $semesterAcademicYear")
+            getAllDivisionsUseCase(
+                semesterNumber = semester,
+                branchId = branchId,
+                academicStartYear = semesterAcademicYear.split("-")[0].trim().toInt(),
+                academicEndYear = semesterAcademicYear.split("-")[1].trim().toInt(),
+                searchQuery = null
+            ).onEach { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        _state.update {
+                            it.copy(areDivisionsLoading = false)
+                        }
+                        viewModelScope.launch {
+                            SnackbarController.sendEvent(
+                                SnackbarEvent(
+                                    message = result.message ?: "Error fetching divisions"
+                                )
+                            )
+                        }
+                    }
+
+                    is Resource.Loading -> {
+                        // You can set a loading flag here if needed
+                        _state.update { it.copy(areDivisionsLoading = true) }
+                    }
+
+                    is Resource.Success -> {
+                        _state.update {
+                            it.copy(
+                                divisionOptions = result.data ?: persistentListOf(),
+                                areDivisionsLoading = false
+                            )
+                        }
+                        Log.d("div", _state.value.divisionOptions.toString())
+                    }
+                }
+            }.launchIn(viewModelScope)
+
+            getAllBatchesUseCase(
+                semesterNumber = semester,
+                branchId = branchId,
+                academicStartYear = semesterAcademicYear.split("-")[0].trim().toInt(),
+                academicEndYear = semesterAcademicYear.split("-")[1].trim().toInt(),
+                searchQuery = null
+            ).onEach { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        _state.update {
+                            it.copy(areBatchesLoading = false)
+                        }
+                        viewModelScope.launch {
+                            SnackbarController.sendEvent(
+                                SnackbarEvent(
+                                    message = result.message ?: "Error fetching batches"
+                                )
+                            )
+                        }
+                    }
+
+                    is Resource.Loading -> {
+                        _state.update { it.copy(areBatchesLoading = true) }
+                    }
+
+                    is Resource.Success -> {
+                        _state.update {
+                            it.copy(
+                                batchOptions = result.data ?: persistentListOf(),
+                                areBatchesLoading = false
+                            )
+                        }
+                    }
+                }
+            }.launchIn(viewModelScope)
+
+        }
+    }
+
 
     private fun getStudents() {
         val students = getStudentsUseCase(
@@ -73,8 +200,10 @@ class SearchStudentViewModel @Inject constructor(
                 branch.id
             },
             semesterNumbers = _state.value.selectedSemesters,
-            academicStartYearOfSemester = _state.value.selectedAcademicStartYearOfSemester?.toIntOrNull(),
-            academicEndYearOfSemester = _state.value.selectedAcademicEndYearOfSemester?.toIntOrNull(),
+            academicStartYearOfSemester = _state.value.selectedAcademicYearOfSemester?.split("-")[0]?.trim()
+                ?.toIntOrNull(),
+            academicEndYearOfSemester = _state.value.selectedAcademicYearOfSemester?.split("-")[1]?.trim()
+                ?.toIntOrNull(),
             admissionTypes = _state.value.selectedAdmissionTypes.map { admissionType ->
                 when (admissionType) {
                     "First Year" -> "FE"
@@ -84,6 +213,13 @@ class SearchStudentViewModel @Inject constructor(
             },
             admissionYear = _state.value.selectedAdmissionYear?.toIntOrNull(),
             currentSemester = true,
+            dropoutAcademicStartYear = _state.value.selectedDropoutYear?.split("-")[0]?.trim(),
+            dropoutAcademicEndYear = _state.value.selectedDropoutYear?.split("-")[1]?.trim(),
+            currentBatch = true,
+            currentDivision = true,
+            divisionId = _state.value.selectedDivision?.id,
+            batchId = _state.value.selectedBatch?.id,
+            schemeId = _state.value.selectedScheme?.id
         ).cachedIn(viewModelScope)
 
         val studentCards = students.map { pagingData ->
@@ -111,21 +247,9 @@ class SearchStudentViewModel @Inject constructor(
         }
     }
 
+
     fun onEvent(event: SearchStudentEvent) {
         when (event) {
-
-            is SearchStudentEvent.AcademicEndYearOfSemesterDropDownVisibilityChanged -> {
-                _state.update {
-                    it.copy(isAcademicEndYearOfSemesterDropDownVisible = event.isVisible)
-                }
-            }
-
-
-            is SearchStudentEvent.AcademicStartYearOfSemesterDropDownVisibilityChanged -> {
-                _state.update {
-                    it.copy(isAcademicStartYearOfSemesterDropDownVisible = event.isVisible)
-                }
-            }
 
             SearchStudentEvent.ApplyFilters -> {
                 getStudents()
@@ -142,8 +266,7 @@ class SearchStudentViewModel @Inject constructor(
                     it.copy(
                         selectedBranches = persistentListOf(),
                         selectedSemesters = persistentListOf(),
-                        selectedAcademicStartYearOfSemester = null,
-                        selectedAcademicEndYearOfSemester = null,
+                        selectedAcademicYearOfSemester = null,
                         selectedAdmissionTypes = persistentListOf(),
                         selectedAdmissionYear = null,
                     )
@@ -163,32 +286,9 @@ class SearchStudentViewModel @Inject constructor(
                 _state.update { it.copy(searchQuery = event.searchQuery) }
             }
 
-
-            is SearchStudentEvent.AcademicEndYearOfSemesterChanged -> {
-                val startYear = _state.value.selectedAcademicStartYearOfSemester?.toIntOrNull()
-                val endYear = event.year.toIntOrNull()
-
-                if (startYear != null && endYear != null && startYear >= endYear) {
-                    viewModelScope.launch {
-                        SnackbarController.sendEvent(SnackbarEvent("Academic start year should be less than academic end year"))
-                    }
-                    return
-                }
-                _state.update { it.copy(selectedAcademicEndYearOfSemester = event.year) }
-
-            }
-
-            is SearchStudentEvent.AcademicStartYearOfSemesterChanged -> {
-                val startYear = event.year.toIntOrNull()
-                val endYear = _state.value.selectedAcademicEndYearOfSemester?.toIntOrNull()
-
-                if (startYear != null && endYear != null && startYear >= endYear) {
-                    viewModelScope.launch {
-                        SnackbarController.sendEvent(SnackbarEvent("Academic start year should be less than academic end year"))
-                    }
-                    return
-                }
-                _state.update { it.copy(selectedAcademicStartYearOfSemester = event.year) }
+            is SearchStudentEvent.AcademicYearOfSemesterChanged -> {
+                _state.update { it.copy(selectedAcademicYearOfSemester = event.year) }
+                loadDivisionsAndBatchesIfReady()
             }
 
 
@@ -220,6 +320,7 @@ class SearchStudentViewModel @Inject constructor(
                         )
                     )
                 }
+                loadDivisionsAndBatchesIfReady()
             }
 
             is SearchStudentEvent.BranchRemoved -> {
@@ -230,6 +331,7 @@ class SearchStudentViewModel @Inject constructor(
                         )
                     )
                 }
+                loadDivisionsAndBatchesIfReady()
             }
 
 
@@ -241,6 +343,7 @@ class SearchStudentViewModel @Inject constructor(
                         )
                     )
                 }
+                loadDivisionsAndBatchesIfReady()
             }
 
             is SearchStudentEvent.SemesterRemoved -> {
@@ -251,6 +354,7 @@ class SearchStudentViewModel @Inject constructor(
                         )
                     )
                 }
+                loadDivisionsAndBatchesIfReady()
             }
 
             is SearchStudentEvent.AdmissionYearChanged -> {
@@ -272,12 +376,22 @@ class SearchStudentViewModel @Inject constructor(
                 _state.update { it.copy(isSearchExpanded = event.isExpanded) }
             }
 
-            is SearchStudentEvent.ShowAlertDialog -> {
-                // Replace dialogText update with Snackbar event
-                viewModelScope.launch {
-                    SnackbarController.sendEvent(SnackbarEvent(event.message))
-                }
+            is SearchStudentEvent.DropoutYearChanged -> {
+                _state.update { it.copy(selectedDropoutYear = event.dropoutYear) }
             }
+
+            is SearchStudentEvent.SelectedSchemeChanged -> {
+                _state.update { it.copy(selectedScheme = event.scheme) }
+            }
+
+            is SearchStudentEvent.SelectedDivisionChanged -> {
+                _state.update { it.copy(selectedDivision = event.division) }
+            }
+
+            is SearchStudentEvent.SelectedBatchChanged -> {
+                _state.update { it.copy(selectedBatch = event.batch) }
+            }
+
         }
     }
 }

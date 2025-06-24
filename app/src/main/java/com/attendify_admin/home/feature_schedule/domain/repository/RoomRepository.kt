@@ -4,6 +4,7 @@ package com.attendify_admin.home.feature_schedule.domain.repository
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.RoomDto
+import com.attendify_admin.common.data.remote.dto.response.RoomListWithTotalCountDto
 import com.attendify_admin.home.feature_schedule.data.remote.dto.request.AddRoomRequest
 import com.attendify_admin.home.feature_schedule.data.remote.dto.request.UpdateRoomRequest
 import kotlinx.coroutines.flow.Flow
@@ -17,6 +18,13 @@ interface RoomRepository {
         sortBy: String,
         sortOrder: String,
     ): Flow<PagingData<RoomDto>>
+
+    suspend fun getAllRooms(
+        searchQuery: String?,
+        sortBy: String,
+        sortOrder: String
+    ): Response<AttendifyApiResponse<RoomListWithTotalCountDto>>
+
 
     suspend fun getRoomById(roomId: Int): Response<AttendifyApiResponse<RoomDto?>>
 

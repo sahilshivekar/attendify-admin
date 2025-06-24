@@ -3,6 +3,7 @@ package com.attendify_admin.home.feature_schedule.domain.repository
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.TimetableDto
+import com.attendify_admin.common.data.remote.dto.response.TimetableListWithTotalCountDto
 import com.attendify_admin.home.feature_schedule.data.remote.dto.request.AddTimetableRequest
 import com.attendify_admin.home.feature_schedule.data.remote.dto.request.UpdateTimetableRequest
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +17,12 @@ interface TimetableRepository {
         academicStartYearOfSemester: Int?,
         academicEndYearOfSemester: Int?,
     ): Flow<PagingData<TimetableDto>>
+
+    suspend fun getAllTimetables(
+        semesterNumber: Int?,
+        academicStartYearOfSemester: Int?,
+        academicEndYearOfSemester: Int?,
+    ): Response<AttendifyApiResponse<TimetableListWithTotalCountDto>>
 
     // Get timetable by ID
     suspend fun getTimetableById(timetableId: Int): Response<AttendifyApiResponse<TimetableDto>>

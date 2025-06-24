@@ -7,6 +7,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,11 +38,11 @@ import com.attendify_admin.common.domain.model.StudentBatch
 import com.attendify_admin.common.domain.model.StudentDivision
 import com.attendify_admin.common.domain.model.StudentSemester
 import com.attendify_admin.common.presentation.PreviewWrapper
-import com.attendify_admin.common.presentation.ScreenPreview
 import com.attendify_admin.common.presentation.UiConstants
 import com.attendify_admin.common.presentation.components.AttendifyTextButton
 import com.attendify_admin.home.feature_users.presentation.student_details.components.AcademicDetailsContainer
 import com.attendify_admin.home.feature_users.presentation.student_details.components.ContactDetailsContainer
+import com.attendify_admin.home.feature_users.presentation.student_details.components.DropoutDetailsContainer
 import com.attendify_admin.home.feature_users.presentation.student_details.components.PersonalDetailsContainer
 import com.attendify_admin.home.feature_users.presentation.student_details.components.SemesterDetailsContainer
 import com.attendify_admin.home.feature_users.presentation.student_details.components.StudentImageContainer
@@ -62,13 +63,20 @@ fun StudentDetailsScreen(
     AnimatedContent(
         targetState = state.student == null,
         transitionSpec = {
-            (slideInVertically { it / 4 } + fadeIn()).togetherWith(fadeOut())
+            (slideInVertically { it / 5 }).togetherWith(fadeOut())
         }
     ) { targetState ->
         if (targetState) {
-            state.student == null
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center),
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
         } else {
-
             Column(
                 modifier = modifier
                     .fillMaxSize()
@@ -87,6 +95,8 @@ fun StudentDetailsScreen(
                 ContactDetailsContainer(state = state)
 
                 AcademicDetailsContainer(state = state)
+
+                DropoutDetailsContainer(state = state)
 
                 Column(
                     modifier = Modifier

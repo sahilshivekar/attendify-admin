@@ -31,7 +31,6 @@ import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface StudentApi {
-
     @GET("api/v1/student/admin/get-students")
     suspend fun getStudents(
         @Query("searchQuery") searchQuery: String?,
@@ -50,9 +49,13 @@ interface StudentApi {
         @Query("currentSemester") currentSemester: Boolean?,
         @Query("divisionCode") divisionCode: String?,
         @Query("batchCode") batchCode: String?,
-        @Query("page") page: Int,
-        @Query("limit") limit: Int
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("dropoutAcademicStartYear") dropoutAcademicStartYear: String?,
+        @Query("dropoutAcademicEndYear") dropoutAcademicEndYear: String?,
+        @Query("getAll") getAll: Boolean,
     ): Response<AttendifyApiResponse<StudentListWithTotalDto>>
+
 
     @Multipart
     @POST("api/v1/student/admin/add")

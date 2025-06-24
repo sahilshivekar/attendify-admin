@@ -51,7 +51,8 @@ class GetClassesPagingSource(
                 courseId = courseId,
                 semesterId = semesterId,
                 page = page,
-                limit = params.loadSize
+                limit = params.loadSize,
+                false
             )
 
             val classes = response.body()?.data?.classes ?: emptyList()

@@ -25,9 +25,11 @@ interface RoomApi {
         @Query("searchQuery") searchQuery: String?,
         @Query("sortBy") sortBy: String,
         @Query("sortOrder") sortOrder: String,
-        @Query("page") page: Int,
-        @Query("limit") limit: Int
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("getAll") getAll: Boolean,
     ): Response<AttendifyApiResponse<RoomListWithTotalCountDto>>
+
 
     @GET("api/v1/room/admin/get-room-by-id")
     suspend fun getRoomById(@Query("roomId") roomId: Int): Response<AttendifyApiResponse<RoomDto?>>

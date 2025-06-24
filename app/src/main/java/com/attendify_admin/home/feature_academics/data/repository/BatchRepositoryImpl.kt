@@ -5,9 +5,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.BatchDto
+import com.attendify_admin.common.data.remote.dto.response.BatchListWithTotalCountDto
+import com.attendify_admin.home.feature_academics.data.remote.BatchApi
 import com.attendify_admin.home.feature_academics.data.remote.dto.request.AddBatchRequest
 import com.attendify_admin.home.feature_academics.data.remote.dto.request.UpdateBatchRequest
-import com.attendify_admin.home.feature_academics.data.remote.BatchApi
 import com.attendify_admin.home.feature_academics.domain.repository.BatchRepository
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
@@ -38,6 +39,24 @@ class BatchRepositoryImpl @Inject constructor(
             }
         ).flow
     }
+
+    override suspend fun getAllBatches(
+        semesterNumber: Int?,
+        branchId: Int?,
+        academicStartYear: Int?,
+        academicEndYear: Int?,
+        searchQuery: String?
+    ): Response<AttendifyApiResponse<BatchListWithTotalCountDto>> {
+        return batchApi.getBatches(
+            semesterNumber = semesterNumber,
+            branchId = branchId,
+            academicStartYear = academicStartYear,
+            academicEndYear = academicEndYear,
+            searchQuery = searchQuery,
+            getAll = true
+        )
+    }
+
 
     override suspend fun addBatch(requestBody: AddBatchRequest): Response<AttendifyApiResponse<BatchDto?>> =
         batchApi.addBatch(requestBody)

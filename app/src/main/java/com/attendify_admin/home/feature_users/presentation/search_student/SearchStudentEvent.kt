@@ -1,6 +1,9 @@
 package com.attendify_admin.home.feature_users.presentation.search_student
 
+import com.attendify_admin.common.domain.model.Batch
 import com.attendify_admin.common.domain.model.Branch
+import com.attendify_admin.common.domain.model.Division
+import com.attendify_admin.common.domain.model.Scheme
 
 
 sealed class SearchStudentEvent {
@@ -12,9 +15,10 @@ sealed class SearchStudentEvent {
     data class SemesterAdded(val semester: Int) : SearchStudentEvent()
     data class SemesterRemoved(val semester: Int) : SearchStudentEvent()
 
-    data class AcademicStartYearOfSemesterChanged(val year: String) : SearchStudentEvent()
-    data class AcademicEndYearOfSemesterChanged(val year: String) : SearchStudentEvent()
+    data class AcademicYearOfSemesterChanged(val year: String?) : SearchStudentEvent()
+//    data class AcademicEndYearOfSemesterChanged(val year: String?) : SearchStudentEvent()
 
+    data class DropoutYearChanged(val dropoutYear: String?) : SearchStudentEvent()
 
     data class AdmissionTypeAdded(val type: String) : SearchStudentEvent()
     data class AdmissionTypeRemoved(val type: String) : SearchStudentEvent()
@@ -23,18 +27,22 @@ sealed class SearchStudentEvent {
     data object ApplyFilters : SearchStudentEvent()
 
     data object FetchStudents : SearchStudentEvent()
+//
+//    data class AcademicStartYearOfSemesterDropDownVisibilityChanged(val isVisible: Boolean) :
+//        SearchStudentEvent()
+//
+//    data class AcademicEndYearOfSemesterDropDownVisibilityChanged(val isVisible: Boolean) :
+//        SearchStudentEvent()
 
-    data class AcademicStartYearOfSemesterDropDownVisibilityChanged(val isVisible: Boolean) :
-        SearchStudentEvent()
-
-    data class AcademicEndYearOfSemesterDropDownVisibilityChanged(val isVisible: Boolean) :
-        SearchStudentEvent()
-
-    data class ShowAlertDialog(val message: String) : SearchStudentEvent()
     data class AdmissionYearChanged(val year: String?) : SearchStudentEvent()
     data class AdmissionYearDropDownVisibilityChanged(val isVisible: Boolean) : SearchStudentEvent()
 
     data class BottomSheetVisibilityChanged(val newVisibility: Boolean) : SearchStudentEvent()
 
     data class SearchExpandedChange(val isExpanded: Boolean) : SearchStudentEvent()
+
+    data class SelectedSchemeChanged(val scheme: Scheme?) : SearchStudentEvent()
+    data class SelectedDivisionChanged(val division: Division?) : SearchStudentEvent()
+    data class SelectedBatchChanged(val batch: Batch?) : SearchStudentEvent()
+
 }

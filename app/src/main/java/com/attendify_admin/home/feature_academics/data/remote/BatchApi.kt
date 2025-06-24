@@ -17,15 +17,16 @@ import retrofit2.http.Query
 
 interface BatchApi {
 
-    @GET("api/v1/admin/admin/get-batches")
+    @GET("api/v1/batch/admin/get-batches")
     suspend fun getBatches(
         @Query("semesterNumber") semesterNumber: Int?,
         @Query("branchId") branchId: Int?,
         @Query("academicStartYear") academicStartYear: Int?,
         @Query("academicEndYear") academicEndYear: Int?,
         @Query("searchQuery") searchQuery: String?,
-        @Query("page") page: Int,
-        @Query("limit") limit: Int
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("getAll") getAll: Boolean,
     ): Response<AttendifyApiResponse<BatchListWithTotalCountDto>>
 
     @POST("api/v1/batch/admin/add")

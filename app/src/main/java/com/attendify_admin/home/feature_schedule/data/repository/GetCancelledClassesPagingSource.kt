@@ -29,7 +29,8 @@ class GetCancelledClassesPagingSource(
                 batchId = batchId,
                 date = date,
                 page = page,
-                limit = params.loadSize
+                limit = params.loadSize,
+                false
             )
 
             val cancelledClasses = response.body()?.data?.cancelledClasses ?: emptyList()

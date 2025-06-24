@@ -3,6 +3,7 @@ package com.attendify_admin.home.feature_users.domain.repository
 import androidx.paging.PagingData
 import com.attendify_admin.common.data.remote.dto.response.AttendifyApiResponse
 import com.attendify_admin.common.data.remote.dto.response.StaffDto
+import com.attendify_admin.common.data.remote.dto.response.StaffListWithTotalDto
 import com.attendify_admin.common.data.remote.dto.response.TeacherTeachesDto
 import com.attendify_admin.home.feature_users.data.remote.dto.request.AddTeachingSubjectRequest
 import com.attendify_admin.home.feature_users.data.remote.dto.request.UpdateStaffDetailsRequest
@@ -18,6 +19,12 @@ interface StaffRepository {
         searchQuery: String?,
         courseId: Int?
     ): Flow<PagingData<StaffDto>>
+
+    suspend fun getAllStaff(
+        searchQuery: String?,
+        courseId: Int?
+    ): Response<AttendifyApiResponse<StaffListWithTotalDto>>
+
 
     // Get staff by ID
     suspend fun getStaffById(staffId: Int): Response<AttendifyApiResponse<StaffDto>>

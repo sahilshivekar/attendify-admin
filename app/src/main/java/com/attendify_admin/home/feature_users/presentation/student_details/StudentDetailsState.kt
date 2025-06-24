@@ -1,10 +1,13 @@
 package com.attendify_admin.home.feature_users.presentation.student_details
 
 import android.net.Uri
+import com.attendify_admin.common.domain.model.Dropout
 import com.attendify_admin.common.domain.model.Semester
 import com.attendify_admin.common.domain.model.Student
 import com.attendify_admin.common.domain.model.StudentBatch
 import com.attendify_admin.common.domain.model.StudentDivision
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 data class StudentDetailsState(
     val dialogText: String? = null,
@@ -26,4 +29,7 @@ data class StudentDetailsState(
     val isStudentImageFileUploading: Boolean = false,
     val isRemovingStudent: Boolean = false,
     val isStudentRemoved: Boolean = false,
-)
+    val dropoutDetails: ImmutableList<Dropout> = persistentListOf(),
+    val areDropoutDetailsLoading: Boolean = false,
+
+    )
