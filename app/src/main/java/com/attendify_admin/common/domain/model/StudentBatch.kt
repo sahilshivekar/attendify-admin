@@ -5,7 +5,7 @@ data class StudentBatch(
     val endDate: String?,
     val startDate: String,
     val batchId: Int,
-    val batch: Batch,
+    val batch: Batch?,
     val studentId: Int,
     val student: Student?
 )

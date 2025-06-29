@@ -8,17 +8,21 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.attendify_admin.home.feature_users.presentation.add_staff.AddStaffScreen
 import com.attendify_admin.home.feature_users.presentation.add_staff.AddStaffViewModel
 import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentScreen
 import com.attendify_admin.home.feature_users.presentation.add_student.AddStudentViewModel
+import com.attendify_admin.home.feature_users.presentation.add_to_dropout.AddToDropoutScreen
+import com.attendify_admin.home.feature_users.presentation.add_to_dropout.AddToDropoutViewModel
 import com.attendify_admin.home.feature_users.presentation.assign_student_to_batch.AssignStudentBatchScreen
 import com.attendify_admin.home.feature_users.presentation.assign_student_to_batch.AssignStudentBatchViewModel
 import com.attendify_admin.home.feature_users.presentation.assign_student_to_division.AssignStudentDivisionScreen
@@ -27,10 +31,17 @@ import com.attendify_admin.home.feature_users.presentation.assign_student_to_sem
 import com.attendify_admin.home.feature_users.presentation.assign_student_to_semester.AssignStudentSemesterViewModel
 import com.attendify_admin.home.feature_users.presentation.assign_subject_to_teacher.AssignSubjectTeacherScreen
 import com.attendify_admin.home.feature_users.presentation.assign_subject_to_teacher.AssignSubjectTeacherViewModel
+import com.attendify_admin.home.feature_users.presentation.modify_student_batch.ModifyStudentBatchScreen
+import com.attendify_admin.home.feature_users.presentation.modify_student_batch.ModifyStudentBatchViewModel
 import com.attendify_admin.home.feature_users.presentation.modify_student_division.ModifyStudentDivisionScreen
 import com.attendify_admin.home.feature_users.presentation.modify_student_division.ModifyStudentDivisionViewModel
+import com.attendify_admin.home.feature_users.presentation.remove_from_dropout.RemoveFromDropoutScreen
+import com.attendify_admin.home.feature_users.presentation.remove_from_dropout.RemoveFromDropoutViewModel
+import com.attendify_admin.home.feature_users.presentation.remove_student_from_semester.RemoveStudentSemesterScreen
+import com.attendify_admin.home.feature_users.presentation.remove_student_from_semester.RemoveStudentSemesterViewModel
 import com.attendify_admin.home.feature_users.presentation.search_staff.SearchStaffScreen
 import com.attendify_admin.home.feature_users.presentation.search_staff.SearchStaffViewModel
+import com.attendify_admin.home.feature_users.presentation.search_student.SearchStudentEvent
 import com.attendify_admin.home.feature_users.presentation.search_student.SearchStudentScreen
 import com.attendify_admin.home.feature_users.presentation.search_student.SearchStudentViewModel
 import com.attendify_admin.home.feature_users.presentation.staff_details.StaffDetailsScreen
@@ -102,6 +113,12 @@ fun UsersNavHost() {
                 onUnassignSubjectToTeacher = {
                     navController.navigate(UsersDestination.UnassignSubjectToTeacher.route)
                 },
+                onAddToDropout = {
+                    navController.navigate(UsersDestination.AddStudentToDropout.route)
+                },
+                onRemoveFromDropout = {
+                    navController.navigate(UsersDestination.RemoveStudentFromDropout.route)
+                }
             )
         }
 
@@ -161,34 +178,54 @@ fun UsersNavHost() {
         }
 
         composable(
-            route = UsersDestination.SearchStudent.route,
-            enterTransition = {
-                fadeIn() + slideInHorizontally { it / 2 }
-            },
-            exitTransition = {
-                fadeOut() + slideOutHorizontally { -it / 2 }
-            },
-            popEnterTransition = {
-                fadeIn() + slideInHorizontally { -it / 2 }
-            },
-            popExitTransition = {
-                fadeOut() + slideOutHorizontally { it / 2 }
-            }
+            route = UsersDestination.SearchStudent.route + "?isSelectable={isSelectable}",
+            arguments = listOf(
+                navArgument("isSelectable") { type = NavType.BoolType; defaultValue = false },
+            )
         ) {
-
             val viewModel = hiltViewModel<SearchStudentViewModel>()
             val state = viewModel.state.collectAsStateWithLifecycle().value
+
             SearchStudentScreen(
                 onEvent = viewModel::onEvent,
                 state = state,
                 onStudentCardClick = { studentId ->
-
-                    navController.navigate(
-                        UsersDestination.StudentDetails.route + "?studentId=$studentId"
-                    )
+                    if (state.isSelectable) {
+                        if (studentId in state.selectedStudentIds) {
+                            viewModel.onEvent(SearchStudentEvent.StudentDeselected(studentId))
+                        } else {
+                            viewModel.onEvent(SearchStudentEvent.StudentSelected(studentId))
+                        }
+                    } else {
+                        navController.navigate(UsersDestination.StudentDetails.route + "?studentId=$studentId")
+                    }
                 },
+                onDoneClick = {
+                    Log.d(
+                        "SearchStudentScreen",
+                        "Previous back stack entry: ${navController.previousBackStackEntry?.destination?.route}"
+                    )
+//                    navController.previousBackStackEntry
+//                        ?.savedStateHandle
+//                        ?.set("selectedStudentIds", state.selectedStudentIds.toList())
+                    val prevSavedStateHandle =
+                        navController.previousBackStackEntry?.savedStateHandle
+                    if (prevSavedStateHandle != null) {
+                        Log.d(
+                            "SearchStudentScreen",
+                            "Setting selectedStudentIds: ${state.selectedStudentIds.toList()}"
+                        )
+                        prevSavedStateHandle["selectedStudentIds"] =
+                            state.selectedStudentIds.toList()
+                    } else {
+                        Log.e("SearchStudentScreen", "Previous SavedStateHandle is null!")
+                    }
+                    navController.popBackStack()
+                }
             )
         }
+
+
 
         composable(
             route = UsersDestination.AddStaff.route,
@@ -265,7 +302,6 @@ fun UsersNavHost() {
                 fadeOut() + slideOutHorizontally { it / 2 }
             }
         ) {
-            Log.d("navgraph", "staff details before viewmodel created")
             val viewModel = hiltViewModel<StaffDetailsViewModel>()
             val state = viewModel.state.collectAsStateWithLifecycle().value
             StaffDetailsScreen(
@@ -281,7 +317,10 @@ fun UsersNavHost() {
         }
 
         composable(
-            route = UsersDestination.SearchStaff.route,
+            route = UsersDestination.SearchStaff.route + "?isSelectable={isSelectable}",
+            arguments = listOf(
+                navArgument("isSelectable") { type = NavType.BoolType; defaultValue = false },
+            ),
             enterTransition = {
                 fadeIn() + slideInHorizontally { it / 2 }
             },
@@ -296,17 +335,25 @@ fun UsersNavHost() {
             }
         ) {
             val viewModel = hiltViewModel<SearchStaffViewModel>()
+            val state = viewModel.state.collectAsStateWithLifecycle().value
             SearchStaffScreen(
                 onEvent = viewModel::onEvent,
-                state = viewModel.state.collectAsStateWithLifecycle().value,
+                state = state,
                 onStaffCardClick = { staffId ->
-                    Log.d("navgraph", "called navigate to staffdetails id: $staffId")
-                    navController.navigate(
-                        UsersDestination.StaffDetails.route + "?staffId=$staffId"
-                    )
-                    Log.d("navgraph", "after calling navigate id: $staffId")
-
+                    if (state.isSelectable) {
+                        val prevSavedStateHandle =
+                            navController.previousBackStackEntry?.savedStateHandle
+                        if (prevSavedStateHandle != null) {
+                            prevSavedStateHandle["staffId"] = staffId
+                        } else {
+                            Log.e("SearchStudentScreen", "Previous SavedStateHandle is null!")
+                        }
+                        navController.popBackStack()
+                    } else {
+                        navController.navigate(UsersDestination.StaffDetails.route + "?staffId=$staffId")
+                    }
                 }
+
             )
         }
 
@@ -326,9 +373,25 @@ fun UsersNavHost() {
             }
         ) {
             val viewModel = hiltViewModel<AssignStudentSemesterViewModel>()
+            val backStackEntry = navController.currentBackStackEntryAsState().value
+            val selectedIds = backStackEntry?.savedStateHandle?.get<List<Int>>("selectedStudentIds")
+
+            // Trigger only once when value is received
+            LaunchedEffect(selectedIds) {
+                selectedIds?.let {
+                    viewModel.onStudentIdsReceived(it)
+                    backStackEntry.savedStateHandle.remove<List<Int>>("selectedStudentIds")
+                }
+            }
+
             AssignStudentSemesterScreen(
                 state = viewModel.state.collectAsStateWithLifecycle().value,
-                onEvent = viewModel::onEvent
+                onEvent = viewModel::onEvent,
+                onSelectStudents = {
+                    navController.navigate(
+                        UsersDestination.SearchStudent.route + "?isSelectable=${true}"
+                    )
+                }
             )
         }
 
@@ -347,10 +410,26 @@ fun UsersNavHost() {
                 fadeOut() + slideOutHorizontally { it / 2 }
             }
         ) {
+
             val viewModel = hiltViewModel<AssignStudentDivisionViewModel>()
+            val backStackEntry = navController.currentBackStackEntryAsState().value
+            val selectedIds = backStackEntry?.savedStateHandle?.get<List<Int>>("selectedStudentIds")
+
+            // Trigger only once when value is received
+            LaunchedEffect(selectedIds) {
+                selectedIds?.let {
+                    viewModel.onStudentIdsReceived(it)
+                    backStackEntry.savedStateHandle.remove<List<Int>>("selectedStudentIds")
+                }
+            }
             AssignStudentDivisionScreen(
                 state = viewModel.state.collectAsStateWithLifecycle().value,
-                onEvent = viewModel::onEvent
+                onEvent = viewModel::onEvent,
+                onSelectStudents = {
+                    navController.navigate(
+                        UsersDestination.SearchStudent.route + "?isSelectable=${true}"
+                    )
+                }
             )
         }
 
@@ -370,9 +449,24 @@ fun UsersNavHost() {
             }
         ) {
             val viewModel = hiltViewModel<AssignStudentBatchViewModel>()
+            val backStackEntry = navController.currentBackStackEntryAsState().value
+            val selectedIds = backStackEntry?.savedStateHandle?.get<List<Int>>("selectedStudentIds")
+
+            // Trigger only once when value is received
+            LaunchedEffect(selectedIds) {
+                selectedIds?.let {
+                    viewModel.onStudentIdsReceived(it)
+                    backStackEntry.savedStateHandle.remove<List<Int>>("selectedStudentIds")
+                }
+            }
             AssignStudentBatchScreen(
                 state = viewModel.state.collectAsStateWithLifecycle().value,
-                onEvent = viewModel::onEvent
+                onEvent = viewModel::onEvent,
+                onSelectStudents = {
+                    navController.navigate(
+                        UsersDestination.SearchStudent.route + "?isSelectable=${true}"
+                    )
+                }
             )
         }
 
@@ -391,10 +485,10 @@ fun UsersNavHost() {
                 fadeOut() + slideOutHorizontally { it / 2 }
             }
         ) {
-            val viewModel = hiltViewModel<AssignStudentSemesterViewModel>()
-            AssignStudentSemesterScreen(
+            val viewModel = hiltViewModel<RemoveStudentSemesterViewModel>()
+            RemoveStudentSemesterScreen(
                 state = viewModel.state.collectAsStateWithLifecycle().value,
-                onEvent = viewModel::onEvent
+                onEvent = viewModel::onEvent,
             )
         }
 
@@ -435,8 +529,8 @@ fun UsersNavHost() {
                 fadeOut() + slideOutHorizontally { it / 2 }
             }
         ) {
-            val viewModel = hiltViewModel<AssignStudentBatchViewModel>()
-            AssignStudentBatchScreen(
+            val viewModel = hiltViewModel<ModifyStudentBatchViewModel>()
+            ModifyStudentBatchScreen(
                 state = viewModel.state.collectAsStateWithLifecycle().value,
                 onEvent = viewModel::onEvent
             )
@@ -458,9 +552,22 @@ fun UsersNavHost() {
             }
         ) {
             val viewModel = hiltViewModel<AssignSubjectTeacherViewModel>()
+            val backStackEntry = navController.currentBackStackEntryAsState().value
+            val selectedIds = backStackEntry?.savedStateHandle?.get<Int>("staffId")
+
+            // Trigger only once when value is received
+            LaunchedEffect(selectedIds) {
+                selectedIds?.let {
+                    viewModel.onStaffIdReceived(it)
+                    backStackEntry.savedStateHandle.remove<Int>("staffId")
+                }
+            }
             AssignSubjectTeacherScreen(
                 state = viewModel.state.collectAsStateWithLifecycle().value,
-                onEvent = viewModel::onEvent
+                onEvent = viewModel::onEvent,
+                onSelectStaffMember = {
+                    navController.navigate(UsersDestination.SearchStaff.route + "?isSelectable=${true}")
+                }
             )
         }
 
@@ -480,9 +587,22 @@ fun UsersNavHost() {
             }
         ) {
             val viewModel = hiltViewModel<UnassignSubjectTeacherViewModel>()
+            val backStackEntry = navController.currentBackStackEntryAsState().value
+            val selectedIds = backStackEntry?.savedStateHandle?.get<Int>("staffId")
+
+            // Trigger only once when value is received
+            LaunchedEffect(selectedIds) {
+                selectedIds?.let {
+                    viewModel.onStaffIdReceived(it)
+                    backStackEntry.savedStateHandle.remove<Int>("staffId")
+                }
+            }
             UnassignSubjectTeacherScreen(
                 state = viewModel.state.collectAsStateWithLifecycle().value,
-                onEvent = viewModel::onEvent
+                onEvent = viewModel::onEvent,
+                onSelectStaffMember = {
+                    navController.navigate(UsersDestination.SearchStaff.route + "?isSelectable=${true}")
+                }
             )
         }
 
@@ -521,6 +641,78 @@ fun UsersNavHost() {
                 }
             )
 
+        }
+
+
+        composable(
+            route = UsersDestination.AddStudentToDropout.route,
+            enterTransition = {
+                fadeIn() + slideInHorizontally { it / 2 }
+            },
+            exitTransition = {
+                fadeOut() + slideOutHorizontally { -it / 2 }
+            },
+            popEnterTransition = {
+                fadeIn() + slideInHorizontally { -it / 2 }
+            },
+            popExitTransition = {
+                fadeOut() + slideOutHorizontally { it / 2 }
+            }
+        ) {
+            val viewModel = hiltViewModel<AddToDropoutViewModel>()
+            val backStackEntry = navController.currentBackStackEntryAsState().value
+            val selectedIds = backStackEntry?.savedStateHandle?.get<List<Int>>("selectedStudentIds")
+
+            // Trigger only once when value is received
+            LaunchedEffect(selectedIds) {
+                selectedIds?.let {
+                    viewModel.onStudentIdsReceived(it)
+                    backStackEntry.savedStateHandle.remove<List<Int>>("selectedStudentIds")
+                }
+            }
+            AddToDropoutScreen(
+                state = viewModel.state.collectAsStateWithLifecycle().value,
+                onEvent = viewModel::onEvent,
+                onSelectStudents = {
+                    navController.navigate(UsersDestination.SearchStudent.route + "?isSelectable=${true}")
+                }
+            )
+        }
+
+        composable(
+            route = UsersDestination.RemoveStudentFromDropout.route,
+            enterTransition = {
+                fadeIn() + slideInHorizontally { it / 2 }
+            },
+            exitTransition = {
+                fadeOut() + slideOutHorizontally { -it / 2 }
+            },
+            popEnterTransition = {
+                fadeIn() + slideInHorizontally { -it / 2 }
+            },
+            popExitTransition = {
+                fadeOut() + slideOutHorizontally { it / 2 }
+            }
+        ) {
+            val viewModel = hiltViewModel<RemoveFromDropoutViewModel>()
+            val backStackEntry = navController.currentBackStackEntryAsState().value
+            val selectedIds = backStackEntry?.savedStateHandle?.get<List<Int>>("selectedStudentIds")
+
+            // Trigger only once when value is received
+            LaunchedEffect(selectedIds) {
+                selectedIds?.let {
+                    viewModel.onStudentIdsReceived(it)
+                    backStackEntry.savedStateHandle.remove<List<Int>>("selectedStudentIds")
+                }
+            }
+
+            RemoveFromDropoutScreen(
+                state = viewModel.state.collectAsStateWithLifecycle().value,
+                onEvent = viewModel::onEvent,
+                onSelectStudents = {
+                    navController.navigate(UsersDestination.SearchStudent.route + "?isSelectable=${true}")
+                }
+            )
         }
     }
 }

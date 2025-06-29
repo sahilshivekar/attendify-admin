@@ -53,8 +53,9 @@ class StudentRepositoryImpl(
         divisionCode: String?,
         batchCode: String?,
         dropoutAcademicStartYear: String?,
-        dropoutAcademicEndYear: String?
-    ): Flow<PagingData<StudentDto>> {
+        dropoutAcademicEndYear: String?,
+        semesterId: Int?,
+        ): Flow<PagingData<StudentDto>> {
 
         return Pager(
             config = PagingConfig(pageSize = 10),
@@ -78,7 +79,8 @@ class StudentRepositoryImpl(
                     divisionCode,
                     batchCode,
                     dropoutAcademicStartYear,
-                    dropoutAcademicEndYear
+                    dropoutAcademicEndYear,
+                    semesterId
                 )
             }
         ).flow
@@ -103,7 +105,8 @@ class StudentRepositoryImpl(
         divisionCode: String?,
         batchCode: String?,
         dropoutAcademicStartYear: String?,
-        dropoutAcademicEndYear: String?
+        dropoutAcademicEndYear: String?,
+        semesterId: Int?
     ): Response<AttendifyApiResponse<StudentListWithTotalDto>> {
         return studentApi.getStudents(
             searchQuery = searchQuery,
@@ -126,7 +129,8 @@ class StudentRepositoryImpl(
             limit = 10,
             dropoutAcademicStartYear = dropoutAcademicStartYear,
             dropoutAcademicEndYear = dropoutAcademicEndYear,
-            getAll = true
+            getAll = true,
+            semesterId = semesterId
         )
     }
 

@@ -31,6 +31,7 @@ import com.attendify_admin.common.domain.model.Staff
 import com.attendify_admin.common.presentation.PreviewWrapper
 import com.attendify_admin.common.presentation.UiConstants
 import com.attendify_admin.common.presentation.components.AttendifyTextButton
+import com.attendify_admin.home.feature_users.presentation.staff_details.components.StaffAssignedSubjects
 import com.attendify_admin.home.feature_users.presentation.staff_details.components.StaffDetailsContainer
 import com.attendify_admin.home.feature_users.presentation.staff_details.components.StaffImageContainer
 
@@ -48,7 +49,7 @@ fun StaffDetailsScreen(
     }
 
     AnimatedContent(
-        targetState = state.isLoadingInitialStaffDetails,
+        targetState = state.isLoadingInitialStaffDetails || state.isLoadingAssignedSubjects,
         transitionSpec = {
             (slideInVertically { it / 5 } + fadeIn()).togetherWith(fadeOut())
         }
@@ -76,6 +77,9 @@ fun StaffDetailsScreen(
 
                 StaffDetailsContainer(state = state)
 
+                Spacer(modifier = Modifier.height(16.dp))
+
+                StaffAssignedSubjects(state = state)
                 Column(
                     modifier = Modifier
                         .padding(top = 16.dp)

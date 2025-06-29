@@ -8,10 +8,10 @@ data class BranchCourseSemestersDto(
     val semesterNumber: Int,
     val branchId: Int,
     @SerializedName("Branch")
-    val branch: BranchDto,
+    val branch: BranchDto?,
     val courseId: Int,
     @SerializedName("Course")
-    val course: CourseDto,
+    val course: CourseDto?,
     val createdAt: String,
     val updatedAt: String,
 )
@@ -21,8 +21,8 @@ fun BranchCourseSemestersDto.toBranchCourseSemesters(): BranchCourseSemesters {
         id = id,
         semesterNumber = semesterNumber,
         branchId = branchId,
-        branch = branch.toBranch(),
+        branch = branch?.toBranch(),
         courseId = courseId,
-        course = course.toCourse()
+        course = course?.toCourse()
     )
 }

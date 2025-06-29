@@ -1,7 +1,6 @@
 package com.attendify_admin.home.feature_users.presentation.student_details
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.togetherWith

@@ -1,5 +1,6 @@
 package com.attendify_admin.home.feature_users.presentation.search_staff
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -14,12 +15,15 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchStaffViewModel @Inject constructor(
     private val getStaffUseCase: GetStaffUseCase,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SearchStaffState()) // Made private
     val state: StateFlow<SearchStaffState> = _state.asStateFlow() // Exposed as StateFlow
 
     init {
+        val isSelectable = savedStateHandle.get<Boolean>("isSelectable") == true
+        _state.update { it.copy(isSelectable = isSelectable) }
         getStaff()
     }
 
@@ -46,6 +50,10 @@ class SearchStaffViewModel @Inject constructor(
                 _state.update {
                     it.copy(searchQuery = event.searchQuery)
                 }
+            }
+
+            is SearchStaffEvent.SelectionModeChanged -> {
+                _state.update { it.copy(isSelectable = event.isSelectionEnabled) }
             }
         }
     }

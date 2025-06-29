@@ -4,9 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,20 +26,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.attendify_admin.R
-import com.attendify_admin.common.domain.model.Batch
-import com.attendify_admin.common.domain.model.Branch
-import com.attendify_admin.common.domain.model.Division
-import com.attendify_admin.common.domain.model.Scheme
-import com.attendify_admin.common.domain.model.Semester
-import com.attendify_admin.common.presentation.PreviewWrapper
 import com.attendify_admin.common.presentation.components.AttendifyButton
 import com.attendify_admin.home.feature_users.presentation.search_student.SearchStudentEvent
 import com.attendify_admin.home.feature_users.presentation.search_student.SearchStudentState
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

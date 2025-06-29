@@ -45,7 +45,8 @@ interface StudentRepository {
         batchCode: String?,
         dropoutAcademicStartYear: String? = null,
         dropoutAcademicEndYear: String? = null,
-    ): Flow<PagingData<StudentDto>>
+        semesterId: Int?,
+        ): Flow<PagingData<StudentDto>>
 
     suspend fun getAllStudents(
         searchQuery: String?,
@@ -65,7 +66,8 @@ interface StudentRepository {
         divisionCode: String?,
         batchCode: String?,
         dropoutAcademicStartYear: String?,
-        dropoutAcademicEndYear: String?
+        dropoutAcademicEndYear: String?,
+        semesterId: Int?
     ): Response<AttendifyApiResponse<StudentListWithTotalDto>>
 
 
@@ -84,7 +86,7 @@ interface StudentRepository {
         admissionType: String,
         branchId: Int,
         studentImageFile: File?,
-        parentEmail: String?
+        parentEmail: String?,
     ): Response<AttendifyApiResponse<StudentDto>>
 
     // Update student details
@@ -96,7 +98,7 @@ interface StudentRepository {
     // Update student image
     suspend fun updateStudentImage(
         studentId: Int,
-        studentImageFile: File
+        studentImageFile: File,
     ): Response<AttendifyApiResponse<StudentDto>>
 
     // Remove student image
@@ -130,10 +132,16 @@ interface StudentRepository {
     suspend fun getStudentSemestersById(studentId: Int): Response<AttendifyApiResponse<List<StudentSemesterDto>?>>
 
     // Get student divisions by ID
-    suspend fun getStudentDivisionsById(studentId: Int, semesterNumber: Int?): Response<AttendifyApiResponse<List<StudentDivisionDto>?>>
+    suspend fun getStudentDivisionsById(
+        studentId: Int,
+        semesterNumber: Int?,
+    ): Response<AttendifyApiResponse<List<StudentDivisionDto>?>>
 
     // Get student batches by ID
-    suspend fun getStudentBatchesById(studentId: Int, semesterNumber: Int?): Response<AttendifyApiResponse<List<StudentBatchDto>?>>
+    suspend fun getStudentBatchesById(
+        studentId: Int,
+        semesterNumber: Int?,
+    ): Response<AttendifyApiResponse<List<StudentBatchDto>?>>
 
     suspend fun addStudentToDropout(requestBody: AddDropoutRequest): Response<AttendifyApiResponse<DropoutDto?>>
 

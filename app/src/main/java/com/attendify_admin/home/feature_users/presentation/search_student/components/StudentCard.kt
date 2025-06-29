@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
@@ -34,7 +38,6 @@ import com.attendify_admin.common.presentation.PreviewWrapper
 import com.attendify_admin.common.presentation.UiConstants
 import com.attendify_admin.common.presentation.components.AttendifyTextDivider
 
-
 @Composable
 fun StudentCard(
     modifier: Modifier = Modifier,
@@ -43,6 +46,14 @@ fun StudentCard(
     studentBranch: String,
     studentYear: String? = null,
     studentImageUrl: String? = null,
+    isSelected: Boolean = false,
+    showCheckmark: Boolean = false,
+//    isRemovable: Boolean = false,
+//    onRemove: () -> Unit = {},
+//    showDefaultSupportingTxt: Boolean = true,
+//    isSupportingTextRisky: Boolean = false,
+//    supportingText: String? = null,
+
 ) {
     val painter = rememberAsyncImagePainter(R.drawable.baseline_account_circle_24)
 
@@ -52,33 +63,48 @@ fun StudentCard(
         headlineContent = {
             Text(
                 text = studentName,
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Companion.SemiBold),
                 color = MaterialTheme.colorScheme.onSurface
             )
         },
         supportingContent = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = studentBranch,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
                 )
                 studentYear?.let { AttendifyTextDivider() }
                 Text(
                     text = studentYear ?: "",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
+//            val textColor = if (isSupportingTextRisky) {
+//                MaterialTheme.colorScheme.error
+//            } else {
+//                MaterialTheme.colorScheme.onSurface
+//            }
+//
+//            when {
+//                supportingText != null -> {
+//                    Text(
+//                        text = supportingText,
+//                        style = MaterialTheme.typography.bodyMedium,
+//                        color = textColor
+//                    )
+//                }
+//
+//                showDefaultSupportingTxt -> {
+
+//                }
+//            }
         },
         leadingContent = {
             Log.d("image", "image for $studentName")
             AsyncImage(
                 model = studentImageUrl,
                 contentDescription = "Student Image",
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .size(42.dp)
                     .clip(CircleShape),
                 placeholder = painter,
@@ -87,10 +113,10 @@ fun StudentCard(
                 onLoading = null,
                 onSuccess = { if (studentImageUrl != null) imageLoaded = true },
                 onError = null,
-                alignment = Alignment.Center,
-                contentScale = ContentScale.Crop,
+                alignment = Alignment.Companion.Center,
+                contentScale = ContentScale.Companion.Crop,
                 alpha = DefaultAlpha,
-                colorFilter = if (!imageLoaded) ColorFilter.tint(
+                colorFilter = if (!imageLoaded) ColorFilter.Companion.tint(
                     MaterialTheme.colorScheme.onSurface.copy(
                         alpha = .5f
                     )
@@ -98,12 +124,31 @@ fun StudentCard(
             )
 
         },
+        trailingContent = {
+            if (showCheckmark) {
+                Icon(
+                    imageVector = if (isSelected) Icons.Default.CheckCircle else Icons.Outlined.CheckCircle,
+                    contentDescription = "Select student",
+                    tint = if (isSelected) MaterialTheme.colorScheme.primary else Color.Companion.Gray
+                )
+            }
+//            if (isRemovable) {
+//                IconButton(onClick = onRemove) {
+//                    Icon(
+//                        imageVector = Icons.Default.Close,
+//                        contentDescription = "Remove Student",
+//                        tint = MaterialTheme.colorScheme.onSurface
+//                    )
+//                }
+//            }
+        },
+
         modifier = modifier
             .fillMaxWidth()
             .widthIn(max = UiConstants.MAX_WIDTH)
             .background(MaterialTheme.colorScheme.background)
             .clickable(onClick = onClick),
-        colors = ListItemDefaults.colors(containerColor = Color.Transparent)
+        colors = ListItemDefaults.colors(containerColor = Color.Companion.Transparent)
     )
 }
 
@@ -113,7 +158,7 @@ fun StudentCard(
 fun SearchStudentScreenPreview() {
     PreviewWrapper {
         StudentCard(
-            modifier = Modifier,
+            modifier = Modifier.Companion,
             onClick = {},
             studentBranch = "Comp. Engg.",
             studentName = "Shivam Pandey",

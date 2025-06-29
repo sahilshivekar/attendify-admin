@@ -1,17 +1,16 @@
 package com.attendify_admin.home.feature_users.presentation.search_student
 
-import androidx.compose.animation.AnimatedContent
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,10 +20,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -34,16 +31,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.attendify_admin.common.presentation.PreviewWrapper
 import com.attendify_admin.common.presentation.UiConstants
+import com.attendify_admin.common.presentation.components.AttendifyButton
 import com.attendify_admin.common.presentation.components.AttendifyNoResultsIndicator
 import com.attendify_admin.common.presentation.components.AttendifySearchBar
-import com.attendify_admin.common.presentation.components.global_snackbar.ObserveAsEvents
-import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarController
 import com.attendify_admin.home.feature_users.presentation.search_student.components.ModalBottomSheetForSearchStudentScreen
 import com.attendify_admin.home.feature_users.presentation.search_student.components.StudentCard
 import kotlinx.coroutines.launch
@@ -56,6 +52,7 @@ fun SearchStudentScreen(
     state: SearchStudentState,
     onEvent: (SearchStudentEvent) -> Unit,
     onStudentCardClick: (Int) -> Unit,
+    onDoneClick: () -> Unit = {},
 ) {
 
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
@@ -136,6 +133,7 @@ fun SearchStudentScreen(
                     searchBarPlaceholder = "Search Student",
                 )
 
+
                 val students = state.students.collectAsLazyPagingItems()
                 val pullRefreshState = rememberPullToRefreshState()
 
@@ -148,70 +146,90 @@ fun SearchStudentScreen(
                         CircularProgressIndicator()
                     }
                 }
-                AnimatedVisibility(
-                    visible = students.itemCount > 0 || (students.loadState.refresh is LoadState.NotLoading && students.itemCount == 0) || students.loadState.hasError,
-                    enter = fadeIn() + slideInVertically {
-                        it / 5
-                    },
-                    exit = fadeOut()
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .widthIn(max = UiConstants.MAX_WIDTH),
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    PullToRefreshBox(
-                        isRefreshing = false,
-                        onRefresh = {
-                            onEvent(SearchStudentEvent.FetchStudents)
+                    AnimatedVisibility(
+                        visible = students.itemCount > 0 || (students.loadState.refresh is LoadState.NotLoading && students.itemCount == 0) || students.loadState.hasError,
+                        enter = fadeIn() + slideInVertically {
+                            it / 5
                         },
-                        state = pullRefreshState,
-                        indicator = {
-                            Indicator(
-                                state = pullRefreshState,
-                                isRefreshing = students.loadState.refresh is LoadState.Loading,
-                                Modifier.align(Alignment.TopCenter),
-                                containerColor = MaterialTheme.colorScheme.surface,
-                                color = MaterialTheme.colorScheme.primary,
-                            )
-                        }
+                        exit = fadeOut(),
+                        modifier = Modifier.weight(1f)
                     ) {
-                        if (students.loadState.refresh is LoadState.NotLoading && students.itemCount == 0) {
-                            AttendifyNoResultsIndicator()
-                        }
-
-                        if (students.loadState.hasError) {
-                            AttendifyNoResultsIndicator(text = "Some error occurred while fetching students")
-                        }
-
-
-                        LazyColumn(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Top,
-                            modifier = Modifier.fillMaxSize()
+                        PullToRefreshBox(
+                            isRefreshing = false,
+                            onRefresh = {
+                                onEvent(SearchStudentEvent.FetchStudents)
+                            },
+                            state = pullRefreshState,
+                            indicator = {
+                                Indicator(
+                                    state = pullRefreshState,
+                                    isRefreshing = students.loadState.refresh is LoadState.Loading,
+                                    Modifier.align(Alignment.TopCenter),
+                                    containerColor = MaterialTheme.colorScheme.surface,
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
+                            }
                         ) {
-                            items(
-                                count = students.itemCount,
-                                key = { it }
-                            ) { index ->
-                                students[index]?.let { student ->
-                                    StudentCard(
-                                        modifier = Modifier,
-                                        onClick = { onStudentCardClick(student.id) },
-                                        studentName = student.studentName,
-                                        studentBranch = student.studentBranch,
-                                        studentYear = student.studentYear,
-                                        studentImageUrl = student.studentImageUrl
-                                    )
-                                }
-                                if (index < students.itemCount - 1)
-                                    HorizontalDivider()
+                            if (students.loadState.refresh is LoadState.NotLoading && students.itemCount == 0) {
+                                AttendifyNoResultsIndicator()
                             }
 
-                            if (students.loadState.append is LoadState.Loading) {
-                                item {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.padding(
-                                            vertical = 32.dp
+                            if (students.loadState.hasError) {
+                                AttendifyNoResultsIndicator(text = "Some error occurred while fetching students")
+                            }
+
+
+                            LazyColumn(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Top,
+                            ) {
+                                items(
+                                    count = students.itemCount,
+                                    key = { it }
+                                ) { index ->
+                                    students[index]?.let { student ->
+                                        StudentCard(
+                                            modifier = Modifier,
+                                            onClick = { onStudentCardClick(student.id) },
+                                            studentName = student.studentName,
+                                            studentBranch = student.studentBranch,
+                                            studentYear = student.studentYear,
+                                            studentImageUrl = student.studentImageUrl,
+                                            isSelected = state.selectedStudentIds.contains(student.id),
+                                            showCheckmark = state.isSelectable
                                         )
-                                    )
+                                    }
+                                    if (index < students.itemCount - 1)
+                                        HorizontalDivider()
+                                }
+
+                                if (students.loadState.append is LoadState.Loading) {
+                                    item {
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.padding(
+                                                vertical = 32.dp
+                                            )
+                                        )
+                                    }
                                 }
                             }
+                        }
+                    }
+                    if (state.isSelectable) {
+                        Log.d("search student", "selection enabled")
+                        AttendifyButton(
+                            onClick = onDoneClick,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp)
+                        ) {
+                            Text("Done")
                         }
                     }
                 }
@@ -221,7 +239,7 @@ fun SearchStudentScreen(
 }
 
 
-@PreviewScreenSizes
+@Preview
 @Composable
 fun SearchStudentScreenPreview() {
     PreviewWrapper {

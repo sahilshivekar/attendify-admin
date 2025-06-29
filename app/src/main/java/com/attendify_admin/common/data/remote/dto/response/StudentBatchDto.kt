@@ -9,7 +9,7 @@ data class StudentBatchDto(
     val startDate: String,
     val batchId: Int,
     @SerializedName("Batch")
-    val batch: BatchDto,
+    val batch: BatchDto?,
     val studentId: Int,
     @SerializedName("Student")
     val student: StudentDto?,
@@ -23,7 +23,7 @@ fun StudentBatchDto.toStudentBatch(): StudentBatch {
         endDate = endDate,
         startDate = startDate,
         batchId = batchId,
-        batch = batch.toBatch(),
+        batch = batch?.toBatch(),
         studentId = studentId,
         student = student?.toStudent()
     )

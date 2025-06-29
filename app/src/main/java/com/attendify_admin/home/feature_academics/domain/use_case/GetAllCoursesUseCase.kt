@@ -48,6 +48,7 @@ class GetAllCoursesUseCase @Inject constructor(
         }
 
         response.onFailure { exception ->
+            exception.printStackTrace()
             when (exception) {
                 is IOException -> emit(Resource.Error(message = RemoteUtils.NETWORK_IO_ERROR_MESSAGE))
                 else -> emit(Resource.Error(message = RemoteUtils.UNKNOWN_NETWORK_ERROR_MESSAGE))

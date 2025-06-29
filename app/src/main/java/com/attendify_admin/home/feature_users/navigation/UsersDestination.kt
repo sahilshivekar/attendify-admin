@@ -18,4 +18,6 @@ sealed class UsersDestination(
     data object UnassignSubjectToTeacher: UsersDestination("unassign_subject_to_teacher")
     data object StudentDetails : UsersDestination("student_details")
     data object StaffDetails : UsersDestination("staff_details")
+    data object AddStudentToDropout: UsersDestination("add_student_to_dropout")
+    data object RemoveStudentFromDropout: UsersDestination("remove_student_from_dropout")
 }

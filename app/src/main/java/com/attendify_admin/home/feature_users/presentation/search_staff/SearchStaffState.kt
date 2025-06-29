@@ -5,11 +5,12 @@ import com.attendify_admin.common.domain.model.Staff
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
-data class SearchStaffState (
+data class SearchStaffState(
     val isFetchingStaff: Boolean = true,
     val dialogText: String? = null,
     val staff: Flow<PagingData<Staff>> = emptyFlow(),
-    val searchQuery: String = ""
+    val searchQuery: String = "",
+    val isSelectable: Boolean = false,
 )
 
 

@@ -1,6 +1,7 @@
 package com.attendify_admin.home.feature_users.presentation.search_student
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -26,7 +27,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.text.trim
 
 
 @HiltViewModel
@@ -36,12 +36,16 @@ class SearchStudentViewModel @Inject constructor(
     private val getAllBatchesUseCase: GetAllBatchesUseCase,
     getSchemesUseCase: GetSchemesUseCase,
     getBranchesUseCase: GetBranchesUseCase,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SearchStudentState())
     val state: StateFlow<SearchStudentState> = _state.asStateFlow()
 
     init {
+        val isSelectable = savedStateHandle.get<Boolean>("isSelectable") == true
+        _state.update { it.copy(isSelectable = isSelectable) }
+
         getBranchesUseCase(searchQuery = null).onEach { result ->
             when (result) {
                 is Resource.Error -> {
@@ -269,6 +273,9 @@ class SearchStudentViewModel @Inject constructor(
                         selectedAcademicYearOfSemester = null,
                         selectedAdmissionTypes = persistentListOf(),
                         selectedAdmissionYear = null,
+                        selectedDropoutYear = null,
+                        selectedScheme = null,
+                        selectedBatch = null,
                     )
                 }
             }
@@ -390,6 +397,18 @@ class SearchStudentViewModel @Inject constructor(
 
             is SearchStudentEvent.SelectedBatchChanged -> {
                 _state.update { it.copy(selectedBatch = event.batch) }
+            }
+
+            is SearchStudentEvent.StudentSelected -> {
+                _state.update { it.copy(selectedStudentIds = it.selectedStudentIds.add(event.id)) }
+            }
+
+            is SearchStudentEvent.StudentDeselected -> {
+                _state.update { it.copy(selectedStudentIds = it.selectedStudentIds.remove(event.id)) }
+            }
+
+            is SearchStudentEvent.SelectionModeChanged -> {
+                _state.update { it.copy(isSelectable = event.enabled) }
             }
 
         }

@@ -10,7 +10,9 @@ import com.attendify_admin.common.domain.model.Scheme
 import com.attendify_admin.common.utils.DateTimeUtil
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
@@ -20,6 +22,8 @@ data class SearchStudentState(
 
     val isFetchingStudents: Boolean = true,
     val students: Flow<PagingData<StudentCard>> = emptyFlow(),
+    val selectedStudentIds: PersistentSet<Int> = persistentSetOf(),
+    val isSelectable: Boolean = false,
 
     val isSearchBarActive: Boolean = false,
     val searchQuery: String = "",

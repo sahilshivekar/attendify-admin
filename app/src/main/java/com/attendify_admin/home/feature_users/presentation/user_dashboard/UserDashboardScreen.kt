@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.attendify_admin.common.presentation.PreviewWrapper
+import com.attendify_admin.home.feature_users.presentation.user_dashboard.components.DropoutManagementContainer
 import com.attendify_admin.home.feature_users.presentation.user_dashboard.components.StaffManagementContainer
 import com.attendify_admin.home.feature_users.presentation.user_dashboard.components.StaffSubjectAllocationContainer
 import com.attendify_admin.home.feature_users.presentation.user_dashboard.components.StudentAllocationContainer
@@ -36,6 +37,8 @@ fun UserDashboardScreen(
     onModifyStudentBatchClick: () -> Unit,
     onAssignSubjectToTeacher: () -> Unit,
     onUnassignSubjectToTeacher: () -> Unit,
+    onAddToDropout: () -> Unit,
+    onRemoveFromDropout: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -80,6 +83,14 @@ fun UserDashboardScreen(
 
         Spacer(Modifier.height(16.dp))
 
+        DropoutManagementContainer(
+            onAddToDropout = onAddToDropout,
+            onRemoveFromDropout = onRemoveFromDropout
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+
     }
 }
 
@@ -88,6 +99,6 @@ fun UserDashboardScreen(
 @Composable
 fun UserDashboardScreenPreview() {
     PreviewWrapper {
-        UserDashboardScreen({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
+        UserDashboardScreen({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
     }
 }

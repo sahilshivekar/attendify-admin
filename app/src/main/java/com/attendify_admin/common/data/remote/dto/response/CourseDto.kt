@@ -7,9 +7,9 @@ data class CourseDto(
     val id: Int,
     val code: String,
     val name: String,
-    val optionalSubject: Any,
+    val optionalSubject: String?,
     @SerializedName("BranchCourseSemesters")
-    val branchCourseSemesters: BranchCourseSemestersDto?,
+    val branchCourseSemesters: List<BranchCourseSemestersDto>?,
     val schemeId: Int,
     @SerializedName("Scheme")
     val scheme: SchemeDto?,
@@ -23,7 +23,9 @@ fun CourseDto.toCourse(): Course {
         code = code,
         name = name,
         optionalSubject = optionalSubject,
-        branchCourseSemesters = branchCourseSemesters?.toBranchCourseSemesters(),
+        branchCourseSemesters = branchCourseSemesters?.map{
+            it.toBranchCourseSemesters()
+        },
         schemeId = schemeId,
         scheme = scheme?.toScheme()
     )

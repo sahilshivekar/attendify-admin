@@ -7,5 +7,5 @@ data class StudentDivision(
     val studentId: Int,
     val student: Student?,
     val divisionId: Int,
-    val division: Division
+    val division: Division?
 )

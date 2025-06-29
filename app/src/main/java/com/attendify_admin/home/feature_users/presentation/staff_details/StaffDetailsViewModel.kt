@@ -10,11 +10,14 @@ import com.attendify_admin.common.presentation.components.global_snackbar.Snackb
 import com.attendify_admin.common.presentation.components.global_snackbar.SnackbarEvent
 import com.attendify_admin.common.utils.FileUtil
 import com.attendify_admin.home.feature_users.domain.use_case.GetStaffByIdUseCase
+import com.attendify_admin.home.feature_users.domain.use_case.GetTeachingSubjectsUseCase
 import com.attendify_admin.home.feature_users.domain.use_case.RemoveStaffImageUseCase
 import com.attendify_admin.home.feature_users.domain.use_case.RemoveStaffUseCase
 import com.attendify_admin.home.feature_users.domain.use_case.UpdateStaffImageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,6 +35,7 @@ class StaffDetailsViewModel @Inject constructor(
     private val updateStaffImageUseCase: UpdateStaffImageUseCase,
     private val removeStaffImageUseCase: RemoveStaffImageUseCase,
     private val removeStaffUseCase: RemoveStaffUseCase,
+    private val getTeachingSubjectsUseCase: GetTeachingSubjectsUseCase,
     savedStateHandle: SavedStateHandle,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
@@ -43,6 +47,7 @@ class StaffDetailsViewModel @Inject constructor(
         savedStateHandle.get<Int>("staffId")?.let { staffId ->
             _state.update { it.copy(staffId = staffId) }
             getStaff(staffId)
+            getAssignedCoursesOfStaffMember(staffId)
         }
     }
 
@@ -113,6 +118,41 @@ class StaffDetailsViewModel @Inject constructor(
                     }
                     SnackbarController.sendEvent(SnackbarEvent("Staff member removed successfully"))
                 }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getAssignedCoursesOfStaffMember(staffId: Int) {
+        getTeachingSubjectsUseCase(staffId).onEach { result ->
+            when (result) {
+                is Resource.Error -> {
+                    _state.update { it.copy(isLoadingAssignedSubjects = false) }
+                    SnackbarController.sendEvent(
+                        SnackbarEvent(
+                            result.message ?: "Failed to load courses assigned to staff members"
+                        )
+                    )
+                }
+
+                is Resource.Loading -> {
+                    _state.update { it.copy(isLoadingAssignedSubjects = true) }
+                }
+
+                is Resource.Success -> {
+                    _state.update {
+                        it.copy(
+                            isLoadingAssignedSubjects = false,
+                            assignedCourses = result.data?.map { teacherTeaches ->
+                                CourseData(
+                                    courseId = teacherTeaches.course?.id!!,
+                                    courseName = teacherTeaches.course.name,
+                                    courseCode = teacherTeaches.course.code,
+                                )
+                            }?.toPersistentList() ?: persistentListOf()
+                        )
+                    }
+                }
+
             }
         }.launchIn(viewModelScope)
     }

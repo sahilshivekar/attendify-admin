@@ -54,6 +54,7 @@ interface StudentApi {
         @Query("dropoutAcademicStartYear") dropoutAcademicStartYear: String?,
         @Query("dropoutAcademicEndYear") dropoutAcademicEndYear: String?,
         @Query("getAll") getAll: Boolean,
+        @Query("semesterId") semesterId: Int?,
     ): Response<AttendifyApiResponse<StudentListWithTotalDto>>
 
 

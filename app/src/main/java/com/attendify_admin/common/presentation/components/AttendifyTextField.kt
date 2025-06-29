@@ -99,7 +99,7 @@ fun AttendifyTextField(
                 ) {
                 Text(
                     text = supportingText ?: "",
-                    style = MaterialTheme.typography.labelSmall
+                    style = MaterialTheme.typography.titleSmall
                 )
             }
         },

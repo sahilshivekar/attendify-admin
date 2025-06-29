@@ -24,7 +24,8 @@ class GetStudentsPagingSource(
     private val divisionCode: String?,
     private val batchCode: String?,
     private val dropoutAcademicStartYear: String?,
-    private val dropoutAcademicEndYear: String?
+    private val dropoutAcademicEndYear: String?,
+    private val semesterId: Int?
 ) : PagingSource<Int, StudentDto>() {
 
     override fun getRefreshKey(state: PagingState<Int, StudentDto>): Int? {
@@ -60,7 +61,8 @@ class GetStudentsPagingSource(
                 params.loadSize,
                 dropoutAcademicStartYear,
                 dropoutAcademicEndYear,
-                false
+                false,
+                semesterId = semesterId
             )
             totalStudentsCount += newResponse.body()?.data?.students?.size ?: 0
 

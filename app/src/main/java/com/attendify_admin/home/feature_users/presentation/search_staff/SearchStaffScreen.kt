@@ -16,11 +16,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -30,7 +32,6 @@ import com.attendify_admin.common.presentation.UiConstants
 import com.attendify_admin.common.presentation.components.AttendifyNoResultsIndicator
 import com.attendify_admin.common.presentation.components.AttendifySearchBar
 import com.attendify_admin.home.feature_users.presentation.search_staff.components.StaffCard
-import com.attendify_admin.home.feature_users.presentation.search_student.SearchStudentEvent
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,7 +42,6 @@ fun SearchStaffScreen(
     onEvent: (SearchStaffEvent) -> Unit,
     onStaffCardClick: (Int) -> Unit = {},
 ) {
-
 
     Column(
         modifier = modifier
@@ -54,11 +54,18 @@ fun SearchStaffScreen(
             modifier = Modifier.widthIn(max = UiConstants.MAX_WIDTH),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
+            Spacer(Modifier.height(16.dp))
+            if (state.isSelectable) {
+                Text(
+                    "Select Staff Member to continue",
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                    modifier = Modifier.align(Alignment.Start).padding(bottom  = 8.dp)
+                )
+            }
 
             AttendifySearchBar(
                 modifier = Modifier
-                    .padding(vertical = 16.dp),
+                    .padding(bottom = 16.dp),
                 searchQuery = state.searchQuery,
                 onSearchQueryValueChange = {
                     onEvent(SearchStaffEvent.SearchQueryChanged(it))

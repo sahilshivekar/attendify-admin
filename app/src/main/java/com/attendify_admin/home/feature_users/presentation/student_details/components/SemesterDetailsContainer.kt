@@ -125,7 +125,7 @@ fun SemesterDetailsContainer(modifier: Modifier = Modifier, state: StudentDetail
                         // past divisions
                         var pastDivisions =
                             state.studentDivisions?.filter { studentDivision ->
-                                studentDivision.division.semesterId == semester.id
+                                studentDivision.division?.semesterId == semester.id
                             }
 
                         pastDivisions = pastDivisions?.sortedBy { studentDivision ->
@@ -140,7 +140,7 @@ fun SemesterDetailsContainer(modifier: Modifier = Modifier, state: StudentDetail
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    text = "Division ${studentDivision.division.divisionCode}",
+                                    text = "Division ${studentDivision.division?.divisionCode}",
                                     style = MaterialTheme.typography.bodyLarge.copy(
                                         fontWeight = FontWeight.Medium
                                     )
@@ -195,7 +195,7 @@ fun SemesterDetailsContainer(modifier: Modifier = Modifier, state: StudentDetail
 
                                     var pastBatches =
                                         state.studentBatches?.filter { studentBatch ->
-                                            studentBatch.batch.divisionId == studentDivision.division.id
+                                            studentBatch.batch?.divisionId == studentDivision.division?.id
                                         }
                                     pastBatches = pastBatches?.sortedBy { studentBatch ->
                                         DateTimeUtil.getDateInDDMMYYYYFromYYYYMMDD(studentBatch.startDate)
@@ -214,7 +214,7 @@ fun SemesterDetailsContainer(modifier: Modifier = Modifier, state: StudentDetail
                                             horizontalArrangement = Arrangement.SpaceBetween
                                         ) {
                                             Text(
-                                                text = "Batch ${studentBatch.batch.batchCode}",
+                                                text = "Batch ${studentBatch.batch?.batchCode}",
                                                 style = MaterialTheme.typography.bodyLarge.copy(
                                                     fontWeight = FontWeight.Medium
                                                 )

@@ -12,7 +12,7 @@ data class StudentDivisionDto(
     val student: StudentDto?,
     val divisionId: Int,
     @SerializedName("Division")
-    val division: DivisionDto,
+    val division: DivisionDto?,
     val createdAt: String,
     val updatedAt: String,
 )
@@ -25,6 +25,6 @@ fun StudentDivisionDto.toStudentDivision(): StudentDivision {
         studentId = studentId,
         student = student?.toStudent(),
         divisionId = divisionId,
-        division = division.toDivision()
+        division = division?.toDivision()
     )
 }

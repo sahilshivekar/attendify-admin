@@ -1,6 +1,11 @@
 package com.attendify_admin.common.presentation.components
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -11,10 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T : Enum<T>>  AttendifyDropDownMenuBox(
+fun <T> AttendifyDropDownMenuBox(
     modifier: Modifier = Modifier,
     expanded: Boolean,
     onDropDownVisibilityChanged: (Boolean) -> Unit,
@@ -24,7 +30,7 @@ fun <T : Enum<T>>  AttendifyDropDownMenuBox(
     options: List<T>,
     onSelectItem: (T) -> Unit,
     label: String,
-    ) {
+) {
 
     val localFocusManager = LocalFocusManager.current
     ExposedDropdownMenuBox(
@@ -62,6 +68,16 @@ fun <T : Enum<T>>  AttendifyDropDownMenuBox(
             shape = MaterialTheme.shapes.medium,
             containerColor = MaterialTheme.colorScheme.surface
         ) {
+            if (options.isEmpty()) {
+                Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center) {
+                    CircularProgressIndicator(
+                        strokeWidth = 2.dp,
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .size(24.dp)
+                    )
+                }
+            }
             options.forEach { option ->
                 DropdownMenuItem(
                     onClick = {
