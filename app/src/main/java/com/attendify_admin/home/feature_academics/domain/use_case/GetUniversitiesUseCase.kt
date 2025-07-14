@@ -13,7 +13,7 @@ import javax.inject.Inject
 class GetUniversitiesUseCase @Inject constructor(
     private val universityRepository: UniversityRepository,
 ) {
-    operator fun invoke(): Flow<Resource<List<University?>>> = flow {
+    operator fun invoke(): Flow<Resource<List<University>>> = flow {
 
         emit(Resource.Loading())
 

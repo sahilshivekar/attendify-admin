@@ -64,16 +64,6 @@ fun UsersNavHost() {
             route = UsersDestination.UsersDashboard.route,
             popEnterTransition = {
                 fadeIn() + slideInHorizontally { -it / 2 }
-            },
-            exitTransition = {
-                val previousDestinationRoute =
-                    navController.previousBackStackEntry?.destination?.route
-                // following logic will work bcz we are popping the entire back stack on tab switch
-                if (previousDestinationRoute == UsersDestination.UsersDashboard.route) {
-                    fadeOut() + slideOutHorizontally { -it / 2 }
-                } else {
-                    fadeOut()
-                }
             }
         ) {
             UserDashboardScreen(

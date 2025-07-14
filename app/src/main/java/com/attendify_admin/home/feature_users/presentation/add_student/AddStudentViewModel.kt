@@ -14,6 +14,7 @@ import com.attendify_admin.common.utils.FileUtil
 import com.attendify_admin.common.utils.PhoneUtil.getCountryByPhoneCode
 import com.attendify_admin.common.validation.ValidateEmail
 import com.attendify_admin.home.feature_academics.domain.use_case.GetBranchesUseCase
+import com.attendify_admin.home.feature_academics.domain.use_case.GetSchemesUseCase
 import com.attendify_admin.home.feature_users.data.remote.dto.request.UpdateStudentDetailsRequest
 import com.attendify_admin.home.feature_users.domain.use_case.AddStudentUseCase
 import com.attendify_admin.home.feature_users.domain.use_case.GetStudentDetailsByIdUseCase
@@ -64,6 +65,7 @@ class AddStudentViewModel @Inject constructor(
     private val validateEmail: ValidateEmail,
     private val getStudentDetailsByIdUseCase: GetStudentDetailsByIdUseCase,
     private val updateStudentDetailsUseCase: UpdateStudentDetailsUseCase,
+    private val getSchemesUseCase: GetSchemesUseCase,
     @ApplicationContext private val context: Context,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
@@ -73,6 +75,7 @@ class AddStudentViewModel @Inject constructor(
 
     init {
         getBranches()
+        getSchemes()
         savedStateHandle.get<Int>("studentId")?.let { studentId ->
             if (studentId != -1) { // -1 is the default value indicating no studentId was passed
                 _state.update {
@@ -98,6 +101,23 @@ class AddStudentViewModel @Inject constructor(
                 is Resource.Loading -> Unit
                 is Resource.Success -> _state.update {
                     it.copy(branchOptions = result.data?.toImmutableList())
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getSchemes() {
+        getSchemesUseCase(null).onEach { result ->
+            when (result) {
+                is Resource.Error -> viewModelScope.launch {
+                    SnackbarController.sendEvent(
+                        SnackbarEvent(message = result.message ?: "Error fetching schemes")
+                    )
+                }
+
+                is Resource.Loading -> Unit
+                is Resource.Success -> _state.update {
+                    it.copy(schemeOptions = result.data?.toImmutableList())
                 }
             }
         }.launchIn(viewModelScope)

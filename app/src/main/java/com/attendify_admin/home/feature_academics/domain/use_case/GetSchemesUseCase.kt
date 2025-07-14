@@ -5,6 +5,7 @@ import com.attendify_admin.common.data.remote.dto.response.toScheme
 import com.attendify_admin.common.domain.RemoteUtils
 import com.attendify_admin.common.domain.model.Scheme
 import com.attendify_admin.home.feature_academics.domain.repository.SchemeRepository
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
@@ -13,9 +14,9 @@ import javax.inject.Inject
 class GetSchemesUseCase @Inject constructor(
     private val schemeRepository: SchemeRepository
 ) {
-    operator fun invoke(searchQuery: String?): Flow<Resource<List<Scheme>?>> = flow {
+    operator fun invoke(searchQuery: String?): Flow<Resource<List<Scheme>>> = flow {
 
-        emit(Resource.Loading<List<Scheme>?>())
+        emit(Resource.Loading())
 
         val response = runCatching {
             schemeRepository.getSchemes(searchQuery)

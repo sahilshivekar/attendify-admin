@@ -4,5 +4,4 @@ package com.attendify_admin.home.feature_academics.data.remote.dto.request
 data class UpdateSchemeRequest(
     val id: String,
     val name: String?,
-    val abbreviation: String?
 )

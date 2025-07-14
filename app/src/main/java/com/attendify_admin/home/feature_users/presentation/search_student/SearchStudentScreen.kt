@@ -67,26 +67,6 @@ fun SearchStudentScreen(
 
     val scope = rememberCoroutineScope()
 
-//
-//    ObserveAsEvents(
-//        SnackbarController.events,
-//    ) { event ->
-//        scope.launch {
-//            bottomSheetScaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-//
-//            val result = bottomSheetScaffoldState.snackbarHostState.showSnackbar(
-//                message = event.message,
-//                actionLabel = event.action?.name,
-//                duration = if (event.action == null) SnackbarDuration.Short else SnackbarDuration.Long
-//            )
-//
-//            if (result == SnackbarResult.ActionPerformed) {
-//                event.action?.action()
-//            }
-//        }
-//
-//    }
-
     Column(
         modifier = modifier
             .fillMaxSize()

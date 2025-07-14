@@ -138,7 +138,7 @@ class StudentDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun getStudentDropoutDetails(studentId: Int){
+    private fun getStudentDropoutDetails(studentId: Int) {
         getDropoutDetailsOfStudentUseCase(studentId).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
@@ -439,9 +439,9 @@ class StudentDetailsViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         val semesters = result.data?.map {
-                            it.semester
+                            it.semester!!
                         }
-                        Log.d("semester", semesters.toString())
+//                        Log.d("semester", semesters.toString())
                         _state.update {
                             it.copy(
                                 isSemestersLoading = false,

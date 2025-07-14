@@ -44,6 +44,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.material)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.hilt.android) // Dagger Hilt for Dependency Injection (DI) in Android
     implementation(libs.hilt.navigation.compose)

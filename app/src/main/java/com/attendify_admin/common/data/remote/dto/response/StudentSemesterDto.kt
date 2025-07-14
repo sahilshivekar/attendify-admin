@@ -7,7 +7,7 @@ data class StudentSemesterDto(
     val id: Int,
     val semesterId: Int,
     @SerializedName("Semester")
-    val semester: SemesterDto,
+    val semester: SemesterDto?,
     val studentId: Int,
     @SerializedName("Student")
     val student: StudentDto?,
@@ -20,7 +20,7 @@ fun StudentSemesterDto.toStudentSemester(): StudentSemester {
     return StudentSemester(
         id = id,
         semesterId = semesterId,
-        semester = semester.toSemester(),
+        semester = semester?.toSemester(),
         studentId = studentId,
         student = student?.toStudent()
     )

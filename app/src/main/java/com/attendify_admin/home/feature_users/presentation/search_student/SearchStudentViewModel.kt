@@ -237,7 +237,7 @@ class SearchStudentViewModel @Inject constructor(
                         student.studentSemesters?.first()?.semester?.semesterNumber != null
                     )
                         StudentUtils.getCurrentYearFromSem(
-                            student.studentSemesters.first().semester.semesterNumber
+                            student.studentSemesters.first().semester!!.semesterNumber
                         ) else null,
                     studentImageUrl = student.studentImgUrl
                 )

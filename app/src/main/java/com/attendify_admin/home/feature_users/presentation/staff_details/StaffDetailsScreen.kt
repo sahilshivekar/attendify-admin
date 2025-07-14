@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.attendify_admin.common.domain.model.Staff
@@ -34,6 +35,7 @@ import com.attendify_admin.common.presentation.components.AttendifyTextButton
 import com.attendify_admin.home.feature_users.presentation.staff_details.components.StaffAssignedSubjects
 import com.attendify_admin.home.feature_users.presentation.staff_details.components.StaffDetailsContainer
 import com.attendify_admin.home.feature_users.presentation.staff_details.components.StaffImageContainer
+import com.attendify_admin.ui.theme.AttendifyAdminTheme
 
 @Composable
 fun StaffDetailsScreen(
@@ -125,10 +127,10 @@ fun StaffDetailsScreen(
 }
 
 
-@PreviewScreenSizes
+@Preview
 @Composable
 fun StaffDetailsScreenPreview() {
-    PreviewWrapper {
+    AttendifyAdminTheme {
         StaffDetailsScreen(
             state = StaffDetailsState(
                 staff = Staff(

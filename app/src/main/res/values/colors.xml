@@ -10,7 +10,7 @@
     <color name="onSurface">#FF434448</color>
 
 
-    <color name="splash_screen_background">#FFFFFFFF</color>
+    <color name="splash_screen_background">#FFF0F3F8</color>
     <color name="text_field_border_label">#801A1D1F</color>
     <color name="normal_text">#E6000000</color>
     <color name="icon_color">#FF0954CF</color>

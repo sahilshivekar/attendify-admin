@@ -3,6 +3,7 @@ hiltVersion = "2.53.1"
 kotlinxCollectionsImmutable = "0.3.7"
 kspVersion = "2.1.0-1.0.29"
 libphonenumber = "8.13.16"
+material = "1.12.0"
 roomVersion = "2.6.1"
 pagingVersion = "3.3.6"
 navVersion = "2.8.9"
@@ -31,6 +32,7 @@ androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscree
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navVersion" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumber" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVersion" }
 retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofitVersion" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.4.0" }

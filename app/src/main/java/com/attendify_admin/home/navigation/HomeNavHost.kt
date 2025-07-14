@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.attendify_admin.home.feature_academics.navigation.AcademicsNavHost
+//import com.attendify_admin.home.feature_academics.navigation.AcademicsNavHost
 import com.attendify_admin.home.feature_schedule.navigation.ScheduleNavHost
 import com.attendify_admin.home.feature_users.navigation.UsersNavHost
 
@@ -75,7 +75,7 @@ fun HomeNavHost(
                 ExitTransition.None
             }
         ) {
-            AcademicsNavHost()
+//            AcademicsNavHost()
         }
     }
 }

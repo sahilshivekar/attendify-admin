@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.AttendifyAdmin" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.AttendifyAdmin" parent="Theme.Material3.Dark.NoActionBar" />
 
-
-    <style name="CustomDatePickerDialog" parent="android:Theme.Material.Light.Dialog.Alert">
-        <item name="android:datePickerStyle">@style/CustomDatePicker</item>
-        <item name="android:colorAccent">@color/primary</item>
-        <item name="android:colorBackground">@color/surface</item>
-        <item name="android:textColor">@color/primary</item>
-    </style>
-
-    <style name="CustomDatePicker" parent="android:Widget.Material.DatePicker">
-        <item name="android:headerBackground">@color/secondary</item>
-    </style>
 </resources>
