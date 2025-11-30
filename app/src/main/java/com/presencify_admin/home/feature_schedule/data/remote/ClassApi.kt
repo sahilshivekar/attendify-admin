@@ -1,0 +1,76 @@
+package com.presencify_admin.home.feature_schedule.data.remote
+
+import com.presencify_admin.common.data.remote.dto.response.PresencifyApiResponse
+import com.presencify_admin.common.data.remote.dto.response.CancelledClassListWithTotalCountDto
+import com.presencify_admin.common.data.remote.dto.response.ClassDto
+import com.presencify_admin.common.data.remote.dto.response.ClassListWithTotalCountDto
+import com.presencify_admin.home.feature_schedule.data.remote.dto.request.AddClassRequest
+import com.presencify_admin.home.feature_schedule.data.remote.dto.request.AddExtraClassRequest
+import com.presencify_admin.home.feature_schedule.data.remote.dto.request.CancelClassRequest
+import com.presencify_admin.home.feature_schedule.data.remote.dto.request.ExtendActiveTillDateRequest
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Query
+
+interface ClassApi {
+
+    @POST("api/v1/class/admin/admin/add-class")
+    suspend fun addClass(@Body requestBody: AddClassRequest): Response<PresencifyApiResponse<ClassDto>>
+
+
+    @GET("api/v1/class/admin/get-classes")
+    suspend fun getClasses(
+        @Query("searchQuery") searchQuery: String?,
+        @Query("timetableId") timetableId: Int?,
+        @Query("divisionId") divisionId: Int?,
+        @Query("startTime") startTime: String?,
+        @Query("endTime") endTime: String?,
+        @Query("activeFrom") activeFrom: String?,
+        @Query("activeTill") activeTill: String?,
+        @Query("instructorId") instructorId: Int?,
+        @Query("dayOfWeek") dayOfWeek: String?,
+        @Query("roomId") roomId: Int?,
+        @Query("batchId") batchId: Int?,
+        @Query("classType") classType: String?,
+        @Query("courseId") courseId: Int?,
+        @Query("semesterId") semesterId: Int?,
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("getAll") getAll: Boolean,
+    ): Response<PresencifyApiResponse<ClassListWithTotalCountDto>>
+
+
+    @GET("api/v1/class/admin/get-class-by-id")
+    suspend fun getClassById(@Query("classId") classId: Int): Response<PresencifyApiResponse<ClassDto>>
+
+    @PUT("api/v1/class/admin/extend-active-till-date-of-class")
+    suspend fun extendActiveTillDateOfClass(@Body requestBody: ExtendActiveTillDateRequest): Response<PresencifyApiResponse<ClassDto>>
+
+    @DELETE("api/v1/class/admin/remove-class")
+    suspend fun removeClass(@Query("classId") classId: Int): Response<PresencifyApiResponse<Unit>>
+
+    @POST("api/v1/class/admin/cancel-class")
+    suspend fun cancelClass(
+        @Body requestBody: CancelClassRequest,
+    ): Response<PresencifyApiResponse<Unit>>
+
+    @POST("api/v1/class/admin/add-extra-class")
+    suspend fun addExtraClass(
+        @Body requestBody: AddExtraClassRequest,
+    ): Response<PresencifyApiResponse<ClassDto>>
+
+    @GET("api/v1/class/admin/get-cancelled-classes")
+    suspend fun getCancelledClasses(
+        @Query("divisionId") divisionId: Int,
+        @Query("batchId") batchId: Int,
+        @Query("date") date: String,
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("getAll") getAll: Boolean,
+    ): Response<PresencifyApiResponse<CancelledClassListWithTotalCountDto>>
+
+}

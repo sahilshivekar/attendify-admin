@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "com.attendify_admin"
+    namespace = "com.presencify_admin"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.attendify_admin"
+        applicationId = "com.presencify_admin"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
