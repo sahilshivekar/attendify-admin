@@ -1,0 +1,168 @@
+package com.presencify_admin.home.feature_users.presentation.search_staff
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.presencify_admin.common.presentation.PreviewWrapper
+import com.presencify_admin.common.presentation.UiConstants
+import com.presencify_admin.common.presentation.components.PresencifyNoResultsIndicator
+import com.presencify_admin.common.presentation.components.PresencifySearchBar
+import com.presencify_admin.home.feature_users.presentation.search_staff.components.StaffCard
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchStaffScreen(
+    modifier: Modifier = Modifier,
+    state: SearchStaffState,
+    onEvent: (SearchStaffEvent) -> Unit,
+    onStaffCardClick: (Int) -> Unit = {},
+) {
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Column(
+            modifier = Modifier.widthIn(max = UiConstants.MAX_WIDTH),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(Modifier.height(16.dp))
+            if (state.isSelectable) {
+                Text(
+                    "Select Staff Member to continue",
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                    modifier = Modifier.align(Alignment.Start).padding(bottom  = 8.dp)
+                )
+            }
+
+            PresencifySearchBar(
+                modifier = Modifier
+                    .padding(bottom = 16.dp),
+                searchQuery = state.searchQuery,
+                onSearchQueryValueChange = {
+                    onEvent(SearchStaffEvent.SearchQueryChanged(it))
+                    onEvent(SearchStaffEvent.FetchStaff)
+                },
+                onSearchIconClick = { onEvent(SearchStaffEvent.FetchStaff) },
+                showFilterIcon = false,
+                searchBarPlaceholder = "Search Staff",
+            )
+
+            val staff = state.staff.collectAsLazyPagingItems()
+
+            val pullRefreshState = rememberPullToRefreshState()
+
+            if (staff.loadState.refresh is LoadState.Loading) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+            AnimatedVisibility(
+                visible = staff.itemCount > 0 || (staff.loadState.refresh is LoadState.NotLoading && staff.itemCount == 0) || staff.loadState.hasError,
+                enter = fadeIn() + slideInVertically {
+                    it / 5
+                },
+                exit = fadeOut()
+            ) {
+                PullToRefreshBox(
+                    isRefreshing = false,
+                    onRefresh = {
+                        onEvent(SearchStaffEvent.FetchStaff)
+                    },
+                    state = pullRefreshState
+                ) {
+
+                    if (staff.loadState.refresh is LoadState.Loading) {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
+                    if (staff.loadState.refresh is LoadState.NotLoading && staff.itemCount == 0) {
+                        PresencifyNoResultsIndicator()
+                    }
+
+                    if (staff.loadState.hasError) {
+                        PresencifyNoResultsIndicator(text = "Some error occurred while fetching students")
+                    }
+                    LazyColumn(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Top,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(
+                            count = staff.itemCount,
+                            key = { index -> index }
+
+                        ) { index ->
+                            staff[index]?.let { staffMember ->
+                                StaffCard(
+                                    name = "${staffMember.firstName} ${if (staffMember.middleName != null) staffMember.middleName + " " else ""}${staffMember.lastName}",
+                                    role = staffMember.role,
+                                    imageUrl = staffMember.staffImageUrl,
+                                    highestQualification = staffMember.highestQualification,
+                                    onClick = {
+                                        onStaffCardClick(staffMember.id)
+                                    }
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(8.dp))
+                            if (staff.loadState.append is LoadState.Loading) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.padding(vertical = 32.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@PreviewScreenSizes
+@Composable
+fun SearchStaffScreenPreview() {
+    PreviewWrapper {
+        SearchStaffScreen(
+            state = SearchStaffState(),
+            onEvent = {}
+        )
+    }
+}

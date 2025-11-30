@@ -1,0 +1,11 @@
+package com.presencify_admin.feature_admin_mgt.presentation.update_password
+
+sealed class UpdatePasswordEvent {
+    data class PasswordChanged(val password: String): UpdatePasswordEvent()
+
+    data class ConfirmPasswordChanged(val confirmPassword: String): UpdatePasswordEvent()
+
+    data object UpdatePasswordClicked : UpdatePasswordEvent()
+
+    data class PasswordVisibilityChanged(val isVisible: Boolean): UpdatePasswordEvent()
+}

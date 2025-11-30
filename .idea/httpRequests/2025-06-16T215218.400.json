@@ -1,0 +1,7 @@
+{
+  "statusCode": 400,
+  "success": false,
+  "message": "Username or Email is needed",
+  "code": "",
+  "errors": []
+}

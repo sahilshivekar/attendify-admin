@@ -1,0 +1,57 @@
+package com.presencify_admin.home.feature_academics.domain.use_case
+
+import android.util.Log
+import com.presencify_admin.common.data.remote.Resource
+import com.presencify_admin.common.data.remote.dto.response.toDivision
+import com.presencify_admin.common.domain.RemoteUtils
+import com.presencify_admin.common.domain.model.Division
+import com.presencify_admin.home.feature_academics.domain.repository.DivisionRepository
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import java.io.IOException
+import javax.inject.Inject
+
+
+class GetAllDivisionsUseCase @Inject constructor(
+    private val divisionRepository: DivisionRepository,
+) {
+    operator fun invoke(
+        semesterNumber: Int?,
+        branchId: Int?,
+        academicStartYear: Int?,
+        academicEndYear: Int?,
+        searchQuery: String?,
+    ): Flow<Resource<ImmutableList<Division>>> = flow {
+
+        emit(Resource.Loading())
+
+        val response = runCatching {
+            divisionRepository.getAllDivisions(
+                semesterNumber,
+                branchId,
+                academicStartYear,
+                academicEndYear,
+                searchQuery
+            )
+        }
+
+        response.onSuccess { response ->
+            if (response.isSuccessful) {
+                Log.d("response", response.toString())
+                emit(Resource.Success(response.body()?.data?.divisions?.map { it.toDivision() }?.toImmutableList()))
+            } else {
+                val errorMessage = RemoteUtils.getErrorMessage(response)
+                emit(Resource.Error(message = errorMessage))
+            }
+        }
+
+        response.onFailure { exception ->
+            when (exception) {
+                is IOException -> emit(Resource.Error(message = RemoteUtils.NETWORK_IO_ERROR_MESSAGE))
+                else -> emit(Resource.Error(message = RemoteUtils.UNKNOWN_NETWORK_ERROR_MESSAGE))
+            }
+        }
+    }
+}
